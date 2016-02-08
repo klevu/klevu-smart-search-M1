@@ -1,0 +1,16 @@
+<?xml version="1.0"?>   
+<layout version="0.1.0">   
+  <searchterms_index_index>   
+    <reference name="root">   
+      <action method="setTemplate"><template>page/1column.phtml</template></action>   
+    </reference>
+    <reference name="head">
+	    <action method="addCss"><stylesheet>css/klevu/search/klevu-search-term.css</stylesheet></action>
+	</reference>    
+    <reference name="content">   
+      <block type="klevu_searchterms/catalog_product_popularterms" name="klevu_searchterms.catalog.product.popularterms" template="klevu/searchterm/popular_searchterms.phtml"/>   
+    </reference>  
+  </searchterms_index_index>   
+
+</layout>   
+	

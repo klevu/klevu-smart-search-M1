@@ -1,0 +1,75 @@
+<?php $config = Mage::helper('klevu_search/config'); ?>
+<div class="kuContainer">
+<div id="loader" style="text-align: center;"><img src="<?php echo $this->getSkinUrl('images/klevu/ku-loader.gif'); ?>" alt="search" /></div>
+<div id="kuNoRecordFound" class="kuNoRecordFound" style="display: none;">
+   <p><?php echo $this->__('No matching products found.');?></p>
+</div>
+<div id="kuProListing" class="kuProListing" style="display: none;">
+   <div id="kuFilters" class="kuFilters">&nbsp;</div>
+   <!-- End of kuFilters -->
+   <div id="kuResultListBlock" class="kuResultList">
+      <div class="kuListHeader">
+         <div id="kuTotResults" class="kuTotResults">&nbsp;</div>
+         <div class="kuSortingOpt">
+            <div class="kuSortby">
+               <label id="klevuSortLbl"><?php echo $this->__('Sort by');?>:</label> 
+               <select id="kuSortby" name="kuSortby" onchange="klevu_changeSortingOptionsForLandigPage(this.value);">
+                  <option id="klevuRelSort" value="rel"><?php echo $this->__('Relevance');?></option>
+                  <option id="klevuLthSort" value="lth"><?php echo $this->__('Price').":".$this->__('Low to high');?></option>
+                  <option id="klevuHtlSort" value="htl"><?php echo $this->__('Price').":".$this->__('High to low');?></option>
+               </select>
+            </div>
+            <div class="kuView"><a id="gridViewBtn" class="kuGridviewBtn" onclick="setKuView('grid');"> <span class="icon-gridview">&nbsp;</span> </a> <a id="listViewBtn" class="kuListviewBtn kuCurrent" onclick="setKuView('list');"> <span class="icon-listview">&nbsp;</span> </a></div>
+            <div class="kuPerPage">
+               <label id="klevuItemsPerPage"><?php echo $this->__('Items per page');?>:</label> 
+               <select id="noOfRecords1" onchange="klevu_changeItemsPerPage(this.value);">
+                <?php   
+                $per_page = explode(",",Mage::getStoreConfig("catalog/frontend/grid_per_page_values"));
+                if(!empty($per_page)){
+                            foreach($per_page as $key => $value) { ?>
+                                    <option> <?php echo $value;?></option>
+                <?php       }
+                        }?>
+               </select>
+            </div>
+            <div id="kuPagination1" class="kuPagination">&nbsp;</div>
+            <div class="kuClearLeft">&nbsp;</div>
+         </div>
+      </div>
+      <div id="kuResultsView" class="kuListView">&nbsp;</div>
+      <div class="kuBottomPagi">
+         <div class="kuPerPage">
+            <label id="klevuItemsPerPageFooter"><?php echo $this->__('Items per page');?>:</label> 
+            <select id="noOfRecords2" onchange="klevu_changeItemsPerPage(this.value);">
+               <?php    if(!empty($per_page)){
+                            foreach($per_page as $key => $value) { ?>
+                                    <option> <?php echo $value;?></option>
+                <?php       }
+                        }?>
+            </select>
+         </div>
+         <div id="kuPagination2" class="kuPagination">&nbsp;</div>
+         <div class="kuClearLeft">&nbsp;</div>
+      </div>
+   </div>
+   <div class="klevu-clear-both">&nbsp;</div>
+</div>
+<!-- End of kuProListing --></div>
+<!-- End of klevu-container -->
+<?php $grid_per_page = Mage::getStoreConfig("catalog/frontend/grid_per_page"); ?>
+<input id="noOfRecords" type="hidden" name="noOfRecords" value="<?php if(!empty($grid_per_page)){ echo $grid_per_page; } else { echo "12";}?>" /> 
+<input id="startPos" type="hidden" name="startPos" value="0" /> 
+<input id="totalResultsFound" type="hidden" name="totalResultsFound" value="0" /> 
+<input id="searchedKeyword" type="hidden" name="searchedKeyword" value="" /> 
+<input id="totalPages" type="hidden" name="totalPages" value="0" />
+<?php $config = Mage::helper('klevu_search/config'); ?>
+<?php 
+$isSecure = Mage::app()->getFrontController()->getRequest()->isSecure(); 
+$protocol = ($isSecure) ? 'https://' : 'http://'; 
+$src = $protocol.$config->getJsUrl();
+?>
+<script type="text/javascript" src="<?php echo $src; ?>/klevu-js-v1/js-1-1/klevu-landing.js">// <![CDATA[
+// ]]></script>
+<script type="text/javascript">// <![CDATA[
+document.getElementById("searchedKeyword").value= klevu_getParamValue("q");
+// ]]></script>

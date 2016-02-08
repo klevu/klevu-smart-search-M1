@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<config>
+  <modules>
+    <Klevu_Content>
+        <active>true</active>
+        <codePool>community</codePool>
+        <version>0.1.0</version>
+        <depends>
+                <Klevu_Search/>
+        </depends>
+    </Klevu_Content>
+  </modules>
+</config>

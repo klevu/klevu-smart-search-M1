@@ -1,0 +1,118 @@
+<?php /** @var Klevu_Search_Block_Adminhtml_Wizard_Configure_User $this */ ?>
+<?php echo $this->getChildHtml('messages');
+$request = $this->getRequest(); ?>
+<form id="klevu_search_wizard_configure_user_form" action="<?php echo $this->getFormActionUrl() ?>" method="POST">
+    <input type="hidden" name="form_key" value="<?php echo $this->getFormKey() ?>" />
+    <fieldset class="fieldset">
+		<div class="kuWizardSteps">
+		<ol class="wizard-progress clearfix">
+			<li class="active-step">
+				<span class="step-name">Register/Login</span>
+				<span class="visuallyhidden">Step </span><span class="step-num">&nbsp;</span>
+			</li>
+			<li>
+				<span class="step-name">Select Plan</span>
+				<span class="visuallyhidden">Step </span><span class="step-num">&nbsp;</span>
+			</li>
+			<li>
+				<span class="step-name">Configure Store</span>
+				<span class="visuallyhidden">Step </span><span class="step-num">&nbsp;</span>
+			</li>
+			<li>
+				<span class="step-name">Finish & Sync</span>
+				<span class="visuallyhidden">Step </span><span class="step-num">&nbsp;</span>
+			</li>
+		</ol>
+		</div>
+		
+        <table cellspacing="0" class="form-list" style="width:100%;">
+            <tbody>
+                <tr>
+                    <td>
+                        <table class="klevu_signup_form">
+                            <tr>
+                                <td colspan="2">
+                                    <div class="content-header">
+                                        <h3>Register New User</h3>
+                                    </div>
+                                    <p><?php echo $this->__("Fill out the form below to create a new Klevu user to use with this Magento installation:") ?></p>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="label"><label for="klevu_new_email"><?php echo $this->__("Primary Email:") ?><span class="required">&nbsp;<em>*</em></span></label>
+                                </td>
+                                <td class="value">
+                                    <input type="text" name="klevu_new_email" value="<?php if($request->getPost("klevu_new_email")){ echo $request->getPost("klevu_new_email");} ?>" id="klevu_new_email" class="required-entry input-text" />
+                                    <p class="note"><?php echo $this->__("For login and technical support");?></p>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="label"><label for="merchantEmail"><?php echo $this->__("Retailer Email:") ?><span class="required">&nbsp;<em>*</em></span></label></td>
+                                <td class="value">
+                                    <input type="text" name="merchantEmail" value="<?php if($request->getPost("merchantEmail")){ echo $request->getPost("merchantEmail");} ?>" id="merchantEmail" class="input-text" />
+                                    <p class="note">
+                                        <?php echo $this->__("For search insights and billing");?>
+                                    </p>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="label"><label for="klevu_new_password"><?php echo $this->__("Password:") ?><span class="required">&nbsp;<em>*</em></span></label></td>
+                                <td class="value"><input type="password" name="klevu_new_password" id="klevu_new_password" class="input-text" />
+                                </td>
+                            </tr>
+                            
+                            <tr>
+                                <td class="label"><label for="contactNo"> <?php echo $this->__("Phone Number:") ?><span class="required">&nbsp;</span></label></td>
+                                <td class="value"><input type="text" value="<?php if($request->getPost("countyCode")){ echo $request->getPost("countyCode");} ?>" placeholder="Country code" name="countyCode"  id="countyCode" class="input-text"  /> <input type="text" name="contactNo" id="contactNo" value="<?php echo Mage::getStoreConfig('general/store_information/phone');?>" class="input-text" /></td>
+                            </tr>
+                            <tr>
+                                <td class="label"><label for="klevu_new_url"> <?php echo $this->__("Store URL:") ?><span class="required">&nbsp;<em>*</em></span></label></td>
+                                <td class="value"><input type="text" name="klevu_new_url" id="klevu_new_url" class="input-text" value="<?php echo $this->getStoreUrl() ?>" /></td>
+                            </tr>
+                            <tr>
+                                <td class="label">&nbsp;</td>
+                                <td colspan="2"><input type="checkbox" name="termsconditions" id="termsOfService"> <label for="termsOfService">I accept <a href="#" onClick="termsofservice();" style="font-size:11px;"><?php echo $this->__("Terms of Service");?></a></label></td>
+                            </tr>
+                            <tr>
+                                <td class="label"></td>
+                                <td class="value" style="padding-right: 26px;">
+                                    <div class="button-set">
+                                        <button type="submit"><span><?php echo $this->__("Next") ?></span></button>
+                                    </div>
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                    <td>
+                        <table class="klevu_signup_form">
+                            <tr>
+                                <td colspan="2">
+                                    <div class="content-header">
+                                        <h3>Already Registered?</h3>
+                                    </div>
+                                    <p><?php echo $this->__("If you have an account with Klevu, please log in:") ?></p>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="label"><label for="klevu_existing_email"><?php echo $this->__("Primary Email:") ?><span class="required">&nbsp;<em>*</em></span></label></td>
+                                <td class="value"><input type="text" name="klevu_existing_email" id="klevu_existing_email" class="input-text" /></td>
+                            </tr>
+                            <tr>
+                                <td class="label"><label for="klevu_existing_password"><?php echo $this->__("Password:") ?><span class="required">&nbsp;<em>*</em></span></label></td>
+                                <td class="value"><input type="password" name="klevu_existing_password" id="klevu_existing_password" class="input-text" /></td>
+                            </tr>
+                            <tr>
+                                <td class="label"></td>
+                                <td class="value">
+                                    <div class="button-set">
+                                        <button type="submit"><span><?php echo $this->__("Login") ?></span></button>
+                                    </div>
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </fieldset>
+</form>

@@ -1,0 +1,40 @@
+<?xml version="1.0"?>
+<config>
+    <sections>
+        <klevu_search translate="label" module="klevu_search">
+            <groups>
+                <attribute_boost translate="label">
+                    <label>Search Merchandising</label>
+                    <sort_order>300</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>1</show_in_website>
+                    <show_in_store>1</show_in_store>
+                    <comment>                     
+                    <![CDATA[<div class="kuGuideLink"><a target="_blank" href="http://support.klevu.com/section/manuals/magento-manuals/merchandising">Quick Guide</a></div>
+                     ]]></comment>
+                    <fields>
+                        <boosting_rule_info translate="label comment">
+                            <label></label>
+                            <comment><![CDATA[Switch to store view scope to set.]]></comment>
+                            <sort_order>801</sort_order>
+                            <frontend_type>label</frontend_type>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </boosting_rule_info>
+                        <boosting_rule translate="label comment">
+                            <label></label>
+                            <comment><![CDATA[To use rule based product boosting, ensure you have selected "Apply
+           Product Boosting Rules" option as the Boosting Attribute above.]]></comment>
+                            <frontend_model>boosting/adminhtml_form_field_rule_button</frontend_model>
+                            <sort_order>801</sort_order>
+                            <show_in_default>0</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </boosting_rule>
+                    </fields>
+                </attribute_boost>
+            </groups>
+        </klevu_search>
+    </sections>
+</config>

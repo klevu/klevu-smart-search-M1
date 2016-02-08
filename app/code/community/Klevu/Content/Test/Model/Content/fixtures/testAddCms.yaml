@@ -1,0 +1,24 @@
+config:
+  default/klevu_search/general/enabled: 1
+  default/klevu_search/general/test_rest_api_key: a2xldnUtMTQyNTU1MTA4OTU2NDEwNjk6S2xldnUtZmo4NzQ3cHUxMg==
+  default/klevu_search/product_sync/enabled: 1
+tables:  
+  cms_page:
+    - page_id: 4
+      title: new content
+      identifier: new content
+      content: new content
+      is_active:1
+      type:pages
+      created_at: 2015-07-17 01:57:22
+      updated_at: 2015-07-17 01:57:22
+tables:
+  klevu_search/product_sync:
+    -
+      product_id:4
+      parent_id: 0
+      store_id: 1
+      test_mode: 0
+      type:pages
+      last_synced_at: 0000-00-00 00:00:00
+      

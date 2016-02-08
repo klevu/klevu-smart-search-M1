@@ -1,0 +1,13 @@
+<data>
+    <upgradeUrl>https://box.klevu.com/analytics</upgradeUrl>
+    <upgradeLabel>Upgrade</upgradeLabel>
+    <upgradeMessage>
+        This feature is not available in your plan. Upgrade your plan to activate this feature.
+    </upgradeMessage>
+    <preserveLayoutMessage>
+        If you want to use <b>Native search result page (which preserves your theme layout)</b> then upgrade your plan.
+    </preserveLayoutMessage>
+    <enabled>enabledaddtocartfront,enabledcmsfront</enabled>
+    <disabled>boosting,enabledpopulartermfront,preserves_layout</disabled>
+    <userPlanForStore>Growth</userPlanForStore>
+</data>

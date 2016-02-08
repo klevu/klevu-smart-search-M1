@@ -1,0 +1,43 @@
+<?php
+/** @var Klevu_Search_Block_Catalog_Product_Popularterms $this */
+?>
+<?php
+$config = Mage::helper('klevu_search/config');
+?>
+<?php
+if ($config->isExtensionConfigured()):
+?>
+<?php
+    $terms = $this->getPopularterms();
+    if (count($terms) == 1) {
+        $terms = array(
+            $terms
+        );
+    }
+    if (count($terms) > 0) {
+        sort($terms);
+        foreach ($terms as $term) {
+            $terms_array[mb_substr($term, 0, 1,'utf-8')][] = $term;
+        }
+        foreach ($terms_array as $key => $value) {
+            $newArray = array_slice($value, 0, 5, true);
+            echo '<div class="klevu-search-terms"><h3>' . $key . '</h3><ul>';
+            foreach ($newArray as $key => $value) {
+                if ($config->isLandingEnabled() == 2) {
+                    $url = Mage::getBaseUrl() . "search?q=" . $value;
+                } else {
+                    $url = Mage::getUrl('catalogsearch/result/index', array(
+                        'q' => $value
+                    ));
+                }
+                echo '<li><a href="' . $url . '">' . $value . "</a></li>";
+            }
+            echo '</ul></div>';
+        }
+    } else {
+        echo $this->__("No Popular search term found");
+    }
+?>
+<?php
+endif;
+?>

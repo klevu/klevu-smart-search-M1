@@ -1,0 +1,97 @@
+<?php /** @var Mage_Core_Block_Template $this */ ?>
+<?php $config = Mage::helper('klevu_search/config'); ?>
+<?php $helper = Mage::helper('klevu_search'); ?>
+<?php if ($config->isExtensionConfigured()): 
+        $url = Mage::getUrl('search', array(
+                '_secure' => Mage::app()->getFrontController()->getRequest()->isSecure()
+        ));
+?>
+<script type="text/javascript">
+    var allInputs = document.getElementsByTagName( 'input' );
+    var klevu_current_version = '<?php  echo Mage::getConfig()->getModuleConfig('Klevu_Search')->version; ?>';
+    <?php 
+    if ($config->isLandingEnabled()==0){ ?>
+    var klevu_showQuickSearchOnEnter=true;
+    (function () {
+        // Remove Magento event observers from the search box
+        // No Redirection of landing page
+        for( i = 0, len = allInputs.length; i < len; i++ ){
+            if( allInputs[i].type === "text" || allInputs[i].type === "search" ){
+                if( allInputs[i].name === "q" ||  allInputs[i].id === "search" ){
+                    var search_input = allInputs[i];
+                    search_input.stopObserving('click');
+                    search_input.stopObserving('keydown');
+                    search_input.form.stopObserving('submit');
+                    search_input.form.observe('submit', function (e) {
+                        Event.stop(e);
+                        klevu_autoSuggest(search_input.value, e);
+                        return false;
+                    });
+               }
+            }
+        }
+        
+    })(); 
+    <?php } else if($config->isLandingEnabled()==2) { ?>
+    (function () {
+        // Remove Magento event observers from the search box
+        // Redirect to klevu js page
+        for( i = 0, len = allInputs.length; i < len; i++ ){
+            if( allInputs[i].type === "text" || allInputs[i].type === "search" ){
+                if( allInputs[i].name === "q" ||  allInputs[i].id === "search" ){
+                    var search_input = allInputs[i];
+                    search_input.stopObserving('click');
+                    search_input.stopObserving('keydown');
+                    search_input.form.action='<?php echo $url; ?>' ;//?q="+search_input.value;
+                    search_input.form.observe('submit', function (e) {
+                        //if(search_input.value.length!= 0){
+                            //Event.stop(e);
+                            //return false;
+                        //}
+                    });
+                }
+            }
+        }
+        
+    })();
+     var klevu_storeLandingPageUrl = '<?php echo $url; ?>';
+     var klevu_showQuickSearchOnEnter=false;
+    <?php } else if($config->isLandingEnabled()==1) { ?>
+    (function () {
+        // Remove Magento event observers from the search box
+        // default magetno layout landing page 
+        for( i = 0, len = allInputs.length; i < len; i++ ){
+            if( allInputs[i].type === "text" || allInputs[i].type === "search" ){
+                if( allInputs[i].name === "q" ||  allInputs[i].id === "search" ){
+                    var search_input = allInputs[i];
+                    search_input.stopObserving('click');
+                    search_input.stopObserving('keydown');
+                }
+            }
+        }
+    })();
+    var klevu_storeLandingPageUrl = '<?php echo Mage::getUrl('catalogsearch/result/');?>'; 
+    var klevu_showQuickSearchOnEnter=false;
+    <?php } ?>
+    // call store js
+    var klevu_apiKey = '<?php echo $config->getJsApiKey() ?>',
+        searchTextBoxName = 'search',
+        klevu_lang = '<?php echo $helper->getStoreLanguage() ?>',
+        klevu_result_top_margin = '',
+        klevu_result_left_margin = '';
+    (function () { var ws = document.createElement('script'),kl_protocol =("https:"===document.location.protocol?"https://":"http://"); ws.type = 'text/javascript'; ws.async = true; ws.src = kl_protocol+'<?php echo $config->getJsUrl() ?>/klevu-js-v1/js/klevu-webstore.js'; var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ws, s); })();
+</script>
+<?php endif; ?>
+
+<?php // show group price based on logged in customer group ?>
+<script type="text/javascript">
+<?php 
+    $login = Mage::getSingleton( 'customer/session' )->isLoggedIn(); //Check if User is Logged In
+    if($login) { ?>
+    var klevu_loginCustomerGroup = "<?php echo Mage::getSingleton('customer/session')->getCustomerGroupId(); ?>";
+<?php }?>
+</script>
+
+
+
+

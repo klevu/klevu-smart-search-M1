@@ -1,0 +1,20 @@
+<?php /** @var Klevu_Search_Block_Adminhtml_Form_Field_Sync_Button $this */ ?>
+<button id="<?php echo $this->getHtmlId() ?>" class="scalable" type="button">
+    <span><?php echo $this->__($this->getButtonLabel()) ?></span>
+</button>
+<script type="text/javascript">
+    $("<?php echo $this->getHtmlId() ?>").observe("click", function () {
+        if(document.getElementById('klevu_search_product_sync_sync_options')) {
+            var syncoptions = document.getElementById('klevu_search_product_sync_sync_options').value;
+            new Ajax.Request("<?php echo $this->getUrl('adminhtml/klevu_search/save_sync_options_config'); ?>" + '?sync_options=' + syncoptions, {
+                method: 'POST',
+                onComplete: function(data) {
+                    setLocation("<?php echo $this->getDestinationUrl() ?>");
+                }
+            });
+        } else {
+            setLocation("<?php echo $this->getDestinationUrl() ?>");
+        }
+        
+    });
+</script>

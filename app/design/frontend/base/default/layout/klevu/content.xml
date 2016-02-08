@@ -1,0 +1,47 @@
+<?xml version="1.0"?>   
+<layout version="0.1.0">   
+  <content_search_index>   
+    <reference name="root">   
+      <action method="setTemplate"><template>page/2columns-left.phtml</template></action>   
+    </reference> 
+    <reference name="head">
+	    <action method="addCss"><stylesheet>css/klevu/content/klevu-landing-left.css</stylesheet></action>
+	</reference>    
+    <reference name="content">   
+      <block type="core/template" name="contentsearch.top.block" before="-" as="contentsearch_top_block" template="klevu/content/top.phtml" />
+      <block type="content/index" name="content_index" template="klevu/content/index.phtml"/>   
+    </reference>  
+    <reference name="left">
+        <block type="content/index" name="contentsearch.left.block"  as="contentsearch_top_block" template="klevu/content/left.phtml" />
+    </reference>
+  </content_search_index>   
+  <catalogsearch_result_index translate="label">
+    <reference name="content">
+        <block type="core/template" name="contentsearch.top.block" before="-" as="contentsearch_top_block" template="klevu/content/top.phtml" />
+    </reference>   
+  </catalogsearch_result_index>
+    <search_index_index>   
+        <reference name="head">
+	        <action method="addCss"><stylesheet>css/klevu/klevu-landing-page-style.css</stylesheet></action>
+            <action method="addCss"><stylesheet>css/klevu/klevu-landing-responsive.css</stylesheet></action>
+	    </reference>
+        <reference name="root">   
+            <action method="setTemplate"><template>page/1column.phtml</template></action>   
+        </reference>   
+        <reference name="content"> 
+            <remove name="search_index"/>        
+            <block type="core/template" name="search_content_index" template="klevu/content/search.phtml"/>   
+        </reference>   
+    </search_index_index>  
+    <cms_page>
+        <reference name="before_body_end">
+            <block type="content/tracking" name="klevu.content.tracking" template="klevu/content/content_tracking.phtml" />
+        </reference>
+    </cms_page>
+    <default>
+        <reference name="before_body_end">
+            <block type="core/template" name="klevu.content.typeofquery" template="klevu/content/type_of_query.phtml"/>
+        </reference>
+    </default>
+</layout>   
+	

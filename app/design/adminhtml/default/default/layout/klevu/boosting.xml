@@ -1,0 +1,33 @@
+<?xml version="1.0"?>
+<layout version="0.1.0">
+  <boosting_adminhtml_boost_index>
+    <reference name="messages">
+            <action method="addNotice" translate="message">
+            <message><![CDATA[Steps:</br>
+1. Click on the "Add New Rule" button to start adding Product Boosting Rules.</br>
+2. Once you are done with adding rules, at the store view scope, choose the option "Apply Product Boosting Rules" for the "Boosting attribute".</br>
+3. Resynchronize ALL your products.]]>
+            </message>
+            </action>
+    </reference>
+    <reference name="head">
+        <action method="setCanLoadExtJs"><flag>1</flag></action>
+        <action method="setCanLoadRulesJs"><flag>1</flag></action>
+    </reference>
+	<reference name="content">
+	  <block type="boosting/adminhtml_boost" name="boost" />
+	</reference>
+  </boosting_adminhtml_boost_index>
+  <boosting_adminhtml_boost_edit>
+    <reference name="head">
+        <action method="setCanLoadExtJs"><flag>1</flag></action>
+        <action method="setCanLoadRulesJs"><flag>1</flag></action>
+    </reference>
+  </boosting_adminhtml_boost_edit>
+  <boosting_adminhtml_boost_new>
+    <reference name="head">
+        <action method="setCanLoadExtJs"><flag>1</flag></action>
+        <action method="setCanLoadRulesJs"><flag>1</flag></action>
+    </reference>
+  </boosting_adminhtml_boost_new>
+</layout>

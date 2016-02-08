@@ -1,0 +1,22 @@
+<?php echo $this->getMessagesBlock()->getGroupedHtml() ?>
+<?php $datasets = $this->getCmsContent(); ?>
+<?php if(count($datasets)>0): ?>
+<div class="category-products">
+<ol id="products-list" class="products-list">
+        <?php foreach ($datasets as $key => $value):?>
+            <li class="item">
+                <h2 class="product-name"><a title="<?php echo $value["name"]; ?>" target="_blank" href="<?php echo $value["url"]; ?>"><?php echo $value["name"]; ?></a></h2>           
+                <?php  if(!empty($value['shortDesc'])) { ?>
+                    <div class="desc std"> <?php echo $value["shortDesc"]."..."; ?> </div>
+                <?php } ?>
+            </li>
+        <?php endforeach; ?>
+</ol>
+</div>
+<?php else: ?>
+    <p><?php echo $this->__('No Records Found.'); ?></p>
+<?php endif ?>
+
+
+
+

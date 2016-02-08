@@ -1,0 +1,17 @@
+<?php /** @var Klevu_Search_Block_Adminhtml_Form_Field_Sync_Button $this */ ?>
+<?php 
+$check_preserve = Mage::getModel("klevu_search/product_sync")->getFeatures();
+if(!empty($check_preserve['disabled'])) {
+$disable_features =  explode(",",$check_preserve['disabled']);
+} else {
+$disable_features = array();
+}
+?>
+<button id="<?php echo $this->getHtmlId() ?>" class="scalable <?php  if (in_array("boosting", $disable_features)) {?>klevu-btn-disabled <?php } ?>" type="button" <?php  if (in_array("boosting", $disable_features)) {?> disabled="disabled" style="opacity:0.60" <?php } ?>>
+    <span><?php echo $this->__($this->getButtonLabel()) ?></span>
+</button>
+<script type="text/javascript">
+    $("<?php echo $this->getHtmlId() ?>").observe("click", function () {
+        window.open('<?php echo $this->getDestinationUrl() ?>','_blank');
+    });
+</script>

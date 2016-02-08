@@ -1,0 +1,44 @@
+<?php /** @var Mage_Core_Block_Template $this */ ?>
+<?php echo $this->getChildHtml('messages') ?>
+<div class="kuWizardSteps">
+<ol class="wizard-progress clearfix">
+	<li class="active-step">
+		<span class="step-name"><?php echo $this->__("Register/Login");?></span>
+		<span class="visuallyhidden"><?php echo $this->__("Step");?> </span><span class="step-num">&nbsp;</span>
+	</li>
+    <?php if(Mage::getSingleton('core/session')->getHideStep() != "yes") { ?>
+	<li class="active-step">
+		<span class="step-name"><?php echo $this->__("Select Plan");?></span>
+		<span class="visuallyhidden"><?php echo $this->__("Step");?> </span><span class="step-num">&nbsp;</span>
+	</li>
+    <?php } ?>
+	<li class="active-step">
+		<span class="step-name"><?php echo $this->__("Configure Store");?></span>
+		<span class="visuallyhidden"><?php echo $this->__("Step");?> </span><span class="step-num">&nbsp;</span>
+	</li>
+	<li class="active-step">
+		<span class="step-name"><?php echo $this->__("Finish & Sync");?></span>
+		<span class="visuallyhidden"><?php echo $this->__("Step");?> </span><span class="step-num">&nbsp;</span>
+	</li>
+</ol>
+</div>
+<div class="kuFinishSyncInfo">
+	<h3><?php echo $this->__('Please click the "Finish and Sync" button below to synchronise your products to Klevu.');?></h3>
+	
+	<ul>
+		<li><?php echo $this->__('Klevu Search will be automatically enabled on frontend after the first synchronisation completes.');?></li>
+		<li><?php echo $this->__('Data will be automatically resynchronised periodically as well as when any information changes.');?></li>
+		<li><?php echo $this->__('Make sure your CRON is setup.');?></li>
+	</ul>
+</div>
+<br/>
+<div class="button-set">
+    <button id="sync-button"><span><?php echo $this->__("Finish and Sync") ?></span></button><br/>
+</div>
+<h4 class="kuCompleteWarning"><?php echo $this->__('Please do not close or refresh the page after clicking the button until the page has finished loading.');?></h4>
+<script type="text/javascript">
+    $("sync-button").observe("click", function (e) {
+        Element.show('loading-mask');
+        window.location = "<?php echo $this->getUrl("adminhtml/klevu_search/manual_sync") ?>";
+    });
+</script>

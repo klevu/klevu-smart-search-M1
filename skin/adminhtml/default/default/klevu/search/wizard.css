@@ -1,0 +1,105 @@
+#klevu_search_wizard .magento_content {
+    height: auto !important;
+    min-height: 450px;
+}
+
+#klevu_search_wizard .divider {
+    height: auto;
+    text-align: center;
+    font-weight: bold;
+    background: none;
+}
+
+#klevu_search_wizard .loading {
+    margin: 50px 20px;
+    text-align: center;
+}
+
+#klevu_search_wizard .warning {
+    margin: 30px 0;
+}
+
+#klevu_search_wizard #klevu_search_wizard_select_store_form .form-list {
+    margin: 0 auto;
+}
+
+#klevu_search_wizard p.error-msg {
+    min-height: 23px;
+    padding: 8px 8px 2px 32px;
+}
+
+#klevu_search_wizard .button-set {
+    margin: 10px 5px;
+}
+
+#klevu_search_wizard .button-set:before,
+#klevu_search_wizard .button-set:after {
+    content: ' ';
+    display: table;
+}
+
+#klevu_search_wizard .button-set:after {
+    clear: both;
+}
+
+#klevu_search_wizard .button-set button,
+#klevu_search_wizard .button-set a {
+    float: right;
+    margin-left: 10px;
+}
+
+#klevu_search_wizard_configure_attributes_form .fieldset div.grid {
+    max-height: 250px;
+    overflow: scroll;
+}
+
+#klevu_search_wizard_summary_form .configuration-changes {
+    margin: 10px 40px;
+}
+
+#klevu_search_wizard_summary_form .configuration-changes {
+    margin: 10px 0;
+}
+
+#klevu_search_wizard_summary_form .configuration-changes li div {
+    font-weight: bold;
+}
+
+#klevu_search_wizard_summary_form .configuration-changes li dl {
+    margin-left: 20px;
+}
+
+#klevu_search_wizard_summary_form .configuration-changes li dt,
+#klevu_search_wizard_summary_form .configuration-changes li dd {
+    float: left;
+}
+
+#klevu_search_wizard_summary_form .configuration-changes li dt {
+    clear: left;
+    width: 150px;
+}
+
+#klevu_search_wizard_summary_form .configuration-changes dl:before,
+#klevu_search_wizard_summary_form .configuration-changes dl:after {
+    content: " ";
+    display: table;
+    clear: both;
+}
+
+.klevu_signup_form td.label{
+    width: 130px !important; 
+}
+
+.klevu_signup_form td.label label{
+    width: 130px !important;
+}
+
+.klevu_signup_form #countyCode{
+    width:74px;
+    text-align:right;
+}
+
+.klevu_signup_form #contactNo{
+    width:190px;
+    text-align:right;
+}

@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+<config>
+    <acl>
+        <resources>
+            <admin>
+                <children>
+                    <system>
+                        <children>
+                            <config>
+                                <children>
+                                    <klevu_search translate="title" module="klevu_search">
+                                        <title>Klevu Search configuration</title>
+                                    </klevu_search>
+                                    <klevu_search_info translate="title" module="klevu_search">
+                                        <title>Help Center</title>
+                                    </klevu_search_info>
+                                </children>
+                            </config>
+                        </children>
+                    </system>
+                </children>
+            </admin>
+        </resources>
+    </acl>
+</config>

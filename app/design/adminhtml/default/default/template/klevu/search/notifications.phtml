@@ -1,0 +1,8 @@
+<?php /** @var Klevu_Search_Block_Adminhtml_Notifications $this */ ?>
+<?php $notifications = $this->getNotifications(); ?>
+<?php foreach ($notifications as $notification): ?>
+    <div class="klevu-notification notification-global">
+        <strong><?php echo $this->__("Klevu Search") ?>:</strong> [<?php echo $notification->getDate() ?>] <?php echo $notification->getMessage() ?>
+        <a class="dismiss" href="<?php echo $this->getDismissUrl($notification) ?>"><?php echo $this->__("Dismiss") ?></a>
+    </div>
+<?php endforeach; ?>

@@ -1,0 +1,9 @@
+<?xml version="1.0"?>   
+<layout version="0.1.0">   
+    <default>
+        <reference name="before_body_end">
+            <block type="core/template" name="klevu.addtocart.index" template="klevu/addtocart/index.phtml"/>
+        </reference>
+    </default>
+</layout>   
+	

@@ -1,0 +1,37 @@
+<?xml version="1.0"?>
+<layout version="0.1.0">
+    <default>
+    <reference name="before_body_end">
+            <block type="core/template" name="klevu.search.form_js" template="klevu/search/form_js.phtml"/>
+    </reference>
+    </default>
+    <catalog_product_view>
+        <reference name="before_body_end">
+            <block type="klevu_search/catalog_product_tracking" name="klevu_search.catalog.product.tracking" template="klevu/search/product_tracking.phtml" />
+        </reference>
+    </catalog_product_view>
+    <search_search_runexternalylog>
+        <label>Klevu Log</label>
+        <remove name="right"/>
+        <remove name="left"/>
+        <reference name="root">
+            <action method="setTemplate"><template>page/1column.phtml</template></action>
+        </reference>
+        <reference name="content">
+            <block type="core/template" name="klevulog" template="klevu/search/klevulog.phtml"/>
+        </reference>
+    </search_search_runexternalylog>
+    <search_index_index>   
+        <reference name="head">
+	        <action method="addCss"><stylesheet>css/klevu/klevu-landing-page-style.css</stylesheet></action>
+            <action method="addCss"><stylesheet>css/klevu/klevu-landing-responsive.css</stylesheet></action>
+	    </reference>
+        <reference name="root">   
+            <action method="setTemplate"><template>page/1column.phtml</template></action>   
+        </reference>   
+        <reference name="content">   
+            <block type="core/template" name="search_index" template="klevu/search/index.phtml"/>   
+        </reference>   
+    </search_index_index>  
+ 
+</layout>

@@ -1,0 +1,69 @@
+<?xml version="1.0"?>
+<layout version="0.1.0">
+
+    <default>
+        <reference name="head">
+            <action method="addItem"><type>skin_css</type><name>klevu/search/notifications.css</name></action>
+            <action method="addItem"><type>skin_css</type><name>klevu/search/klevumagestyle.css</name></action>
+        </reference>
+        <reference name="notifications">
+            <block type="klevu_search/adminhtml_notifications" name="klevu_notifications"
+                   template="klevu/search/notifications.phtml"/>
+        </reference>
+    </default>
+    <adminhtml_catalog_product_index>
+        <reference name="products_list">
+            <action method="addButton" ifconfig="klevu_search/product_sync/enabled">
+                <name>klevu_search_sync_all</name>
+                <data helper="klevu_search/getSyncAllButtonData"/>
+            </action>
+        </reference>
+    </adminhtml_catalog_product_index>
+
+    <adminhtml_system_config_edit>
+        <update handle="editor" />
+        <reference name="head">
+            <action method="addItem"><type>skin_css</type><name>klevu/search/wizard.css</name></action>
+            <action method="addItem"><type>js</type><name>klevu/search/lib/Wizard.js</name></action>
+        </reference>
+    </adminhtml_system_config_edit>
+
+    <adminhtml_klevu_search_wizard_configure_user>
+        <remove name="root"/>
+        <block type="klevu_search/adminhtml_wizard_configure_user" name="configure_user"
+               template="klevu/search/wizard/configure/user.phtml" output="toHtml">
+            <block type="core/messages" name="messages" as="messages" />
+        </block>
+    </adminhtml_klevu_search_wizard_configure_user>
+    
+    <adminhtml_klevu_search_wizard_configure_userplan>
+        <remove name="root"/>
+        <block type="klevu_search/adminhtml_wizard_configure_userplan" name="configure_userplan"
+               template="klevu/search/wizard/configure/userplan.phtml" output="toHtml">
+            <block type="core/messages" name="messages" as="messages" />
+        </block>
+    </adminhtml_klevu_search_wizard_configure_userplan>
+
+    <adminhtml_klevu_search_wizard_configure_store>
+        <remove name="root" />
+        <block type="klevu_search/adminhtml_wizard_configure_store" name="configure_store"
+               template="klevu/search/wizard/configure/store.phtml" output="toHtml">
+            <block type="core/messages" name="messages" as="messages" />
+        </block>
+    </adminhtml_klevu_search_wizard_configure_store>
+
+    <adminhtml_klevu_search_wizard_configure_attributes>
+        <remove name="root" />
+        <block type="klevu_search/adminhtml_wizard_configure_attributes" name="configure_attributes"
+               template="klevu/search/wizard/configure/attributes.phtml" output="toHtml">
+            <block type="core/messages" name="messages" as="messages"/>
+        </block>
+    </adminhtml_klevu_search_wizard_configure_attributes>
+
+    <adminhtml_klevu_search_wizard_configure_store_post>
+        <remove name="root"/>
+        <block type="adminhtml/template" name="configure_attributes_post" template="klevu/search/wizard/complete.phtml" output="toHtml">
+            <block type="core/messages" name="messages" as="messages" />
+        </block>
+    </adminhtml_klevu_search_wizard_configure_store_post>
+</layout>

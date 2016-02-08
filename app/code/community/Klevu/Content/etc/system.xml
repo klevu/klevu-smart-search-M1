@@ -1,0 +1,81 @@
+<?xml version="1.0"?>
+<config>
+    <sections>
+        <klevu_search translate="label" module="klevu_search">
+            <label>Search Configuration</label>
+            <tab>klevu</tab>
+            <sort_order>300</sort_order>
+            <show_in_default>1</show_in_default>
+            <show_in_website>1</show_in_website>
+            <show_in_store>1</show_in_store>
+            <groups>
+                <product_sync translate="label">
+                    <label>Data Sync Settings</label>
+                    <sort_order>3</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>1</show_in_website>
+                    <show_in_store>1</show_in_store>
+                    <comment>                     
+                    <![CDATA[<div class="kuGuideLink"><a target="_blank" href="http://support.klevu.com/section/manuals/magento-manuals/data-synchronization/">Quick Guide</a></div>
+                     ]]></comment>
+                    <fields>
+                        <enabledcms translate="label">
+                            <label>Enable Other Content Sync</label>
+                            <comment><![CDATA[Enable CMS Synchronization.]]></comment>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <sort_order>111</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </enabledcms>
+                    </fields>
+                </product_sync>
+                <cmscontent translate="label">
+                    <label>CMS / Other (Non-Product) Content</label>
+                    <frontend_type>select</frontend_type>
+                    <source_model>adminhtml/system_config_source_yesno</source_model>
+                    <sort_order>103</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>1</show_in_website>
+                    <show_in_store>1</show_in_store>
+                    <comment>                     
+                    <![CDATA[<div class="kuGuideLink"><a target="_blank" href="http://support.klevu.com/section/manuals/magento-manuals/cms-pages-non-product-content/">Quick Guide</a></div>
+                     ]]></comment>
+                    <fields>
+                        <enabledcmsfront_info translate="label comment">
+                            <label></label>
+                            <comment><![CDATA[Switch to store view scope to set.]]></comment>
+                            <sort_order>100</sort_order>
+                            <frontend_type>label</frontend_type>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>0</show_in_store>
+                         </enabledcmsfront_info>
+                         <enabledcmsfront translate="label">
+                            <label>Enable Other Content in Frontend</label>
+                            <comment><![CDATA[By default, when a search query is fired, Klevu searches in the 
+           product catalog. To enable search in the other content (e.g. CMS and Other non-product content), select Yes.]]></comment>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <sort_order>100</sort_order>
+                            <show_in_default>0</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </enabledcmsfront>
+                        <excludecms_pages translate="label">
+                            <label>Exclude CMS Pages from Search</label>
+                            <comment><![CDATA[Please make sure to resynchronize data by choosing the "All data" option and clicking on the "Sync Data for This Store" button under the "Data Sync Settings".]]></comment>
+                            <frontend_model>content/adminhtml_form_cmspages</frontend_model>
+                            <backend_model>adminhtml/system_config_backend_serialized_array</backend_model>
+                            <sort_order>102</sort_order>
+                            <show_in_default>0</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </excludecms_pages>
+                    </fields>
+                </cmscontent>
+            </groups>
+        </klevu_search>
+    </sections>
+</config>

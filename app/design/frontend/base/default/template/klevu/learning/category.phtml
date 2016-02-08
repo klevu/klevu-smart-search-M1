@@ -1,0 +1,5 @@
+<?php /** @var Klevu_Learning_Block_Tracking $this */ ?>
+<?php $config = Mage::helper('klevu_search/config'); ?>
+<?php if ($config->isExtensionConfigured()): ?>
+<?php $this->setCategoryData(); ?>        
+<?php endif; ?>

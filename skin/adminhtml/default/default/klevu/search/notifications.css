@@ -1,0 +1,9 @@
+.klevu-notification:before,
+.klevu-notification:after {
+    content: " ";
+    display: table;
+    clear: both;
+}
+.klevu-notification .dismiss {
+    float: right;
+}

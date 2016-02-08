@@ -1,0 +1,33 @@
+<?php $contentFilters = $this->getContentFilters();
+if(count($contentFilters)> 0) {
+?>
+<div class="col-left-first">
+   <div class="block block-layered-nav">
+    <div class="block-content toggle-content">
+         <dl id="narrow-by-list">
+            <dt class="odd"><?php echo $this->__("Type"); ?></dt>
+            <dd class="odd">
+               <ol>
+                    <?php foreach($contentFilters["category"]["options"] as $key => $value) {
+                        $url_content = Mage::getUrl('content/search',array("q" => Mage::app()->getRequest()->getParam("q")));
+                    ?>
+                    <li class="kuFilterSelect">
+                        <a href="<?php echo $url_content."?cat=".strtolower($value["label"]);?>" class="kuFilterLbl">
+                            <?php echo $value["label"]; ?><span class="count"> (<?php echo $value["count"]; ?>)</span>
+                            
+                        </a>
+                        <?php if($value["selected"]=="true") { ?>
+                              <a href="<?php echo $url_content;?>" class="kuFilterClose">X</a>
+                        <?php } ?>
+                    </li>
+                    <div class="kuClrFilterBoth"></div>
+                    <?php } ?>
+               </ol>
+            </dd>
+            </ol>
+            </dd>
+         </dl>
+      </div>
+   </div>
+</div>
+<?php } ?>

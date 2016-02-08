@@ -1,0 +1,18 @@
+config:
+  default/klevu_search/general/rest_api_key: a2xldnUtMTQzNTczMzMwNDcwMjE3Mzk6S2xldnUtOHJqczNocnViYQ==
+  default/klevu_search/general/js_api_key: klevu-14357333047021739
+  default/klevu_search/product_sync/enabledcms: 1
+
+tables:
+  cms_page:
+    - page_id: 1
+      title: test
+      identifier: test
+      content: test test women
+      is_active:1
+    - page_id: 2
+      title: test
+      identifier: test
+      content: test test women
+      is_active:1
+

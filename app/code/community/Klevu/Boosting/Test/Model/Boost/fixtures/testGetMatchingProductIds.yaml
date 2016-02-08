@@ -1,0 +1,44 @@
+eav:
+  catalog_product:
+    -
+      entity_id: 132
+      attribute_set_id: 4
+      type_id: simple
+      sku: ac674
+      name: SLR Camera Tripod
+      short_description: Sturdy, lightweight tripods are designed to meet the needs of amateur and professional photographers and videographers.
+      description: Sturdy, lightweight tripods are designed to meet the needs of amateur and professional photographers and videographers.
+      url_key: slr-camera-tripod
+      image: /s/l/slr-camera-tripod.jpg
+      weight: 42
+      stock:
+        qty: 100.00
+        is_in_stock: 1
+      website_ids:
+        - 1 # Default website
+      category_ids:
+        - 2 # Default category
+      price: 99
+      tax_class_id: 2
+      status: 1
+      visibility: 4
+      created_at: 2007-08-29 19:53:55
+      updated_at: 2008-08-08 15:05:45      
+tables:
+   klevu_products_boosting:
+    -
+      id:466
+      name: Test
+      description: Test
+      status: 1
+      boosting:23
+      matchingids:,1307,1309,
+      conditions_serialized:'a:7:{s:4:"type";s:37:"boosting/boost_rule_condition_combine";s:9:"attribute";N;s:8:"operator";N;s:5:"value";s:1:"1";s:18:"is_value_processed";N;s:10:"aggregator";s:3:"all";s:10:"conditions";a:1:{i:0;a:5:{s:4:"type";s:37:"boosting/boost_rule_condition_product";s:9:"attribute";s:3:"sku";s:8:"operator";s:2:"==";s:5:"value";s:5:"ac674";s:18:"is_value_processed";b:0;}}}'
+    -
+      id:467
+      name: Test
+      description: Test
+      status: 1
+      boosting:23
+      matchingids:,1307,1309,
+      conditions_serialized:'a:7:{s:4:"type";s:37:"boosting/boost_rule_condition_combine";s:9:"attribute";N;s:8:"operator";N;s:5:"value";s:1:"1";s:18:"is_value_processed";N;s:10:"aggregator";s:3:"all";s:10:"conditions";a:1:{i:0;a:5:{s:4:"type";s:37:"boosting/boost_rule_condition_product";s:9:"attribute";s:12:"category_ids";s:8:"operator";s:2:"==";s:5:"value";s:1:"2";s:18:"is_value_processed";b:0;}}}'

@@ -1,0 +1,30 @@
+<?xml version="1.0"?>
+<data>
+    <result>
+        <id>3</id>
+        <itemGroupId>3</itemGroupId>
+    </result>
+    <result>
+        <id>2</id>
+        <itemGroupId>2</itemGroupId>
+    </result>
+    <result>
+        <id>1</id>
+        <itemGroupId>1</itemGroupId>
+    </result>
+    <meta>
+        <totalResultsFound>3</totalResultsFound>
+        <typeOfQuery>WILDCARD_AND</typeOfQuery>
+        <paginationStartFrom>0</paginationStartFrom>
+        <noOfResults>9</noOfResults>
+    </meta>
+    <filters>
+        <filter type="other" label="CATEGORY" key="category">
+            <option name="Test Category " value="category:shirts" count="3" selected="false"/>
+        </filter>
+        <filter type="other" label="PRICE RANGE" key="Price Range">
+            <option name="0 - 49" value="klevu_price:0 - 49" count="3" selected="false" />
+            <option name="0 - 49" value="klevu_price:50 - 99" count="4" selected="false" />
+        </filter>
+    </filters>
+</data>

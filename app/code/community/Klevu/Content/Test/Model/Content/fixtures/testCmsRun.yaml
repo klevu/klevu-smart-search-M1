@@ -1,0 +1,48 @@
+config:
+  default/klevu_search/general/rest_api_key: a2xldnUtMTQzNTczMzMwNDcwMjE3Mzk6S2xldnUtOHJqczNocnViYQ==
+  default/klevu_search/general/js_api_key: klevu-14357333047021739
+  default/klevu_search/product_sync/enabledcms: 1
+  
+tables:  
+  cms_page:
+    - page_id: 1
+      title: privacy
+      identifier: privacy
+      content: privacy privacy women
+      is_active:1
+    - page_id: 2
+      title: test
+      identifier: test
+      content: test test women
+      is_active:1
+    - page_id: 3
+      title: new content
+      identifier: new content
+      content: new content
+      is_active:1
+      type:pages
+      created_at: 2015-07-17 01:57:22
+      updated_at: 2015-07-17 01:57:22
+tables:
+  klevu_search/product_sync:
+    -
+      product_id:1
+      parent_id: 0
+      store_id: 1
+      test_mode: 0
+      type:pages
+      last_synced_at: 2008-08-10 13:36:29
+    -
+      product_id:2
+      parent_id: 0
+      store_id: 1
+      test_mode: 0
+      type:pages
+      last_synced_at: 2008-06-27 01:57:22
+    -
+      product_id:3
+      parent_id: 0
+      store_id: 1
+      test_mode: 0
+      type:pages
+      last_synced_at: 2008-06-27 01:57:22    

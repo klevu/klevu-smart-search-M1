@@ -1,0 +1,18 @@
+<data>
+    <response>success</response>
+    <customerId>116</customerId>
+    <webstores>
+        <webstore>
+            <jsApiKey>klevu-1396353366396116</jsApiKey>
+            <restApiKey>M5NjM1MzM2NjM5NjExNjpLbGV2dS1nbWFpMjZ0djE2</restApiKey>
+            <storeName>storeName</storeName>
+            <testAccountEnabled>true</testAccountEnabled>
+        </webstore>
+        <webstore>
+            <jsApiKey>klevu-1396353407457116</jsApiKey>
+            <restApiKey>M5NjM1MzQwNzQ1NzExNjpLbGV2dS1ka2hzMjZqYnNx</restApiKey>
+            <storeName>storeName</storeName>
+            <testAccountEnabled>true</testAccountEnabled>
+        </webstore>
+    </webstores>
+</data>
