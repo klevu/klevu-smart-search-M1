@@ -3,7 +3,7 @@
 Intelligent cloud hosted site search with self-learning search technology. Guaranteed to increase in search led conversions.<br /> 
 
 <hr />
-<h3><a href="http://www.klevu.com/support/installation-steps.html"> Installation Steps</a>&nbsp; |  &nbsp;<a href="http://www.klevu.com/support/faq-troubleshooting.html"> FAQs &amp; Troubleshooting </a></h3> 
+<h3><a href="http://support.klevu.com/knowledgebase/integration-steps-for-magento/"> Installation Steps</a>&nbsp; |  &nbsp;<a href="http://support.klevu.com/section/manuals/magento-manuals/"> Manuals </a> &nbsp; |  &nbsp;<a href="http://support.klevu.com/faq/faqs/"> FAQs</a></h3> 
 
 <b>Have questions? Need help?</b>  E-mail us at: <a href="mailto:support@klevu.com">support@klevu.com</a><br />
 <hr />
@@ -103,21 +103,13 @@ Shoppers very often research and search from their mobile devices prior to buyin
 <br />
 <hr />
 
-<h2>Pricing</h2>
-Klevu Search for SMEs comes in 2 variants - <b>BASIC</b> and <b>PRO</b>
-<br /><br />
-![Klevu Search Basic Vs Pro](http://www.klevu.com/magento-screens/basic-vs-pro.jpg "Klevu Search  Basic Vs Pro")
-
-<br /><br />
-<h3>  
-<a href="http://www.klevu.com/site-search-magento-basic-features.html">Learn more about BASIC</a> &nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="http://www.klevu.com/site-search-magento-pro.html">Learn more about PRO</a> 
-</h3>
+<h3><a href="http://demo.klevu.com/klevusearch/pro">Live demo</a></h3>
 
 <hr /><br /><br />
 
 
 <h3>Have questions? Need help? Have feedback for us?</h3>
-Check <a href="http://www.klevu.com/support/faq-troubleshooting.html"> FAQs &amp; Troubleshooting </a> section <b>OR</b> E-mail us at: <a href="mailto:support@klevu.com">support@klevu.com</a>
+Check <a href="http://support.klevu.com/faq/faqs/"> FAQs  </a> section <b>OR</b> E-mail us at: <a href="mailto:support@klevu.com">support@klevu.com</a>
 <br />
 <br />
 For more information please visit <a href="http://www.klevu.com/">http://www.klevu.com</a> 
