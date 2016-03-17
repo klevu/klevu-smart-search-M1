@@ -5,7 +5,7 @@ class Klevu_Search_Model_Api_Action_Producttracking extends Klevu_Search_Model_A
     const ENDPOINT = "/analytics/productTracking";
     const METHOD   = "POST";
 
-    const DEFAULT_REQUEST_MODEL  = "klevu_search/api_request_post";
+    const DEFAULT_REQUEST_MODEL  = "klevu_search/api_request_get";
     const DEFAULT_RESPONSE_MODEL = "klevu_search/api_response_data";
 
     protected function validate($parameters) {

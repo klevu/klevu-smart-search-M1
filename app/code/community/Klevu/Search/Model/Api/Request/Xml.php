@@ -26,11 +26,18 @@ class Klevu_Search_Model_Api_Request_Xml extends Klevu_Search_Model_Api_Request 
      */
     protected function build() {
         $client = parent::build();
-
-        $client
-            ->setHeaders("Content-Type", "application/xml")
-            ->setRawData($this->getDataAsXml());
-
+        $convertDataToXml = $this->getDataAsXml();
+        $gZen = gzencode($convertDataToXml,5);
+        if($gZen !== false) {
+            $client
+                ->setHeaders("Content-Encoding", "gzip") 
+                ->setHeaders("Content-Type", "application/xml")
+                ->setRawData($gZen);
+        } else {
+            $client
+                ->setHeaders("Content-Type", "application/xml")
+                ->setRawData($convertDataToXml);
+        }
         return $client;
     }
 

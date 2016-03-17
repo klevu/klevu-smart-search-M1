@@ -820,7 +820,6 @@ class Klevu_Search_Model_Product_Sync extends Klevu_Search_Model_Sync {
         }
         $product_ids = array_unique($product_ids);
         $parent_ids = array_unique($parent_ids);
-
         $data = Mage::getModel('catalog/product')->getCollection()
             ->addIdFilter($product_ids)
             ->setStore($this->getStore())
@@ -1078,7 +1077,7 @@ class Klevu_Search_Model_Product_Sync extends Klevu_Search_Model_Sync {
                 $product['listCategory'] = $this->getCategoryNames($parent->getCategoryIds());
             } else {
                 $product['category'] = "";
-                $product['listCategory'] = "";
+                $product['listCategory'] = "KLEVU_PRODUCT";
             }
             
             
@@ -2525,5 +2524,41 @@ class Klevu_Search_Model_Product_Sync extends Klevu_Search_Model_Sync {
         if(!empty($pro_ids)) {
             $this->updateSpecificProductIds($pro_ids);
         }
+    }
+    
+    /**
+     * Get the klevu cron entry which is running mode
+     * @return int
+     */
+    public function getKlevuCronStatus(){
+        $collection = Mage::getResourceModel('cron/schedule_collection')
+        ->addFieldToFilter("job_code", $this->getJobCode())
+        ->addFieldToFilter("status", Mage_Cron_Model_Schedule::STATUS_RUNNING);
+        if($collection->getSize()){
+            $data = $collection->getData();
+            $url = Mage::getModel('adminhtml/url')->getUrl("adminhtml/klevu_search/clear_klevu_cron");
+            return Mage_Cron_Model_Schedule::STATUS_RUNNING." Since ".$data[0]['executed_at']." <a href='".$url."'>Clear Klevu Cron</a>";
+        } else {
+            $collection = Mage::getResourceModel('cron/schedule_collection')
+            ->addFieldToFilter("job_code", $this->getJobCode())
+            ->addFieldToFilter("status",Mage_Cron_Model_Schedule::STATUS_SUCCESS)
+            ->setOrder('finished_at', 'desc');
+            if($collection->getSize()){
+                $data = $collection->getData();
+                return Mage_Cron_Model_Schedule::STATUS_SUCCESS." ".$data[0]["finished_at"];
+            }
+        }
+        return;
+    }
+    
+    /**
+     * Remove the cron which is in running state
+     * @return void
+     */
+    public function clearKlevuCron(){
+        $condition = array();
+        $condition[] = $this->getConnection()->quoteInto('status = ?', Mage_Cron_Model_Schedule::STATUS_RUNNING);   
+        $condition[] = $this->getConnection()->quoteInto('job_code = ?',$this->getJobCode());
+        $this->getConnection()->delete($this->getTableName("cron_schedule"),$condition);   
     }
 }

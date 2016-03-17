@@ -4,7 +4,7 @@ class Klevu_Search_Model_Api_Action_Idsearch extends Klevu_Search_Model_Api_Acti
     const ENDPOINT = "/cloud-search/n-search/idsearch";
     const METHOD   = "GET";
 
-    const DEFAULT_REQUEST_MODEL = "klevu_search/api_request_post";
+    const DEFAULT_REQUEST_MODEL = "klevu_search/api_request_get";
     const DEFAULT_RESPONSE_MODEL = "klevu_search/api_response_search";
 
     protected function validate($parameters) {

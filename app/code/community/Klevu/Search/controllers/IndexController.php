@@ -40,6 +40,24 @@ class Klevu_Search_IndexController extends Mage_Core_Controller_Front_Action {
      */
     public function runexternalyAction(){
         try {
+                $config = Mage::helper('klevu_search/config');
+                if($config->isExternalCallEnbaled()){
+                    if($this->getRequest()->getParam('data') == "updatesonly") {
+                        Mage::getModel('klevu_search/product_sync')->run();
+                        Mage::getModel("content/content")->run();
+                        Mage::getSingleton('core/session')->addSuccess("Updated Data has been sent to klevu.");
+                        
+                    } else if($this->getRequest()->getParam('data') == "alldata") {
+                        // Modified the updated date klevu_product_sync table
+                        Mage::getModel('klevu_search/product_sync')->markAllProductsForUpdate();
+                        // Run the product sync for all store
+                        Mage::getModel('klevu_search/product_sync')->run();
+                        Mage::getModel("content/content")->run();
+                        Mage::getSingleton('core/session')->addSuccess("All products Data sent to klevu.");
+
+                    }
+
+                }
                 $debugapi = Mage::getModel('klevu_search/product_sync')->getApiDebug();
                 $content="";
                 if($this->getRequest()->getParam('debug') == "klevu") {

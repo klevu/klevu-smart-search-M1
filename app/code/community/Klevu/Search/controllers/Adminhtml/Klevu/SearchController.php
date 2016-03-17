@@ -82,6 +82,13 @@ class Klevu_Search_Adminhtml_Klevu_SearchController extends Mage_Adminhtml_Contr
         Mage::helper('klevu_search/config')->saveSyncOptions($sync_options);
     }
     
+    /* clear the cron entry */
+    public function clear_klevu_cronAction() {
+        Mage::getModel("klevu_search/product_sync")->clearKlevuCron();
+        Mage::getSingleton('adminhtml/session')->addSuccess($this->__("Running Klevu product Sync entry cleared from cron_schedule table."));
+        return $this->_redirectReferer("adminhtml/dashboard");
+    }
+    
     protected function _isAllowed()
     {
         return true;
