@@ -428,6 +428,7 @@ class Klevu_Search_Helper_Config extends Mage_Core_Helper_Abstract {
      * @return bool
      */
     public function isProductSyncEnabled($store_id = null) {
+
         $flag = $this->getProductSyncEnabledFlag($store_id);
 
         // static::KLEVU_PRODUCT_FORCE_OLDERVERSION for handling of older version of klevu 
@@ -601,7 +602,7 @@ class Klevu_Search_Helper_Config extends Mage_Core_Helper_Abstract {
      *
      * @return bool
      */
-    public function isExternalCallEnbaled() {
+    public function isExternalCallEnabled() {
         return Mage::getStoreConfigFlag(static::XML_PATH_ENABLE_EXTERNAL_CALL);
     }
 

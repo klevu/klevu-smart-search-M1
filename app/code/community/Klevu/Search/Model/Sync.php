@@ -95,9 +95,18 @@ abstract class Klevu_Search_Model_Sync extends Varien_Object {
      */
     protected function isBelowMemoryLimit() {
         $helper = Mage::helper('klevu_search');
-
-        $limit = $helper->humanReadableToBytes(ini_get('memory_limit'));
+        $php_memory_limit = ini_get('memory_limit');
         $usage = memory_get_usage(true);
+
+        if($php_memory_limit < 0){
+            $this->log(Zend_Log::DEBUG, sprintf(
+            "Memory usage: %s of %s.",
+            $helper->bytesToHumanReadable($usage),
+            $php_memory_limit));
+            return true;
+        }
+        
+        $limit = $helper->humanReadableToBytes($php_memory_limit);
 
         $this->log(Zend_Log::DEBUG, sprintf(
             "Memory usage: %s of %s.",

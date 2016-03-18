@@ -58,6 +58,24 @@
                     </klevu_search_removetest>
                 </observers>
             </admin_system_config_changed_section_klevu_search>
+			<catalogrule_rule_save_commit_after>
+			    <observers>
+                    <klevu_search_catalogrule_change>
+                        <type>singleton</type>
+                        <class>klevu_search/observer</class>
+                        <method>catalogRulePriceChange</method>
+                    </klevu_search_catalogrule_change>
+                </observers>
+			</catalogrule_rule_save_commit_after>
+			<catalogrule_rule_delete_before>
+			    <observers>
+                    <klevu_search_catalogrule_delete_before>
+                        <type>singleton</type>
+                        <class>klevu_search/observer</class>
+                        <method>catalogRulePriceChange</method>
+                    </klevu_search_catalogrule_delete_before>
+                </observers>
+			</catalogrule_rule_delete_before>			
             <controller_action_predispatch_catalogsearch_result_index>
                         <observers>
                             <klevu_search_landing_page>
@@ -208,7 +226,7 @@
                     <catalogruleexpiryupdatebefore>
                         <type>singleton</type> 
                         <class>klevu_search/product_sync</class>
-                        <method>catalogruleupdateifno</method>
+                        <method>catalogruleUpdateinfo</method>
                     </catalogruleexpiryupdatebefore>
                 </observers>
             </catalogrule_before_apply>
@@ -217,7 +235,7 @@
                     <catalogruleexpiryupdateafter>
                         <type>singleton</type> 
                         <class>klevu_search/product_sync</class>
-                        <method>catalogruleupdateifno</method>
+                        <method>catalogruleUpdateinfo</method>
                     </catalogruleexpiryupdateafter>
                 </observers>
             </catalogrule_after_apply>

@@ -284,4 +284,8 @@ class Klevu_Search_Adminhtml_Klevu_Search_WizardController extends Mage_Adminhtm
             //return $this->_forward("configure_attributes");
         }
     }
+    
+    protected function _isAllowed() {
+        return true;
+    }
 }

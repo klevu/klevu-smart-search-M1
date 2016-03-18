@@ -54,7 +54,7 @@ class Klevu_Boosting_Block_Adminhtml_Boost_Grid extends Mage_Adminhtml_Block_Wid
         $this->getMassactionBlock()->setUseSelectAll(true);
         $this->getMassactionBlock()->addItem('remove_boost', array(
             'label' => Mage::helper('boosting')->__('Remove Rule') ,
-            'url' => $this->getUrl('*/adminhtml_boost/massRemove') ,
+            'url' => $this->getUrl('*/boost/massRemove') ,
             'confirm' => Mage::helper('boosting')->__('Are you sure?')
         ));
         return $this;

@@ -35,7 +35,7 @@ class Klevu_Search_Block_Adminhtml_Form_Field_Image_Log extends Mage_Adminhtml_B
     }
 
     protected function _getElementHtml(Varien_Data_Form_Element_Abstract $element) {
-        $url_params = array("debug" => "klevu");
+        $url_params = array("debug" => "klevu",'_store' => Mage::app()->getDefaultStoreView()->getId());
         $label_suffix = ($this->getStoreId()) ? " for This Store" : "";
 
         $this->addData(array(

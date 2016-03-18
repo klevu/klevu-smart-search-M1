@@ -5,7 +5,7 @@
 .kuContainer{
 	width:100%;
 	margin:0 auto;
-	font-family:inherit;
+	font-family: inherit;
 	font-size:12px;
 }
 
@@ -18,24 +18,28 @@
 /* klevu filters */
 .kuFilters{
 	float:left;
-	width:23%;
+	width: 20%;
 	border:1px solid #ccc;
+	border-top: none;
 }
 
 /* set the height of each filter*/
-.kuFilterBox{		
+.kuFilterBox{
 	height:150px;
 	overflow:hidden;
+	margin-bottom: 20px;
 }
 
 /* heading of filters i.e brand, color */
-.kuFilterHead{		
+.kuFilterHead{
 	padding: 8px;
-	font-weight: bold;
-	font-size: 12px;
+	/* font-weight: bold; */
+	font-size: 14px;
 	text-align: left;
-	background-color: #eee;
-	border-bottom: 1px solid #ddd;
+	line-height: 1.4;
+	background-color: #f4f4f4;
+	border-bottom: 1px solid #cccccc;
+	border-top: 1px solid #cccccc;
 }
 		
 /* down arrow div in filters */
@@ -86,24 +90,27 @@
 	position: relative;
 	overflow: hidden;
 	margin: 0 5px;
-	line-height:24px;
+	line-height: 22px;
 	padding-left: 5px;
 	padding-right: 5px;
-	font-size: 13px;
+	font-size: 14px;
 	text-decoration: none;
 	cursor: pointer;
 	font-style:normal;
+	font-family: inherit;
 }
 
 /* set background color on hover of filter */
 .kuFilterNames ul li a:hover{
-	background-color:#eee;
+	background-color: #888888;
 	cursor: pointer;
+	color:#fff;
 }
+
 
 /* set background color for selected filter */
 .kuFilterNames ul li.kuSelected a{
-	background-color:#616161;
+	background-color: #888888;
 	color: #fff;
 }
 
@@ -121,6 +128,7 @@
 	float:right;
 	width:13%;
 	text-align:right;
+	color: #a0a0a0;
 }
 
 /* shows cancel button if filter is selected */
@@ -131,15 +139,19 @@
 	font-size:10px;
 }
 
+.kuFilterNames ul li a:hover span.kuFilterTotal{
+    color:#fff;
+}
+
 /* klevu results box */
 .kuResultList{
 	float:right;
-	width:75%;
+	width: 78%;
 }
 
 /* div for Sorting, pagination, change result view icons*/
 .kuSortHeader{
-	margin:5px;
+	/* margin:5px; */
 	padding-top: 0px;
 	margin-top: 0px;
 }
@@ -163,24 +175,30 @@
 }	
 
 .kuTotalResultsTab a{
-	padding:8px;	
+	padding:8px;
 	cursor:pointer;
+	font-size: 14px;
 	border-radius:3px;
+	margin-right: 10px;
 }
 
 .kuTotalResultsTab a:hover{
-	background-color:#eee;	
+	background-color:#eee;
+	text-decoration:none;	
 }
 
 .kuTotalResultsTab a.kuTabSelected{
-	background-color:#616161;	
+	background-color: #888888;
 	color:#fff;
 }
 
 .kuSortingOpt{
-	background-color:#eee;
-	border:1px solid #ccc;
-	padding:5px;	
+	background-color: #f4f4f4;
+	border-top: 1px solid #ccc;
+	border-bottom: 1px solid #ccc;
+	padding: 8px;
+	padding-left: 12px;
+	width: 98%;
 }
 
 /* div to display sorting dropdown */
@@ -312,13 +330,22 @@
 }
 
 .kuClearLeft{
-	clear:left;	
+	clear:left;
 	line-height:0px;
+}
+
+.klevu-clearboth-listview{
+	clear:left;	
+	
 }
 
 
 /* klevu results div */
 .kuResults{
+	margin-top:10px;
+}
+
+.kuOtherContentView{
 	margin-top:10px;
 }
 
@@ -336,11 +363,16 @@
 .kuListView ul li{
 	position:relative;
 	display:block;
-	width: 98.5%;
+	width: 98%;
 	height: auto;
 	padding: 10px;
-	border-bottom: 1px solid #eee;
+	border: 1px solid #eee;
 	text-align:left;
+	margin-bottom: 32px;
+}
+
+.kuListView ul li:hover{
+	border: 1px solid #cccccc;	
 }
 
 /* In LISTVIEW:  for wrapping the image in fixed size div */
@@ -393,7 +425,7 @@
 /* In LISTVIEW: display product name and description */
 .kuListView ul li .kuNameDesc{
 	float:left;
-	width:65%;
+	width: 52%;
 	margin-left:5px;
 }
 
@@ -409,11 +441,12 @@
 
 /* In LISTVIEW: set product name color and font size */
 .kuListView ul li .kuName a{
-	font-size:14px;
+	font-size: 14px;
 	text-decoration:none;
 	color:inherit;
-	font-weight:bold;
+	font-weight: 500;
 	font-style:normal;
+	text-transform: uppercase;
 }
 
 .kuListView ul li .kuName a:hover{
@@ -432,9 +465,10 @@
 
 /* In LISTVIEW: div to display saleprice */
 .kuListView ul li .kuSalePrice{
-	font-weight:bold;	
-	font-size:14px;
+	font-weight:bold;
+	font-size: 16px;
 	margin-bottom:5px;
+	font-family: inherit;
 }
 
 /* In LISTVIEW: div to display original price with line-through style */
@@ -462,43 +496,43 @@
 /* In GRIDVIEW: list style for each result */
 .kuGridView ul li{
 	display: inline-block;
-	width: 24%;
-	min-height: 275px;
+	width: 23.5%;
+	min-height: 335px;
 	padding: 0;
 	vertical-align: top;
-	border-top: 1px solid #ddd;
+	border: 1px solid #eeeeee;
 	text-align:center;
-	margin:2px;
+	margin: 8px;
 	padding-top:15px;
 	margin-left:0px !important;
+	margin-bottom: 40px;
 	font-style:normal;
 	position:relative;
 }
 
-.kuGridView ul li:nth-child(1),.kuGridView ul li:nth-child(2),.kuGridView ul li:nth-child(3),.kuGridView ul li:nth-child(4){
-	border-top:none;	
+.kuGridView ul li:hover{
+	border: 1px solid #cccccc;	
 }
 
 /* In GRIDVIEW:  for wrapping the image in fixed size div */
-.kuGridView .klevuImgWrap{ 
+.kuGridView .klevuImgWrap{
 		float:none;
-        overflow:hidden;
-		padding:5px;
-        width:90% !important;
-        height:145px !important;
-        text-align:center;
+		overflow:hidden;
+		width: 100% !important;
+		height: 160px !important;
+		text-align:center;
 		margin:0 auto;
 }
 
 /* In GRIDVIEW: thumbnail of the product */
 .kuGridView img{
         max-width:100% !important;
-        max-height:140px !important;
+        max-height: 140px !important;
         height:auto;
         width:auto;
         border:none;
         outline:none;
-		display:inline-block !important;
+        display:inline-block !important;
 }
 
 .kuGridView ul li .kuDiscountBadge{
@@ -526,7 +560,7 @@
 }
 
 .kuGridView ul li .kuName{
-	padding:5px;	
+	padding:5px;
 	min-height:45px;
 }
 
@@ -547,27 +581,25 @@
 /* CSS for add to cart button */
 .kuGridView ul li .kuAddtocart{
 	display:block;
-	height:20px;
 	margin-top:20px;
+	margin-bottom: 10px;
+	width: 100%;
 }
 
 .kuGridView ul li input[type="text"]{
-	display:inline-block;
+	display: none;
 	width:25%;
-	float:left;	
 	border:1px solid #ddd;
 	outline:none;
 	text-align:right;
 }
 
 .kuGridView ul li a.kuAddtocartBtn{
-	display:inline-block;
-	background: #616161;
-	float:right;
+	display: block;
+	background: #3399cc;
 	color: #fff;
-	width:72%;
-	padding-top:6px;
-	padding-bottom:6px;
+	width: 60%;
+	padding: 7px 15px;
 	margin-bottom: 0;
 	text-align: center;
 	vertical-align: middle;
@@ -578,22 +610,31 @@
 	-ms-user-select: none;
 	-o-user-select: none;
 	text-decoration:none;
+	font-size: 13px;
+	line-height: 19px;
+	margin: 0 auto;
+}
 
+.kuListView ul li .kuAddtocart{
+	width: 15%;
+	float:left;
+	margin-top: 20px;
 }
 
 .kuListView ul li input[type="text"]{
 	width:5%;
-	float:none;	
+	float:none;
 	border:1px solid #ddd;
 	outline:none;
 	text-align:right;
+	display: none;
 }
 
 .kuListView ul li a.kuAddtocartBtn{
-	background: #616161;
+	background: #3399cc;
 	float:none;
 	color: #fff;
-	width:15%;
+	width: 92%;
 	padding-top:6px;
 	padding-bottom:6px;
 	padding:6px;
@@ -607,13 +648,13 @@
 	-ms-user-select: none;
 	-o-user-select: none;
 	text-decoration:none;
-
+	display: block;
 }
 
 
 /* In GRIDVIEW: set product name color and font size */
 .kuGridView ul li .kuName a{
-	font-size:13px;
+	font-size: 14px;
 	text-decoration:none;
 	color:inherit;
 	font-style:normal;
@@ -633,9 +674,14 @@
 
 /* In GRIDVIEW: div to display saleprice */
 .kuGridView ul li .kuSalePrice{
-	font-weight:bold;	
-	font-size:14px;
-	margin-bottom:5px;
+	font-size: 16px;
+	font-weight:bold;
+	font-family: inherit;
+}
+
+.priceGreyText{
+	font-size:11px;
+	color: #636363;
 }
 
 /* In GRIDVIEW: div to display original price with line-through style */
@@ -652,9 +698,10 @@
 	
 /* pagination links at bottom of results */
 .kuBottomPagi{
-	padding:5px;	
-	background-color:#eee;
-	border:1px solid #ccc;
+	padding: 8px;
+	background-color: #f4f4f4;
+	border-top: 1px solid #ccc;
+	border-bottom: 1px solid #ccc;
 }
 
 .kuBottomPagi .kuPerPage{

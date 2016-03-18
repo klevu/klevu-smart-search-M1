@@ -22,7 +22,7 @@ class Klevu_Boosting_Block_Adminhtml_Boost_Edit_Tab_Conditions extends Mage_Admi
         $boostModel = Mage::registry('boost_data');
         $form = new Varien_Data_Form();
         $form->setHtmlIdPrefix('rule_');
-        $renderer = Mage::getBlockSingleton('adminhtml/widget_form_renderer_fieldset')->setTemplate('promo/fieldset.phtml')->setNewChildUrl($this->getUrl('*/adminhtml_boost/newConditionHtml/form/rule_conditions_fieldset'));
+        $renderer = Mage::getBlockSingleton('adminhtml/widget_form_renderer_fieldset')->setTemplate('promo/fieldset.phtml')->setNewChildUrl($this->getUrl('*/boost/newConditionHtml/form/rule_conditions_fieldset'));
         $fieldset = $form->addFieldset('conditions_fieldset', array(
             'legend' => $this->__('Specify "Conditions" when the rule should be executed (Note: Only the attributes which have been enabled for promotion use are visible in the dropdown below (see Catalog > Attributes > Manage Attributes > Choose your attribute > Properties > Use for Promo Rule Conditions).
 )')

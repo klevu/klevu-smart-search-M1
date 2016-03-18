@@ -87,13 +87,13 @@
     </global>
     <admin>
         <routers>
-            <boosting>
-                <use>admin</use>
+            <adminhtml>
                 <args>
-                    <module>Klevu_Boosting</module>
-                    <frontName>admin_boosting</frontName>
+                    <modules>
+                        <klevu_boosting before="Mage_Adminhtml">Klevu_Boosting_Adminhtml</klevu_boosting>
+                    </modules>
                 </args>
-            </boosting>
+            </adminhtml>
         </routers>
     </admin>
     <adminhtml>

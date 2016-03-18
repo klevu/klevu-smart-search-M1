@@ -15,7 +15,7 @@ class Klevu_Search_Helper_Data extends Mage_Core_Helper_Abstract {
      * @param string $locale
      */
     function getLanguageFromLocale($locale) {
-        if (strlen($locale) == 5 && strpos($locale, "_") == 2) {
+        if (strlen($locale) == 5 && strpos($locale, "_") === 2) {
             return substr($locale, 0, 2);
         }
 

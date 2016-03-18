@@ -41,7 +41,7 @@ class Klevu_Search_IndexController extends Mage_Core_Controller_Front_Action {
     public function runexternalyAction(){
         try {
                 $config = Mage::helper('klevu_search/config');
-                if($config->isExternalCallEnbaled()){
+                if($config->isExternalCallEnabled()){
                     if($this->getRequest()->getParam('data') == "updatesonly") {
                         Mage::getModel('klevu_search/product_sync')->run();
                         Mage::getModel("content/content")->run();

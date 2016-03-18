@@ -15,4 +15,9 @@ class Klevu_Search_Adminhtml_Klevu_NotificationsController extends Mage_Adminhtm
 
         return $this->_redirectReferer($this->getUrl("adminhtml/dashboard"));
     }
+	
+	protected function _isAllowed()
+    {
+        return true;
+    }
 }

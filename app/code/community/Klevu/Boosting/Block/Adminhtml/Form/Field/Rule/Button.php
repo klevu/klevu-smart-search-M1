@@ -40,7 +40,7 @@ class Klevu_Boosting_Block_Adminhtml_Form_Field_Rule_Button extends Mage_Adminht
         $this->addData(array(
             "html_id"         => $element->getHtmlId(),
             "button_label"    => sprintf("Configure Product Boosting Rules%s", $label_suffix),
-            "destination_url" => $this->getUrl("admin_boosting/adminhtml_boost", $url_params),
+            "destination_url" => $this->getUrl("adminhtml/boost/index", $url_params),
         ));
 
         return $this->_toHtml();

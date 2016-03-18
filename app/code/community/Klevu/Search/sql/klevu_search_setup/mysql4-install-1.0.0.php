@@ -26,7 +26,7 @@ CREATE TABLE `{$notifications_table}` (
 // the notification the next time cron runs
 $installer->getConnection()->insert($notifications_table, array(
     "type" => "cron_check",
-    "message" => Mage::helper("klevu_search")->__('Klevu Search relies on cron for normal operations. Please check that you have Magento cron set up correctly. You can find instructions on how to set up Magento Cron <a target="_blank" href="https://klevusearch.freshdesk.com/support/solutions/articles/5000518493-how-do-i-setup-a-cron-">here</a>.')
+    "message" => Mage::helper("klevu_search")->__('Klevu Search relies on cron for normal operations. Please check that you have Magento cron set up correctly. You can find instructions on how to set up Magento Cron <a target="_blank" href="http://support.klevu.com/knowledgebase/setup-a-cron/">here</a>.')
 ));
 
 $now = date_create("now")->format("Y-m-d H:i:00");

@@ -6,7 +6,7 @@ class Klevu_Shell_Sync extends Mage_Shell_Abstract
  
     public function __construct() {
         parent::__construct();
-        
+ 
         // Time limit to infinity
         set_time_limit(0);     
     }

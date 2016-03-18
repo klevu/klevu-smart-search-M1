@@ -119,47 +119,76 @@ class Klevu_Search_Model_Product_Sync extends Klevu_Search_Model_Sync {
                 $this->log(Zend_Log::INFO, sprintf("Starting sync for %s (%s).", $store->getWebsite()->getName(), $store->getName()));
 
                 $actions = array(
-                    'delete' => $this->getConnection()
+                    'delete' => 
+					$this->getConnection()
                         ->select()
-                        /*
-                         * Select synced products in the current store/mode that are no longer enabled
-                         * (don't exist in the products table, or have status disabled for the current
-                         * store, or have status disabled for the default store) or are not visible
-                         * (in the case of configurable products, check the parent visibility instead).
-                         */
-                        ->from(
-                            array('k' => $this->getTableName("klevu_search/product_sync")),
-                            array('product_id' => "k.product_id", 'parent_id' => "k.parent_id")
-                        )
-                        ->joinLeft(
-                            array('v' => $this->getTableName("catalog/category_product_index")),
-                            "v.product_id = k.product_id AND v.store_id = :store_id",
-                            ""
-                        )
-                        ->joinLeft(
-                            array('p' => $this->getTableName("catalog/product")),
-                            "p.entity_id = k.product_id",
-                            ""
-                        )
-                        ->joinLeft(
-                            array('ss' => $this->getProductStatusAttribute()->getBackendTable()),
-                            "ss.attribute_id = :status_attribute_id AND ss.entity_id = k.product_id AND ss.store_id = :store_id",
-                            ""
-                        )
-                        ->joinLeft(
-                            array('sd' => $this->getProductStatusAttribute()->getBackendTable()),
-                            "sd.attribute_id = :status_attribute_id AND sd.entity_id = k.product_id AND sd.store_id = :default_store_id",
-                            ""
-                        )
-                        ->where("(k.store_id = :store_id) AND (k.type = :type) AND (k.test_mode = :test_mode) AND ((p.entity_id IS NULL) OR (CASE WHEN ss.value_id > 0 THEN ss.value ELSE sd.value END != :status_enabled) OR (CASE WHEN k.parent_id = 0 THEN k.product_id ELSE k.parent_id END NOT IN (?)))",
-                            $this->getConnection()
+                        ->union(array(
+							$this->getConnection()
+							->select()
+							/*
+							 * Select synced products in the current store/mode that are no longer enabled
+							 * (don't exist in the products table, or have status disabled for the current
+							 * store, or have status disabled for the default store) or are not visible
+							 * (in the case of configurable products, check the parent visibility instead).
+							 */
+							->from(
+								array('k' => $this->getTableName("klevu_search/product_sync")),
+								array('product_id' => "k.product_id", 'parent_id' => "k.parent_id")
+							)
+							->joinLeft(
+								array('v' => $this->getTableName("catalog/category_product_index")),
+								"v.product_id = k.product_id AND v.store_id = :store_id",
+								""
+							)
+							->joinLeft(
+								array('p' => $this->getTableName("catalog/product")),
+								"p.entity_id = k.product_id",
+								""
+							)
+							->joinLeft(
+								array('ss' => $this->getProductStatusAttribute()->getBackendTable()),
+								"ss.attribute_id = :status_attribute_id AND ss.entity_id = k.product_id AND ss.store_id = :store_id",
+								""
+							)
+							->joinLeft(
+								array('sd' => $this->getProductStatusAttribute()->getBackendTable()),
+								"sd.attribute_id = :status_attribute_id AND sd.entity_id = k.product_id AND sd.store_id = :default_store_id",
+								""
+							)
+							->where("(k.store_id = :store_id) AND (k.type = :type) AND (k.test_mode = :test_mode) AND ((p.entity_id IS NULL) OR (CASE WHEN ss.value_id > 0 THEN ss.value ELSE sd.value END != :status_enabled) OR (CASE WHEN k.parent_id = 0 THEN k.product_id ELSE k.parent_id END NOT IN (?)) )",
+								$this->getConnection()
+									->select()
+									->from(
+										array('i' => $this->getTableName("catalog/category_product_index")),
+										array('id' => "i.product_id")
+									)
+									->where("(i.store_id = :store_id) AND (i.visibility IN (:visible_both, :visible_search))")
+								
+							),
+							$this->getConnection()
                                 ->select()
+                                /*
+                                 * Select products which are not associated with parent 
+                                 * but still parent exits in klevu product sync table with parent id
+                                 * 
+                                 */
                                 ->from(
-                                    array('i' => $this->getTableName("catalog/category_product_index")),
-                                    array('id' => "i.product_id")
+                                    array('ks' => $this->getTableName("klevu_search/product_sync")),
+                                    array('product_id' => "ks.product_id","parent_id" => 'ks.parent_id')
                                 )
-                                ->where("(i.store_id = :store_id) AND (i.visibility IN (:visible_both, :visible_search))")
-                        )
+								->where("(ks.parent_id !=0 AND ks.product_id NOT IN (?) AND ks.store_id = :store_id)",
+									$this->getConnection()
+									->select()
+									/*
+									 * Select products from catalog super link table
+									 */
+									->from(
+										array('s' => $this->getTableName("catalog/product_super_link")),
+										array('product_id' => "s.product_id")
+									)
+								)
+							)
+					    )		
                         ->group(array('k.product_id', 'k.parent_id'))
                         ->bind(array(
                             'type'          => "products",
@@ -622,14 +651,14 @@ class Klevu_Search_Model_Product_Sync extends Klevu_Search_Model_Sync {
                 if (isset($skipped_record_ids[$i])) {
                     continue;
                 }
-                $or_where[] = sprintf("(%s AND %s)",
+                $or_where[] = sprintf("(%s AND %s AND %s)",
                     $connection->quoteInto("k.product_id = ?", $data[$i]['product_id']),
                     $connection->quoteInto("k.parent_id = ?", $data[$i]['parent_id']),
                     $connection->quoteInto("k.type = ?", "products")
                 );
             }
+			
             $select->where(implode(" OR ", $or_where));
-
             $connection->query($select->deleteFromSelect("k"));
 
             $skipped_count = count($skipped_record_ids);
@@ -2091,9 +2120,10 @@ class Klevu_Search_Model_Product_Sync extends Klevu_Search_Model_Sync {
      */ 
     public function updateSpecificProductIds($ids)
     {
-        $pro_ids = implode(',', $ids);
-        $where = sprintf("product_id IN(%s) OR parent_id IN(%s)", $pro_ids, $pro_ids);
         $resource = Mage::getSingleton('core/resource');
+        $pro_ids = implode(',', $ids);
+        $where = sprintf("(product_id IN(%s) OR parent_id IN(%s)) AND %s", $pro_ids,$pro_ids,$this->getConnection()->quoteInto('type = ?',"products"));
+         
         $resource->getConnection('core_write')->update(
         $resource->getTableName('klevu_search/product_sync'),
                 array('last_synced_at' => '0'),
@@ -2252,6 +2282,7 @@ class Klevu_Search_Model_Product_Sync extends Klevu_Search_Model_Sync {
                                 )
                                 ->where("k.product_id IS NULL")
                                 ->where("c.path LIKE ?","{$rootStoreCategory}%")
+								->group(array('c.entity_id'))
                         ->bind(array(
                             'type' => "categories",
                             'store_id' => $store->getId(),
@@ -2501,7 +2532,7 @@ class Klevu_Search_Model_Product_Sync extends Klevu_Search_Model_Sync {
     }
     
     // Get all products for update
-    public function catalogruleupdateifno(){
+    public function catalogruleUpdateinfo(){
         $timestamp_after = strtotime("+1 day",strtotime(date_create("now")->format("Y-m-d")));
         $timestamp_before = strtotime("-1 day",strtotime(date_create("now")->format("Y-m-d")));
         $query = $this->getConnection()->select()
