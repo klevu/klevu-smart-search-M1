@@ -2,7 +2,7 @@
 <config>
     <modules>
         <Klevu_Search>
-            <version>1.2.3</version>
+            <version>1.2.4</version>
         </Klevu_Search>
     </modules>
     <global>
@@ -239,6 +239,15 @@
                     </catalogruleexpiryupdateafter>
                 </observers>
             </catalogrule_after_apply>
+			<cataloginventory_stock_item_save_commit_after>
+			    <observers>
+                    <cataloginventory_stock_item_update>
+                        <type>singleton</type> 
+                        <class>klevu_search/observer</class>
+                        <method>updateStock</method>
+                    </cataloginventory_stock_item_update>
+                </observers>
+			</cataloginventory_stock_item_save_commit_after>
         </events>
     </global>
     <admin>

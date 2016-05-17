@@ -78,7 +78,7 @@ class Klevu_Search_Helper_Config extends Mage_Core_Helper_Abstract {
      * @return bool
      */
     public function isTaxEnabled($store_id = null) {
-        $flag =  Mage::getStoreConfigFlag(static::XML_PATH_TAX_ENABLED, $store_id);
+        $flag =  Mage::getStoreConfig(static::XML_PATH_TAX_ENABLED, $store_id);
         return in_array($flag, array(
                 Klevu_Search_Model_System_Config_Source_Taxoptions::YES
         ));

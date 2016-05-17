@@ -219,6 +219,9 @@ class Klevu_Search_Model_Observer extends Varien_Object {
         }
     }
 	
+	/**
+     * Update the product ids to sync with klevu for rule 
+     */
 	public function catalogRulePriceChange(Varien_Event_Observer $observer){
 		try {
 			$obj = $observer->getEvent()->getRule();
@@ -244,5 +247,21 @@ class Klevu_Search_Model_Observer extends Varien_Object {
             Mage::helper('klevu_search')->log(Zend_Log::CRIT, sprintf("Exception thrown in %s::%s - %s", __CLASS__, __METHOD__, $e->getMessage()));
         }
 	}
+	
+	/**
+     * Update the product id when stock item changed through out api
+     */
+	public function updateStock($observer){
+		try {
+			if (version_compare(Mage::getVersion(), '1.7.0.2', '<=') !== true) {
+				$productId = $observer->getEvent()->getItem()->getProductId();
+				if(!empty($productId)) {
+					Mage::getModel("klevu_search/product_sync")->updateSpecificProductIds(array($productId));
+				}
+			}
+		} catch(Exception $e) {
+			Mage::helper('klevu_search')->log(Zend_Log::CRIT, sprintf("Exception thrown in %s::%s - %s", __CLASS__, __METHOD__, $e->getMessage()));
+		}
+    }
     
 }

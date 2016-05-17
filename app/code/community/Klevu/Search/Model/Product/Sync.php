@@ -1039,6 +1039,7 @@ class Klevu_Search_Model_Product_Sync extends Klevu_Search_Model_Sync {
                                 }
                             }
                         }
+						
                         break;
                     case "price":
                             // Default to 0 if price can't be determined
@@ -1257,10 +1258,11 @@ class Klevu_Search_Model_Product_Sync extends Klevu_Search_Model_Sync {
                         'product_id'   => "s.product_id",
                         'in_stock'     => "s.is_in_stock",
                         'manage_stock' => "s.manage_stock",
-                        'use_config'   => "s.use_config_manage_stock"
+                        'use_config'   => "s.use_config_manage_stock",
                     )
                 )
                 ->where("s.product_id IN (?)", $product_ids)
+				->where("s.stock_id = ?",1)
         );
 
         $data = array();
@@ -2592,4 +2594,7 @@ class Klevu_Search_Model_Product_Sync extends Klevu_Search_Model_Sync {
         $condition[] = $this->getConnection()->quoteInto('job_code = ?',$this->getJobCode());
         $this->getConnection()->delete($this->getTableName("cron_schedule"),$condition);   
     }
+	
+
+	
 }
