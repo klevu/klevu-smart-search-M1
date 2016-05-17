@@ -136,7 +136,8 @@ class Klevu_Search_Model_Observer extends Varien_Object {
      * @param Varien_Event_Observer $observer
      */
     public function applyLandingPageModelRewrites(Varien_Event_Observer $observer) {
-        if (Mage::helper("klevu_search/config")->isLandingEnabled()) {
+
+        if (Mage::helper("klevu_search/config")->isLandingEnabled() == 1 && Mage::helper("klevu_search/config")->isExtensionConfigured()) {
 
             $rewrites = array(
                 "global/models/catalogsearch_resource/rewrite/fulltext_collection"         => "Klevu_Search_Model_CatalogSearch_Resource_Fulltext_Collection",
