@@ -4,19 +4,18 @@
 
 @media only screen and (max-width: 1024px) {
 	.kuSortby{
-		width:45%;
+		width:30%;
 	}
 
 	.kuView{
-		width:50%;
+		width:30%;
 		text-align:right;
 	}
 	
 	.kuPerPage{
-		width:45%;
+		width:30%;
 		text-align:left;
-		margin-left:0px;
-		margin-top:10px;
+		margin-left:10px;
 	}
 	
 	.kuPagination{
@@ -26,15 +25,24 @@
 	
 	.kuGridView ul li{
 		width:31%;	
+		margin-bottom:50px;
+	}
+	
+	.kuListView .klevuImgWrap{
+		width:20% !important;
 	}
 	
 	.kuListView ul li .kuNameDesc{
-		width:80%;	
+		width:76%;	
 	}
 	
 	.kuListView ul li .kuPrice{
-		float:none !important;
-		width:100%;
+		float: none !important;
+		width: 58%;
+		display: table-cell;
+		text-align: left;
+		padding-top: 20px;
+		padding-left: 10px;
 	}
 	
 	.kuListView ul li .kuPrice .kuSalePrice{
@@ -45,8 +53,18 @@
 		display:inline !important;	
 	}
 	
-	.kuGridView ul li:nth-child(4){
-		border-top:1px solid #ddd;	
+	.kuListView ul li .kuAddtocart{
+		width: 15%;
+		float: none;
+		margin-top: 30px;
+		visibility: visible !important;
+		opacity: 1;
+		display: table-cell;
+	}
+	
+	.kuGridView ul li .kuAddtocart{
+		visibility: visible;
+		opacity: 1;
 	}
 		
 }
@@ -58,10 +76,7 @@
 	
 	.kuGridView ul li{
 		width:31%;	
-	}
-	
-	.kuGridView ul li:nth-child(4){
-		border-top:1px solid #ddd;	
+		margin-bottom:50px;
 	}
 
 }
@@ -71,10 +86,22 @@
 		display:none !important;	
 	}
 	
+	.kuTotResults{
+		float:none;
+		width:100%; 
+		text-align: center;
+	}
+	
 	.kuResultList{
 		float:none;
 		width:100%;	
 		margin-left:0px;
+	}
+	
+	.kuTotalResultsTab{
+	  float:none; 
+		width:100%; 
+		text-align: center;
 	}
 	
 	.kuSortby{
@@ -90,53 +117,49 @@
 		width:50%;
 		text-align:right;
 		height:50px;
+		display: none;
 	}
 	
 	.kuPerPage{
-		width:35%;
-		text-align:left;
+		width:48%;
+		text-align:right;
 		margin:0 auto;
 		margin-top:0px;
 	}
 	
 	.kuPagination{
-		width:65%;
+		width:100%;
 		margin:0 auto;
-		margin-top:0px;
-		text-align:right;
+		margin-top:10px;
+		text-align:center;
 	}
 	
 	.kuGridView ul li{
 		width:31%;	
 	}
-	
-	.kuGridView ul li:nth-child(3){
-		border-top:none;	
-	}
-	
-	.kuGridView ul li:nth-child(4){
-		border-top:1px solid #ddd;	
-	}
+
 	
 	.kuBottomPagi .kuPerPage{
 		margin-left:0px;
-		text-align: center;
+		text-align: left;
 		margin-bottom:5px;
+		float: left;
+		width: 46%;
 	}
 
 	.kuBottomPagi .kuPagination{
-		width: 100%;
-		float: none;
+		width: 52%;
+		float: right;
+		margin-top: 5px;
+		text-align: right;
 	}
 	
 }
 
 @media only screen and (max-width: 480px) {
 	.kuGridView ul li{
-		width:47%;	
-	}
-	
-	.kuGridView ul li:nth-child(3),.kuGridView ul li:nth-child(4){
-		border-top:1px solid #ddd;	
+		width:46%;	
+		min-height: 390px;
+		margin-bottom: 55px;
 	}
 }

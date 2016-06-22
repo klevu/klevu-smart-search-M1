@@ -34,6 +34,21 @@ class Klevu_Search_Helper_Data extends Mage_Core_Helper_Abstract {
             return $this->getLanguageFromLocale($store->getConfig(Mage_Core_Model_Locale::XML_PATH_DEFAULT_LOCALE));
         }
     }
+	
+	
+	/**
+     * Return the store timezone for the given store.
+     *
+     * @param int|Mage_Core_Model_Store $store
+     *
+     * @return string
+     */
+    function getStoreTimeZone($store = null) {
+        if ($store = Mage::app()->getStore($store)) {
+            return $store->getConfig(Mage_Core_Model_Locale::XML_PATH_DEFAULT_TIMEZONE);
+        }
+    }
+	
 
     /**
      * Check if the given domain is considered to be a valid domain for a production environment.
@@ -210,11 +225,15 @@ class Klevu_Search_Helper_Data extends Mage_Core_Helper_Abstract {
             foreach ($groupProductIds as $ids) {
                 foreach ($ids as $id) {
                     $groupProduct = Mage::getModel('catalog/product')->load($id);
-                    if($config->isTaxEnabled($store->getId())) {
-                        $groupPrices[] = Mage::helper("tax")->getPrice($groupProduct, $groupProduct->getFinalPrice(), true, null, null, null, $store,false);
-                    } else {
-                        $groupPrices[] = $groupProduct->getFinalPrice();
-                    }
+					$stockItem = $groupProduct->getStockItem();
+					if($stockItem->getIsInStock())
+					{
+						if($config->isTaxEnabled($store->getId())) {
+							$groupPrices[] = Mage::helper("tax")->getPrice($groupProduct, $groupProduct->getFinalPrice(), true, null, null, null, $store,false);
+						} else {
+							$groupPrices[] = $groupProduct->getFinalPrice();
+						}
+					}
                 }
             }
             asort($groupPrices);
@@ -269,11 +288,15 @@ class Klevu_Search_Helper_Data extends Mage_Core_Helper_Abstract {
             foreach ($groupProductIds as $ids) {
                 foreach ($ids as $id) {
                     $groupProduct = Mage::getModel('catalog/product')->load($id);
-                    if($config->isTaxEnabled($store->getId())) {
-                        $groupPrices[] = Mage::helper("tax")->getPrice($groupProduct, $groupProduct->getPrice(), true, null, null, null, $store,false);
-                    } else {
-                        $groupPrices[] = $groupProduct->getPrice();
-                    }
+					$stockItem = $groupProduct->getStockItem();
+					if($stockItem->getIsInStock())
+					{
+						if($config->isTaxEnabled($store->getId())) {
+							$groupPrices[] = Mage::helper("tax")->getPrice($groupProduct, $groupProduct->getPrice(), true, null, null, null, $store,false);
+						} else {
+							$groupPrices[] = $groupProduct->getPrice();
+						}
+					}
                 }
             }
             asort($groupPrices);
@@ -310,15 +333,23 @@ class Klevu_Search_Helper_Data extends Mage_Core_Helper_Abstract {
         return $attribute->getAttributeId();
     }
     
-    public function getIp() {
-        if (!empty($_SERVER['HTTP_CLIENT_IP'])) {
-            $ip = $_SERVER['HTTP_CLIENT_IP'];
-        } elseif (!empty($_SERVER['HTTP_X_FORWARDED_FOR'])) {
-            $ip = $_SERVER['HTTP_X_FORWARDED_FOR'];
-        } else {
-            $ip = $_SERVER['REMOTE_ADDR'];
-        }
-        
-        return $ip;
+	public function getIp() {
+		$ip = '';
+		if (!empty($_SERVER['HTTP_CLIENT_IP']))
+			$ip = $_SERVER['HTTP_CLIENT_IP'];
+		else if(!empty($_SERVER['HTTP_X_FORWARDED_FOR']))
+			$ip = $_SERVER['HTTP_X_FORWARDED_FOR'];
+		else if(!empty($_SERVER['HTTP_X_FORWARDED']))
+			$ip = $_SERVER['HTTP_X_FORWARDED'];
+		else if(!empty($_SERVER['HTTP_FORWARDED_FOR']))
+			$ip = $_SERVER['HTTP_FORWARDED_FOR'];
+		else if(!empty($_SERVER['HTTP_FORWARDED']))
+			$ip = $_SERVER['HTTP_FORWARDED'];
+		else if(!empty($_SERVER['REMOTE_ADDR']))
+			$ip = $_SERVER['REMOTE_ADDR'];
+		else
+			$ip = 'UNKNOWN';
+	 
+		return $ip;
     }
 }

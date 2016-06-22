@@ -40,6 +40,7 @@ class Klevu_Search_Helper_Config extends Mage_Core_Helper_Abstract {
     const XML_PATH_RATING = "klevu_search/general/rating_flag";
     const XML_PATH_UPGRADE_FEATURES = "klevu_search/general/upgrade_features";
     const XML_PATH_UPGRADE_TIRES_URL = "klevu_search/general/tiers_url";
+	const XML_PATH_CONFIG_IMAGE_FLAG = "klevu_search/image_setting/enabled";
 
     const DATETIME_FORMAT = "Y-m-d H:i:s T";
     protected $_klevu_features_response;
@@ -773,7 +774,7 @@ class Klevu_Search_Helper_Config extends Mage_Core_Helper_Abstract {
     /**
      * get feature update
      *
-     * @return bool 
+     * @return string 
      */
     public function getFeaturesUpdate($elemnetID) {
         try {
@@ -835,4 +836,14 @@ class Klevu_Search_Helper_Config extends Mage_Core_Helper_Abstract {
         $this->setStoreConfig(static::XML_PATH_UPGRADE_FEATURES,$value,$store);
     }
     
+	/**
+     * Return the configuration flag for sending config image.
+     *
+     * @param Mage_Core_Model_Store|int $store
+     *
+     * @return bool
+     */
+	public function isUseConfigImage($store=null){
+		return Mage::getStoreConfigFlag(static::XML_PATH_CONFIG_IMAGE_FLAG, $store);
+	}
 }

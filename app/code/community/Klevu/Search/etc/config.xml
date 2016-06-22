@@ -2,7 +2,7 @@
 <config>
     <modules>
         <Klevu_Search>
-            <version>1.2.4</version>
+            <version>1.2.5</version>
         </Klevu_Search>
     </modules>
     <global>
@@ -352,6 +352,9 @@
             <order_sync>
                 <enabled>1</enabled>
             </order_sync>
+			<image_setting>
+				<enabled>0</enabled>
+			</image_setting>
         </klevu_search>
     </default>
     <phpunit>

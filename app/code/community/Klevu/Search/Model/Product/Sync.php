@@ -418,7 +418,7 @@ class Klevu_Search_Model_Product_Sync extends Klevu_Search_Model_Sync {
                     
                 }
                 $config->setLastProductSyncRun("now", $store);
-
+			
                 if ($errors == 0) {
                     // If Product Sync finished without any errors, notifications are not relevant anymore
                     $this->deleteNotifications($store);
@@ -601,7 +601,7 @@ class Klevu_Search_Model_Product_Sync extends Klevu_Search_Model_Sync {
                         $store->getWebsite()->getName(),
                         $store->getName(),
                         $response->getMessage()
-                    )
+                    ),$store
                 );
             }
 
@@ -881,9 +881,10 @@ class Klevu_Search_Model_Product_Sync extends Klevu_Search_Model_Sync {
             //$item = $data->getItemById($product['product_id']);
             $item = Mage::getModel('catalog/product')->load($product['product_id']);
             $item->setCustomerGroupId(Mage_Customer_Model_Group::NOT_LOGGED_IN_ID);
-           
+			$this->log(Zend_Log::DEBUG, sprintf("Retrieve data for product ID %d", $product['product_id']));
             //$parent = ($product['parent_id'] != 0) ?  $data->getItemById($product['parent_id']) : null;
             $parent = ($product['parent_id'] != 0) ? Mage::getModel('catalog/product')->load($product['parent_id'])->setCustomerGroupId(Mage_Customer_Model_Group::NOT_LOGGED_IN_ID): null;
+			$this->log(Zend_Log::DEBUG, sprintf("Retrieve data for product ID Parent ID %d", $product['parent_id']));
             
             if (!$item) {
                 // Product data query did not return any data for this product
@@ -961,14 +962,26 @@ class Klevu_Search_Model_Product_Sync extends Klevu_Search_Model_Sync {
                         }
                         break;
                     case "image":
+					    $config = Mage::helper('klevu_search/config');
                         foreach ($attributes as $attribute) {
-                            if ($item->getData($attribute) && $item->getData($attribute) != "no_selection") {
-                                $product[$key] = $item->getData($attribute);
-                                break;
-                            } else if ($parent && $parent->getData($attribute) && $parent->getData($attribute) != "no_selection") {
-                                $product[$key] = $parent->getData($attribute);
-                                break;
-                            }
+							if($config->isUseConfigImage($this->getStore()->getId())) {
+							    if ($parent && $parent->getData($attribute) && $parent->getData($attribute) != "no_selection") {
+									$product[$key] = $parent->getData($attribute);
+									break;
+								} else if ($item->getData($attribute) && $item->getData($attribute) != "no_selection") {
+									$product[$key] = $item->getData($attribute);
+									break;
+								} 
+							} else {
+								if ($item->getData($attribute) && $item->getData($attribute) != "no_selection") {
+									$product[$key] = $item->getData($attribute);
+									break;
+								} else if ($parent && $parent->getData($attribute) && $parent->getData($attribute) != "no_selection") {
+									$product[$key] = $parent->getData($attribute);
+									break;
+								}	
+								
+							}
                         }
                         if ($product[$key] != "" && strpos($product[$key], "http") !== 0) {
                             // Prepend media base url for relative image locations
@@ -998,7 +1011,7 @@ class Klevu_Search_Model_Product_Sync extends Klevu_Search_Model_Sync {
                         }else {
                             $tax_class_id = "";
                         }
-
+			
                         if ($parent && $parent->getData("type_id") == Mage_Catalog_Model_Product_Type_Configurable::TYPE_CODE) {
                             // Calculate configurable product price based on option values
                             $fprice = $parent->getFinalPrice();
@@ -1147,7 +1160,8 @@ class Klevu_Search_Model_Product_Sync extends Klevu_Search_Model_Sync {
             }
 
             // Add stock data
-            $product['inStock'] = ($stock_data[$product['product_id']]) ? "yes" : "no";
+			$product['inStock'] = ($stock_data[$product['product_id']]) ? "yes" : "no";
+	
 
             // Configurable product relation
             if ($product['parent_id'] != 0) {
@@ -1871,7 +1885,6 @@ class Klevu_Search_Model_Product_Sync extends Klevu_Search_Model_Sync {
      */
     protected function notify($message, $store = null) {
         $type = ($store === null) ? static::NOTIFICATION_GLOBAL_TYPE : static::NOTIFICATION_STORE_TYPE_PREFIX . $store->getId();
-
         /** @var Klevu_Search_Model_Notification $notification */
         $notification = Mage::getResourceModel('klevu_search/notification_collection')
             ->addFieldToFilter("type", array('eq' => $type))
@@ -1897,9 +1910,7 @@ class Klevu_Search_Model_Product_Sync extends Klevu_Search_Model_Sync {
      */
     protected function deleteNotifications($store = null) {
         $type = ($store === null) ? static::NOTIFICATION_GLOBAL_TYPE : static::NOTIFICATION_STORE_TYPE_PREFIX . $store->getId();
-
         $this->getConnection()->delete($this->getTableName('klevu_search/notification'), array("type = ?" => $type));
-
         return $this;
     }
 

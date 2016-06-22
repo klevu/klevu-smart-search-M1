@@ -103,6 +103,7 @@ class Klevu_Search_Model_Observer extends Varien_Object {
                 if(count($parentIds) > 0 && !empty($parentIds)) {
                     Mage::getModel("klevu_search/product_sync")->updateSpecificProductIds($parentIds);
                 }
+				
             }
         } catch(Exception $e) {
             Mage::helper('klevu_search')->log(Zend_Log::DEBUG, sprintf("error while updating bundle product id :\n%s", $e->getMessage()));

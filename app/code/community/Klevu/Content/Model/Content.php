@@ -365,7 +365,6 @@ class Klevu_Content_Model_Content extends Klevu_Search_Model_Product_Sync
         $cms_data = $data->load()->getData();
         foreach($cms_data as $key => $value) {
             $value["name"] = $value["title"];
-            $value["desc"] = $value["content"];
             $value["id"] = "pageid_" . $value["page_id"];
             $value["url"] = $base_url . $value["identifier"];
             $value["desc"] = strip_tags($value["content"]);
