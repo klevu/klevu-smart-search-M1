@@ -3,12 +3,12 @@
 abstract class Klevu_Search_Model_Sync extends Varien_Object {
 
     /**
-     * Limit the memory usage of the sync to 80% of the memory
+     * Limit the memory usage of the sync to 70% of the memory
      * limit. Considering that the minimum memory requirement
      * for Magento at the time of writing is 256MB, this seems
      * like a sensible default.
      */
-    const MEMORY_LIMIT = 0.8;
+    const MEMORY_LIMIT = 0.7;
 
     /**
      * Return the cron job code used for the sync model.
@@ -129,6 +129,7 @@ abstract class Klevu_Search_Model_Sync extends Varien_Object {
      */
     protected function rescheduleIfOutOfMemory() {
         if (!$this->isBelowMemoryLimit()) {
+			Mage::getSingleton('core/session')->setMemoryMessage("There may be few products left which will be synced during the next sync process.");
             $this->log(Zend_Log::INFO, "Memory limit reached. Stopped and rescheduled.");
             $this->schedule();
 

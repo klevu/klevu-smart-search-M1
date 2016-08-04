@@ -692,7 +692,10 @@ class Klevu_Search_Model_Product_Sync extends Klevu_Search_Model_Sync {
      */
     protected function updateProducts(array $data) {
         $total = count($data);
-        $this->addProductSyncData($data);
+        $dataToSend = $this->addProductSyncData($data);
+		if(!empty($dataToSend) && is_numeric($dataToSend)){
+		    $data = array_slice($data, 0, $dataToSend);
+		}
         $response = Mage::getModel('klevu_search/api_action_updaterecords')
             ->setStore($this->getStore())
             ->execute(array(
@@ -767,7 +770,10 @@ class Klevu_Search_Model_Product_Sync extends Klevu_Search_Model_Sync {
      */
     protected function addProducts(array $data) {
         $total = count($data);
-        $this->addProductSyncData($data);
+        $dataToSend = $this->addProductSyncData($data);
+		if(!empty($dataToSend) && is_numeric($dataToSend)){
+		    $data = array_slice($data, 0, $dataToSend);
+		}
         $response = Mage::getModel('klevu_search/api_action_addrecords')
             ->setStore($this->getStore())
             ->execute(array(
@@ -876,8 +882,16 @@ class Klevu_Search_Model_Product_Sync extends Klevu_Search_Model_Sync {
         }
         $currency = $this->getStore()->getDefaultCurrencyCode();
         $media_url .= Mage::getModel('catalog/product_media_config')->getBaseMediaUrlAddition();
-        Mage::app()->loadAreaPart(Mage_Core_Model_App_Area::AREA_FRONTEND,Mage_Core_Model_App_Area::PART_EVENTS);  
+        Mage::app()->loadAreaPart(Mage_Core_Model_App_Area::AREA_FRONTEND,Mage_Core_Model_App_Area::PART_EVENTS);
+		$rc = 0;
         foreach ($products as $index => &$product) {
+			
+			if($rc % 5 == 0) {
+				if ($this->rescheduleIfOutOfMemory()) {
+                    return $rc;
+				}
+			}
+			
             //$item = $data->getItemById($product['product_id']);
             $item = Mage::getModel('catalog/product')->load($product['product_id']);
             $item->setCustomerGroupId(Mage_Customer_Model_Group::NOT_LOGGED_IN_ID);
@@ -1170,8 +1184,20 @@ class Klevu_Search_Model_Product_Sync extends Klevu_Search_Model_Sync {
 
             // Set ID data
             $product['id'] = Mage::helper('klevu_search')->getKlevuProductId($product['product_id'], $product['parent_id']);
+			
+			
+			if($item) {
+			    $item->clearInstance();
+				$item = null;
+			}
+			
+			if($parent) {
+			    $parent->clearInstance();
+				$parent = null;
+			}
             unset($product['product_id']);
             unset($product['parent_id']);
+			$rc++;
         }
 
         return $this;

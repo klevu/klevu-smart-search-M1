@@ -13,6 +13,13 @@ class Klevu_Shell_Sync extends Mage_Shell_Abstract
  
     // Shell script point of entry
     public function run() {
+		if(file_exists("klevu_running_index.lock")){
+			echo "Klevu indexing process is in running state";
+			return;
+		} 
+		
+		fopen("klevu_running_index.lock", "w");
+		
         try {
             if ($this->getArg('updatesonly')) {
                 Mage::getModel('klevu_search/product_sync')->run();
@@ -32,7 +39,12 @@ class Klevu_Shell_Sync extends Mage_Shell_Abstract
         } catch(Exception $e){
             echo $e->getMessage();
         }
- 
+		
+		if(file_exists("klevu_running_index.lock")){
+			unlink("klevu_running_index.lock");
+		}
+		
+	
     }
  
     // Usage instructions

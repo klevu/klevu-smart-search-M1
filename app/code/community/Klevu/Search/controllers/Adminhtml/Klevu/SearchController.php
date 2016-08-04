@@ -67,7 +67,15 @@ class Klevu_Search_Adminhtml_Klevu_SearchController extends Mage_Adminhtml_Contr
             Mage::getModel("klevu_search/product_sync")->run();
             /* Use event For other content sync */
             Mage::dispatchEvent('content_data_to_sync', array());
-            Mage::getSingleton('adminhtml/session')->addSuccess($this->__("Data updates have been sent to Klevu"));
+			$memoryMessage = Mage::getSingleton('core/session')->getMemoryMessage();
+			if(!empty($memoryMessage)) {
+				$message = $this->__("Data updates have been sent to Klevu.").$memoryMessage;
+				Mage::getSingleton('core/session')->setMemoryMessage("");
+			} else {
+				$message = $this->__("Data updates have been sent to Klevu.");
+			}
+            Mage::getSingleton('adminhtml/session')->addSuccess($message);
+			
         } catch (Mage_Core_Model_Store_Exception $e) {
             Mage::logException($e);
         }
