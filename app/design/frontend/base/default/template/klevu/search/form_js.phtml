@@ -71,7 +71,9 @@
 				}
 			}
 		})();
-		var klevu_storeLandingPageUrl = '<?php echo Mage::getUrl('catalogsearch/result/');?>'; 
+		var klevu_storeLandingPageUrl = '<?php echo Mage::getUrl('catalogsearch/result/', array(
+                '_secure' => Mage::app()->getFrontController()->getRequest()->isSecure()
+        ));?>'; 
 		var klevu_showQuickSearchOnEnter=false;
     <?php } ?>
 		// call store js
