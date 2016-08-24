@@ -332,7 +332,12 @@ class Klevu_Search_Helper_Data extends Mage_Core_Helper_Abstract {
         $attribute = $attributecollection->getFirstItem();
         return $attribute->getAttributeId();
     }
-    
+	
+    /**
+     * Get the client ip address
+     *
+     * @return string
+     */
 	public function getIp() {
 		$ip = '';
 		if (!empty($_SERVER['HTTP_CLIENT_IP']))
@@ -352,4 +357,26 @@ class Klevu_Search_Helper_Data extends Mage_Core_Helper_Abstract {
 	 
 		return $ip;
     }
+	
+	/**
+     * Get the currecy switcher data
+     *
+     * @return string
+     */
+	public function getCurrencyData() {
+	    $baseCurrencyCode = Mage::app()->getBaseCurrencyCode();
+		$currentCurrencyCode = Mage::app()->getStore()->getCurrentCurrencyCode();
+		if($baseCurrencyCode != $currentCurrencyCode){
+	        $availableCurrencies = Mage::app()->getStore()->getAvailableCurrencyCodes();
+            $currencyRates = Mage::getModel('directory/currency')->getCurrencyRates($baseCurrencyCode, array_values($availableCurrencies));
+	        if(count($availableCurrencies) > 1) { 
+                foreach($currencyRates as $key => &$value){
+					$Symbol = Mage::app()->getLocale()->currency($key)->getSymbol() ? Mage::app()->getLocale()->currency($key)->getSymbol() : Mage::app()->getLocale()->currency($key)->getShortName();
+			        $value = sprintf("'%s':'%s:%s'", $key,$value,$Symbol);
+		        }
+		        $currency = implode(",",$currencyRates);
+			    return $currency;
+		    }
+	    }
+	}
 }

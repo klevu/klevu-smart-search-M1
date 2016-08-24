@@ -4,7 +4,6 @@
     <Klevu_Addtocart>
       <active>true</active>
       <codePool>community</codePool>
-      <version>0.1.0</version>
     </Klevu_Addtocart>
   </modules>
 </config>

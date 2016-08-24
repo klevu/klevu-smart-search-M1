@@ -15,7 +15,9 @@ class Klevu_Search_Model_Observer extends Varien_Object {
      */
     public function scheduleProductSync(Varien_Event_Observer $observer) {
         if (!$this->getIsProductSyncScheduled()) {
-            Mage::getModel("klevu_search/product_sync")->schedule();
+		    if(Mage::helper("klevu_search/config")->isExternalCronEnabled()) {
+				Mage::getModel("klevu_search/product_sync")->schedule();
+			}
             $this->setIsProductSyncScheduled(true);
         }
     }
@@ -87,7 +89,9 @@ class Klevu_Search_Model_Observer extends Varien_Object {
         $sync->markAllProductsForUpdate($store);
 
         if (!$this->getIsProductSyncScheduled()) {
-            $sync->schedule();
+			if(Mage::helper("klevu_search/config")->isExternalCronEnabled()) {
+                $sync->schedule();
+			}
             $this->setIsProductSyncScheduled(true);
         }
     }

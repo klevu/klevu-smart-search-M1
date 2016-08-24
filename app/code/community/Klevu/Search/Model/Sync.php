@@ -131,8 +131,9 @@ abstract class Klevu_Search_Model_Sync extends Varien_Object {
         if (!$this->isBelowMemoryLimit()) {
 			Mage::getSingleton('core/session')->setMemoryMessage("There may be few products left which will be synced during the next sync process.");
             $this->log(Zend_Log::INFO, "Memory limit reached. Stopped and rescheduled.");
-            $this->schedule();
-
+			if(Mage::helper("klevu_search/config")->isExternalCronEnabled()) {
+			    $this->schedule();
+			}
             return true;
         }
 

@@ -17,9 +17,14 @@ class Klevu_Search_Adminhtml_Klevu_SearchController extends Mage_Adminhtml_Contr
         if (Mage::helper('klevu_search/config')->isProductSyncEnabled()) {
             
             if(Mage::helper('klevu_search/config')->getSyncOptionsFlag() == "2") {
-                Mage::getModel('klevu_search/product_sync')
+				if(Mage::helper("klevu_search/config")->isExternalCronEnabled()) {
+                    Mage::getModel('klevu_search/product_sync')
                     ->markAllProductsForUpdate($store)
                     ->schedule();
+				} else {
+					 Mage::getModel('klevu_search/product_sync')
+                    ->markAllProductsForUpdate($store);
+				}
 
                 if ($store) {
                     Mage::helper("klevu_search")->log(Zend_Log::INFO, sprintf("Product Sync scheduled to re-sync ALL products in %s (%s).",

@@ -71,7 +71,7 @@
 				}
 			}
 		})();
-		var klevu_storeLandingPageUrl = '<?php echo Mage::getUrl('catalogsearch/result/', array(
+		var klevu_storeLandingPageUrl = '<?php echo Mage::getUrl('catalogsearch/result/',array(
                 '_secure' => Mage::app()->getFrontController()->getRequest()->isSecure()
         ));?>'; 
 		var klevu_showQuickSearchOnEnter=false;
@@ -85,16 +85,24 @@
 		(function () { var ws = document.createElement('script'),kl_protocol =("https:"===document.location.protocol?"https://":"http://"); ws.type = 'text/javascript'; ws.async = true; ws.src = kl_protocol+'<?php echo $config->getJsUrl() ?>/klevu-js-v1/js/klevu-webstore.js'; var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ws, s); })();
 </script>
 <?php endif; ?>
-
 <?php // show group price based on logged in customer group ?>
-<script type="text/javascript">
 <?php 
     $login = Mage::getSingleton( 'customer/session' )->isLoggedIn(); //Check if User is Logged In
     if($login) { ?>
-    var klevu_loginCustomerGroup = "<?php echo Mage::getSingleton('customer/session')->getCustomerGroupId(); ?>";
+	    <script type="text/javascript">
+            var klevu_loginCustomerGroup = "<?php echo Mage::getSingleton('customer/session')->getCustomerGroupId(); ?>";
+	    </script>
 <?php }?>
-</script>
-
+<?php 
+    $currency = $helper->getCurrencyData();
+	if(!empty($currency)){ ?>
+	<script type="text/javascript">
+	    var klevu_currentCurrencyCode = "<?php echo Mage::app()->getStore()->getCurrentCurrencyCode(); ?>";
+	    var klevu_currentCurrencyRates = {<?php echo $currency;?>};
+	</script>
+<?php 	
+    }
+?>
 
 
 

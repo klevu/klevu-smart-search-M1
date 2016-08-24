@@ -212,7 +212,9 @@ class Klevu_Search_Adminhtml_Klevu_Search_WizardController extends Mage_Adminhtm
         $session->addSuccess("Store configured successfully. Saved API credentials.");
 
         // Schedule a Product Sync
-        Mage::getModel("klevu_search/product_sync")->schedule();
+		if(Mage::helper("klevu_search/config")->isExternalCronEnabled()) {
+            Mage::getModel("klevu_search/product_sync")->schedule();
+		}
        
         $this->loadLayout();
         $this->initLayoutMessages("klevu_search/session");
@@ -273,7 +275,9 @@ class Klevu_Search_Adminhtml_Klevu_Search_WizardController extends Mage_Adminhtm
             $session->addSuccess(Mage::helper("klevu_search")->__("Attributes configured successfully. Attribute mappings saved to System Configuration."));
 
             // Schedule a Product Sync
-            Mage::getModel("klevu_search/product_sync")->schedule();
+			if(Mage::helper("klevu_search/config")->isExternalCronEnabled()) {
+                Mage::getModel("klevu_search/product_sync")->schedule();
+			}
 
             $this->loadLayout();
             $this->initLayoutMessages("klevu_search/session");

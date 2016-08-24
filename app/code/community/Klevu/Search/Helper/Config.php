@@ -41,6 +41,7 @@ class Klevu_Search_Helper_Config extends Mage_Core_Helper_Abstract {
     const XML_PATH_UPGRADE_FEATURES = "klevu_search/general/upgrade_features";
     const XML_PATH_UPGRADE_TIRES_URL = "klevu_search/general/tiers_url";
 	const XML_PATH_CONFIG_IMAGE_FLAG = "klevu_search/image_setting/enabled";
+	const XML_PATH_CONFIG_SYNC_FREQUENCY = "klevu_search/product_sync/frequency";
 
     const DATETIME_FORMAT = "Y-m-d H:i:s T";
     protected $_klevu_features_response;
@@ -845,5 +846,20 @@ class Klevu_Search_Helper_Config extends Mage_Core_Helper_Abstract {
      */
 	public function isUseConfigImage($store=null){
 		return Mage::getStoreConfigFlag(static::XML_PATH_CONFIG_IMAGE_FLAG, $store);
+	}
+	
+	
+    /**
+     * Return the klevu cron stettings.
+     *
+     * @return bool
+     */
+	public function isExternalCronEnabled(){
+		// Cron expression refers to 31,feb means which will never execute
+		if(Mage::getStoreConfig(static::XML_PATH_CONFIG_SYNC_FREQUENCY) == "0 5 31 2 *") {
+			return false;
+		} else {
+			return true;
+		}
 	}
 }

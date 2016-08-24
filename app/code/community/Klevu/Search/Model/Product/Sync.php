@@ -432,33 +432,37 @@ class Klevu_Search_Model_Product_Sync extends Klevu_Search_Model_Sync {
      */
     public function runManually() {
         $time = date_create("now")->format("Y-m-d H:i:s");
-        $schedule = Mage::getModel("cron/schedule");
-        $schedule
+		if(Mage::helper("klevu_search/config")->isExternalCronEnabled()) {
+            $schedule = Mage::getModel("cron/schedule");
+            $schedule
             ->setJobCode($this->getJobCode())
             ->setCreatedAt($time)
             ->setScheduledAt($time)
             ->setExecutedAt($time)
             ->setStatus(Mage_Cron_Model_Schedule::STATUS_RUNNING)
             ->save();
-
+        }
         try {
             $this->run();
         } catch (Exception $e) {
             Mage::logException($e);
-
-            $schedule
+            
+			if(Mage::helper("klevu_search/config")->isExternalCronEnabled()) {
+                $schedule
                 ->setMessages($e->getMessage())
                 ->setStatus(Mage_Cron_Model_Schedule::STATUS_ERROR)
                 ->save();
-
+			}
             return;
         }
 
         $time = date_create("now")->format("Y-m-d H:i:s");
-        $schedule
+		if(Mage::helper("klevu_search/config")->isExternalCronEnabled()) {
+            $schedule
             ->setFinishedAt($time)
             ->setStatus(Mage_Cron_Model_Schedule::STATUS_SUCCESS)
             ->save();
+		}
 
         return;
     }
