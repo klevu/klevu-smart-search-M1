@@ -28,16 +28,16 @@
         <div class="kuSortHeader">
           <div class="kuSortingOpt">
             <div class="kuSortby">
-              <label><?php echo $this->__('Sort by');?>:</label>
+              <label id="klevuSortLbl">Sort by:</label>
               <select name="kuSortby" id="kuSortby" onchange="klevu_changeSortingOptionsForLandigPage(this.value);">
-                <option><?php echo $this->__('Relevance');?></option>
-                <option><?php echo $this->__('Price').":".$this->__('Low to high');?></option>
-                <option><?php echo $this->__('Price').":".$this->__('High to low');?></option>
+                <option id="klevuRelSort" value="rel"><?php echo $this->__('Relevance');?></option>
+                <option id="klevuLthSort" value="lth"><?php echo $this->__('Price').":".$this->__('Low to high');?></option>
+                <option id="klevuHtlSort" value="htl"><?php echo $this->__('Price').":".$this->__('High to low');?></option>
               </select>
             </div>
             
             <div class="kuPerPage">
-              <label><?php echo $this->__('Items per page');?>:</label>
+              <label id="klevuItemsPerPage"><?php echo $this->__('Items per page');?>:</label>
               <select onchange="klevu_changeItemsPerPage(this.value);" id="noOfRecords1">
                     <?php  
 							$per_page = explode(",",Mage::getStoreConfig("catalog/frontend/grid_per_page_values"));
@@ -69,7 +69,7 @@
         
         <div class="kuBottomPagi">
           <div class="kuPerPage">
-            <label><?php echo $this->__('Items per page');?>:</label>
+            <label id="klevuItemsPerPageFooter"><?php echo $this->__('Items per page');?>:</label>
             <select onchange="klevu_changeItemsPerPage(this.value);" id="noOfRecords2">
                     <?php   
                             if(!empty($per_page)){

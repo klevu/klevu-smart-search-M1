@@ -855,7 +855,6 @@ class Klevu_Search_Helper_Config extends Mage_Core_Helper_Abstract {
      * @return bool
      */
 	public function isExternalCronEnabled(){
-		// Cron expression refers to 31,feb means which will never execute
 		if(Mage::getStoreConfig(static::XML_PATH_CONFIG_SYNC_FREQUENCY) == "0 5 31 2 *") {
 			return false;
 		} else {

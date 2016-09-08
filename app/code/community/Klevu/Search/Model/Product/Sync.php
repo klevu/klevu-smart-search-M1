@@ -285,7 +285,7 @@ class Klevu_Search_Model_Product_Sync extends Klevu_Search_Model_Sync {
                             'status_enabled' => Mage_Catalog_Model_Product_Status::STATUS_ENABLED,
                         )),
 
-                    'add' => $this->getConnection()
+                     'add' => $this->getConnection()
                         ->select()
                         ->union(array(
                             // Select non-configurable products that need to be added
@@ -358,6 +358,7 @@ class Klevu_Search_Model_Product_Sync extends Klevu_Search_Model_Sync {
                             'status_attribute_id' => $this->getProductStatusAttribute()->getId(),
                             'status_enabled' => Mage_Catalog_Model_Product_Status::STATUS_ENABLED
                         ))
+						
                 );
 
                 $errors = 0;
@@ -367,7 +368,6 @@ class Klevu_Search_Model_Product_Sync extends Klevu_Search_Model_Sync {
                         return;
                     }
                     $method = $action . "Products";
-
                     $products = $this->getConnection()->fetchAll($statement, $statement->getBind());
 
                     $total = count($products);
@@ -899,11 +899,14 @@ class Klevu_Search_Model_Product_Sync extends Klevu_Search_Model_Sync {
             //$item = $data->getItemById($product['product_id']);
             $item = Mage::getModel('catalog/product')->load($product['product_id']);
             $item->setCustomerGroupId(Mage_Customer_Model_Group::NOT_LOGGED_IN_ID);
+			
+			
+			
 			$this->log(Zend_Log::DEBUG, sprintf("Retrieve data for product ID %d", $product['product_id']));
             //$parent = ($product['parent_id'] != 0) ?  $data->getItemById($product['parent_id']) : null;
             $parent = ($product['parent_id'] != 0) ? Mage::getModel('catalog/product')->load($product['parent_id'])->setCustomerGroupId(Mage_Customer_Model_Group::NOT_LOGGED_IN_ID): null;
 			$this->log(Zend_Log::DEBUG, sprintf("Retrieve data for product ID Parent ID %d", $product['parent_id']));
-            
+
             if (!$item) {
                 // Product data query did not return any data for this product
                 // Remove it from the list to skip syncing it
@@ -1130,12 +1133,12 @@ class Klevu_Search_Model_Product_Sync extends Klevu_Search_Model_Sync {
             // Add non-attribute data
             $product['currency'] = $currency;
 
-            if ($item->getCategoryIds()) {
-                $product['category'] = $this->getLongestPathCategoryName($item->getCategoryIds());
-                $product['listCategory'] = $this->getCategoryNames($item->getCategoryIds());
-            } else if ($parent) {
+            if ($parent) {
                 $product['category'] = $this->getLongestPathCategoryName($parent->getCategoryIds());
                 $product['listCategory'] = $this->getCategoryNames($parent->getCategoryIds());
+			} else if ($item->getCategoryIds()) {
+                $product['category'] = $this->getLongestPathCategoryName($item->getCategoryIds());
+                $product['listCategory'] = $this->getCategoryNames($item->getCategoryIds());
             } else {
                 $product['category'] = "";
                 $product['listCategory'] = "KLEVU_PRODUCT";
@@ -1600,14 +1603,13 @@ class Klevu_Search_Model_Product_Sync extends Klevu_Search_Model_Sync {
         $name = "";
         foreach ($categories as $id) {
             if (isset($category_paths[$id])) {
-                if (count($category_paths[$id]) > $length) {
-                    $length = count($category_paths[$id]);
-                    $name = end($category_paths[$id]);
-                }
+                //if (count($category_paths[$id]) > $length) {
+                    //$length = count($category_paths[$id]);
+                    $name .= end($category_paths[$id]).";";
+                //}
             }
         }
-
-        return $name;
+        return substr($name,0,strrpos($name,";")+1-1);
     }
     
     /**

@@ -91,6 +91,7 @@
     if($login) { ?>
 	    <script type="text/javascript">
             var klevu_loginCustomerGroup = "<?php echo Mage::getSingleton('customer/session')->getCustomerGroupId(); ?>";
+			var klevu_loginCustomerEmail = "<?php echo Mage::getSingleton('customer/session')->getCustomer()->getEmail(); ?>";
 	    </script>
 <?php }?>
 <?php 

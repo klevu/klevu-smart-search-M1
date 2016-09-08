@@ -12,6 +12,31 @@ class Klevu_Boosting_Model_Observer extends Varien_Object
 		    Mage::getModel("klevu_search/product_sync")->updateSpecificProductIds($matchIds);
 		}
     }
+	
+	/* update matching product ids */
+    public function getMatchingidsDeleteBefore(Varien_Event_Observer $observer) {
+        $obj = $observer->getEvent()->getObject();
+        $deletdData = Mage::getResourceModel("boosting/boost")->getDeletedMatchingIds($obj->getId());
+		if(!empty($deletdData)) {
+			if(is_array($deletdData)){
+				$deletdIds = explode(",",$deletdData[0]['matchingids']);
+			}
+			$updateIds = array_filter($deletdIds);
+			if(!empty($updateIds)) {
+		        Mage::getModel("klevu_search/product_sync")->updateSpecificProductIds($updateIds);
+			}
+		}
+    }
+	
+   /* update previous matching product ids to restore the score */
+    public function updatePreviousMatchingids(Varien_Event_Observer $observer) {
+		$obj = $observer->getEvent()->getObject();
+		$model = Mage::getModel('boosting/boost')->load($obj->getId());
+		$matchIds = $model->getMatchingProductIds();
+		if(!empty($matchIds)) {
+		    Mage::getModel("klevu_search/product_sync")->updateSpecificProductIds($matchIds);
+		}
+    }
     
     /* update matching product ids */
     public function addBoostingAttribute(Varien_Event_Observer $observer) {

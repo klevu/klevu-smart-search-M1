@@ -54,9 +54,13 @@ class Klevu_Shell_Sync extends Mage_Shell_Abstract
         
 Usage:  php -f sync.php -- [options]
 
+  Note:If you choose to run this script at regular intervals to sync data, please make sure to select the value "Never" for the System -> Configuration -> Klevu -> Search Configuration -> Data Sync Settings -> Frequency option.
+  
   --updatesonly If you are using this option, only the products updated since the last successful synchronization will be synchronized with the Klevu servers. Klevu uses the updated_at timestamp of the catalog_product_entity table to figure out which products to synchronize.
   
   --alldata     If you are using this option, the entire product catalog is considered for synchronization.
+  
+  
   
 USAGE;
     }

@@ -139,7 +139,7 @@ class Klevu_Search_Model_Api_Action_Addrecords extends Klevu_Search_Model_Api_Ac
     protected function prepareParameters(&$parameters) {
         foreach ($parameters['records'] as &$record) {
             if (isset($record['listCategory']) && is_array($record['listCategory'])) {
-                $record['listCategory'] = implode(";", $record['listCategory']);
+                $record['listCategory'] = implode(";;", $record['listCategory']);
             }
 
             if (isset($record['other']) && is_array($record['other'])) {

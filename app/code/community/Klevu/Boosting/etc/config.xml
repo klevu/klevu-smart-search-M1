@@ -56,6 +56,15 @@
             </boosting_read>
         </resources>
         <events>
+		    <boosting_save_before>
+                <observers>
+                    <boosting_update_matchingids>
+                        <type>singleton</type>
+                        <class>boosting/observer</class>
+                        <method>updatePreviousMatchingids</method>
+                    </boosting_update_matchingids>
+                </observers>
+            </boosting_save_before>
             <boosting_save_after>
                 <observers>
                     <boosting_update_matchingids>
@@ -65,6 +74,15 @@
                     </boosting_update_matchingids>
                 </observers>
             </boosting_save_after>
+			<boosting_delete_before>
+                <observers>
+                    <boosting_update_matchingids>
+                        <type>singleton</type>
+                        <class>boosting/observer</class>
+                        <method>getMatchingidsDeleteBefore</method>
+                    </boosting_update_matchingids>
+                </observers>
+            </boosting_delete_before>
             <add_external_data_to_sync>
                 <observers>
     				<add_boosting_data_to_sync>
