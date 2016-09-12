@@ -3,6 +3,11 @@
 Intelligent cloud hosted site search with self-learning search technology. Guaranteed to increase in search led conversions.<br /> 
 
 <hr />
+<h2>Compatible with</h2>
+<li>CE 1.5, 1.6, 1.6.1, 1.6.2.0, 1.7, 1.8, 1.8.1, 1.9, 1.9.1, 1.9.2</li>
+<li>EE 1.12, 1.13, 1.13.1, 1.14, 1.14.1, 1.14.2</li>
+
+<hr />
 <h3><a href="http://support.klevu.com/knowledgebase/integration-steps-for-magento/"> Installation Steps</a>&nbsp; |  &nbsp;<a href="http://support.klevu.com/section/manuals/magento-manuals/"> Manuals </a> &nbsp; |  &nbsp;<a href="http://support.klevu.com/faq/faqs/"> FAQs</a></h3> 
 
 <b>Have questions? Need help?</b>  E-mail us at: <a href="mailto:support@klevu.com">support@klevu.com</a><br />
