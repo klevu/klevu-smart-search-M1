@@ -29,14 +29,20 @@ class Klevu_Search_Model_Observer extends Varien_Object {
      * @param Varien_Event_Observer $observer
      */
     public function scheduleOrderSync(Varien_Event_Observer $observer) {
-        $store = Mage::app()->getStore($observer->getEvent()->getStore());
-        if(Mage::helper("klevu_search/config")->isOrderSyncEnabled($store->getId())) {
-            $model = Mage::getModel("klevu_search/order_sync");
-            $order = $observer->getEvent()->getOrder();
-            if ($order) {
+		try {
+            $store = Mage::app()->getStore($observer->getEvent()->getStore());
+			if(Mage::helper("klevu_search/config")->isOrderSyncEnabled($store->getId())) {
+				$model = Mage::getModel("klevu_search/order_sync");
+				$order = $observer->getEvent()->getOrder();
+				if ($order) {
                 $model->addOrderToQueue($order);
-            }
-            $model->schedule();
+				}
+				$model->schedule();
+			}
+		} catch(Exception $e) {
+            // Catch the exception that was thrown, log it.
+            Mage::helper('klevu_search')->log(Zend_Log::CRIT, sprintf("Exception thrown in %s::%s - %s", __CLASS__, __METHOD__, $e->getMessage()));
+            
         }
     }
 

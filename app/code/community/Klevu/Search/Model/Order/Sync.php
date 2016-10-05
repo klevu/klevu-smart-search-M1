@@ -38,11 +38,11 @@ class Klevu_Search_Model_Order_Sync extends Klevu_Search_Model_Sync {
 		$order_date = Mage::helper("klevu_search/compat")->now();
 		$session_id = session_id();
 		$ip_address = Mage::helper("klevu_search")->getIp();
-		$order_email = $order->getCustomer()->getEmail();
+		$order_email = 'unknown';
 		if($order->getCustomerId()){
-           $order_email = $order->getCustomerEmail(); //logged in customer
+           $order_email = $order->getCustomer()->getEmail(); //logged in customer
 		} else{
-			$order_email = $order->getBillingAddress()->getEmail(); //not logged in customer
+		   $order_email = $order->getBillingAddress()->getEmail(); //not logged in customer
 		}
         foreach ($order->getAllVisibleItems() as $item) {
             /** @var Mage_Sales_Model_Order_Item $item */
