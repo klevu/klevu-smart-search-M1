@@ -319,6 +319,20 @@ class Klevu_Search_Helper_Data extends Mage_Core_Helper_Abstract {
         $attribute = $attributecollection->getFirstItem();
         return $attribute->getAttributeId();
     }
+	
+	
+	/**
+     * Get the is exclude attribute id
+     *
+     * @return string
+     */
+    public function getIsExcludeAttributeId(){
+        $entity_type = Mage::getSingleton("eav/entity_type")->loadByCode("catalog_category");
+        $entity_typeid = $entity_type->getId();
+        $attributecollection = Mage::getModel("eav/entity_attribute")->getCollection()->addFieldToFilter("entity_type_id", $entity_typeid)->addFieldToFilter("attribute_code", "exclude_in_search");
+        $attribute = $attributecollection->getFirstItem();
+        return $attribute->getAttributeId();
+    }
     
     /**
      * Get the is visibility attribute id
@@ -379,4 +393,44 @@ class Klevu_Search_Helper_Data extends Mage_Core_Helper_Abstract {
 		    }
 	    }
 	}
+	
+	/**
+     * Get total product count which have visibility catalog search
+	 * /Not visible individual/search/enable in Magento
+     *
+     * @return count
+     */
+	public function getTotalProductCount() {
+		$stores = Mage::app()->getStores();
+		foreach ($stores as $store) {
+			$products = Mage::getResourceModel('catalog/product_collection')
+			->setStore($store->getId())
+			->addStoreFilter($store->getId())
+			->addAttributeToFilter('status', Mage_Catalog_Model_Product_Status::STATUS_ENABLED)
+			->addAttributeToFilter('visibility', array('in' => array(
+				Mage_Catalog_Model_Product_Visibility::VISIBILITY_IN_SEARCH,
+				Mage_Catalog_Model_Product_Visibility::VISIBILITY_BOTH,
+				Mage_Catalog_Model_Product_Visibility::VISIBILITY_NOT_VISIBLE,
+			)));
+			$count[] = $products->getSize();
+	    }
+		return min($count);
+    }
+	
+	/**
+     * Get Klevu plans
+	 * /Not visible individual/search/enable in Magento
+     *
+     * @return count
+     */
+	public function getPlans() {
+		$response = Mage::getModel('klevu_search/api_action_getplans')->execute(array("store"=>"magento"));
+		if ($response->isSuccessful()) {
+		    $plans = $response->getData();
+			return $plans['plans']['plan'];
+		} else {
+			return;
+		}
+    }
+	
 }

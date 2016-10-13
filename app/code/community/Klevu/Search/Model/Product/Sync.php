@@ -369,6 +369,7 @@ class Klevu_Search_Model_Product_Sync extends Klevu_Search_Model_Sync {
                     }
                     $method = $action . "Products";
                     $products = $this->getConnection()->fetchAll($statement, $statement->getBind());
+					
 
                     $total = count($products);
                     $this->log(Zend_Log::INFO, sprintf("Found %d products to %s.", $total, $action));
@@ -887,6 +888,11 @@ class Klevu_Search_Model_Product_Sync extends Klevu_Search_Model_Sync {
         $currency = $this->getStore()->getDefaultCurrencyCode();
         $media_url .= Mage::getModel('catalog/product_media_config')->getBaseMediaUrlAddition();
         Mage::app()->loadAreaPart(Mage_Core_Model_App_Area::AREA_FRONTEND,Mage_Core_Model_App_Area::PART_EVENTS);
+		$backend = Mage::getResourceModel('catalog/product_attribute_backend_media');
+		$attributeId = Mage::getResourceModel('eav/entity_attribute')->getIdByCode('catalog_product', 'media_gallery');
+		$container = new Varien_Object(array(
+			'attribute' => new Varien_Object(array('id' => $attributeId))
+		));
 		$rc = 0;
         foreach ($products as $index => &$product) {
 			
@@ -901,12 +907,10 @@ class Klevu_Search_Model_Product_Sync extends Klevu_Search_Model_Sync {
             $item->setCustomerGroupId(Mage_Customer_Model_Group::NOT_LOGGED_IN_ID);
 			
 			
-			
 			$this->log(Zend_Log::DEBUG, sprintf("Retrieve data for product ID %d", $product['product_id']));
             //$parent = ($product['parent_id'] != 0) ?  $data->getItemById($product['parent_id']) : null;
             $parent = ($product['parent_id'] != 0) ? Mage::getModel('catalog/product')->load($product['parent_id'])->setCustomerGroupId(Mage_Customer_Model_Group::NOT_LOGGED_IN_ID): null;
 			$this->log(Zend_Log::DEBUG, sprintf("Retrieve data for product ID Parent ID %d", $product['parent_id']));
-
             if (!$item) {
                 // Product data query did not return any data for this product
                 // Remove it from the list to skip syncing it
@@ -992,7 +996,36 @@ class Klevu_Search_Model_Product_Sync extends Klevu_Search_Model_Sync {
 								} else if ($item->getData($attribute) && $item->getData($attribute) != "no_selection") {
 									$product[$key] = $item->getData($attribute);
 									break;
-								} 
+								}
+								
+								if ($parent && $parent->getData($attribute) == "no_selection") {
+									$product[$key] = $parent->getData('small_image');
+									if($product[$key] == "no_selection"){
+										$product_media = new Varien_Object(array(
+											'id' => $product['parent_id'],
+											'store_id' => $this->getStore()->getId(),
+										));
+										$media_image = $backend->loadGallery($product_media, $container);
+										if(count($media_image) > 0) {
+									        $product[$key] = $media_image[0]['file'];
+										}
+									}
+									break;
+								} else if ($item->getData($attribute) && $item->getData($attribute) == "no_selection") {
+									$product[$key] = $item->getData('small_image');
+									if($product[$key] == "no_selection"){
+									    $product_media = new Varien_Object(array(
+											'id' => $product['product_id'],
+											'store_id' => $this->getStore()->getId(),
+										));
+										$media_image = $backend->loadGallery($product_media, $container);
+										if(count($media_image) > 0) {
+									        $product[$key] = $media_image[0]['file'];
+										}
+									}
+									break;
+								}
+								
 							} else {
 								if ($item->getData($attribute) && $item->getData($attribute) != "no_selection") {
 									$product[$key] = $item->getData($attribute);
@@ -1000,26 +1033,76 @@ class Klevu_Search_Model_Product_Sync extends Klevu_Search_Model_Sync {
 								} else if ($parent && $parent->getData($attribute) && $parent->getData($attribute) != "no_selection") {
 									$product[$key] = $parent->getData($attribute);
 									break;
-								}	
+								}
+
+								if ($item->getData($attribute) && $item->getData($attribute) == "no_selection") {
+									$product[$key] = $item->getData('small_image');
+									if($product[$key] == "no_selection"){
+										$product_media = new Varien_Object(array(
+											'id' => $product['product_id'],
+											'store_id' => $this->getStore()->getId(),
+										));
+										$media_image = $backend->loadGallery($product_media, $container);
+										
+										if(count($media_image) > 0) {
+									        $product[$key] = $media_image[0]['file'];
+										}
+									}
+									break;
+								} else if ($parent && $parent->getData($attribute) && $parent->getData($attribute) == "no_selection") {
+									$product[$key] = $parent->getData('small_image');
+									if($product[$key] == "no_selection"){
+										$product_media = new Varien_Object(array(
+											'id' => $product['parent_id'],
+											'store_id' => $this->getStore()->getId(),
+										));
+										$media_image = $backend->loadGallery($product_media, $container);
+										if(count($media_image) > 0) {
+									        $product[$key] = $media_image[0]['file'];
+										}
+									}
+									break;
+								}
 								
 							}
                         }
-                        if ($product[$key] != "" && strpos($product[$key], "http") !== 0) {
-                            // Prepend media base url for relative image locations
-                            //generate thumbnail image for each products
-                            Mage::getModel('klevu_search/product_sync')->thumbImage($product[$key]);
-                            $imageResized = Mage::getBaseDir('media').DS."klevu_images".$product[$key];
-                                if (file_exists($imageResized)) {
-                                    $config = Mage::helper('klevu_search/config');
-                                    if($config->isSecureUrlEnabled($this->getStore()->getId())) {
-                                        $product[$key] =  $this->getStore()->getBaseUrl(Mage_Core_Model_Store::URL_TYPE_MEDIA,true)."klevu_images".$product[$key];
-                                    } else {
-                                        $product[$key] =  $this->getStore()->getBaseUrl(Mage_Core_Model_Store::URL_TYPE_MEDIA)."klevu_images".$product[$key];
-                                    }
-                                }else{
-                                    $product[$key] = $media_url . $product[$key];
-                                }
-                        }
+						if(!is_array($product[$key])) {
+							if ($product[$key] != "" && strpos($product[$key], "http") !== 0) {
+								if(strpos($product[$key],"/", 0) !== 0 && !empty($product[$key]) && $product[$key]!= "no_selection" ){
+									$product[$key] = "/".$product[$key];
+								}
+								// Prepend media base url for relative image locations
+								//generate thumbnail image for each products
+								Mage::getModel('klevu_search/product_sync')->thumbImage($product[$key]);
+								$imageResized = Mage::getBaseDir('media').DS."klevu_images".$product[$key];
+									if (file_exists($imageResized)) {
+										$config = Mage::helper('klevu_search/config');
+										if($config->isSecureUrlEnabled($this->getStore()->getId())) {
+											$product[$key] =  $this->getStore()->getBaseUrl(Mage_Core_Model_Store::URL_TYPE_MEDIA,true)."klevu_images".$product[$key];
+										} else {
+											$product[$key] =  $this->getStore()->getBaseUrl(Mage_Core_Model_Store::URL_TYPE_MEDIA)."klevu_images".$product[$key];
+										}
+									}else{
+										if(empty($product[$key]) || $product[$key] == "no_selection") {
+											$placeholder_image = Mage::getStoreConfig("catalog/placeholder/small_image_placeholder");
+											if(!empty($placeholder_image)) {
+												$product[$key] = $media_url .'/placeholder/' .Mage::getStoreConfig("catalog/placeholder/small_image_placeholder");
+											} else {
+												$product[$key] = $media_url .'/placeholder/' .Mage::getStoreConfig("catalog/placeholder/image_placeholder");	
+											}
+										}else {
+											 $product[$key] = $media_url . $product[$key];
+										}
+									}
+							}
+						} else {
+							$placeholder_image = Mage::getStoreConfig("catalog/placeholder/small_image_placeholder");
+							if(!empty($placeholder_image)) {
+								$product[$key] = $media_url .'/placeholder/' .Mage::getStoreConfig("catalog/placeholder/small_image_placeholder");
+							} else {
+								$product[$key] = $media_url .'/placeholder/' .Mage::getStoreConfig("catalog/placeholder/image_placeholder");	
+							}
+						}
                         break;
                     case "salePrice":
                         // Default to 0 if price can't be determined
@@ -2249,6 +2332,7 @@ class Klevu_Search_Model_Product_Sync extends Klevu_Search_Model_Sync {
     public function runCategory($store)
     {
             $isActiveAttributeId =  Mage::helper("klevu_search")->getIsActiveAttributeId();
+			$isExcludeAttributeId = Mage::helper("klevu_search")->getIsExcludeAttributeId();
             $this->log(Zend_Log::INFO, sprintf("Starting sync for category %s (%s).", $store->getWebsite()->getName() , $store->getName()));
             $rootId = $this->getStore()->getRootCategoryId();
             $rootStoreCategory = "1/$rootId/";
@@ -2269,7 +2353,12 @@ class Klevu_Search_Model_Product_Sync extends Klevu_Search_Model_Sync {
                                     "k.product_id = ci.entity_id AND ci.attribute_id = :is_active",
                                     ""
                                 )
-                        ->where("k.type = :type AND (ci.value = 0 OR k.product_id NOT IN ?)",
+						->joinLeft(
+                                    array('ex' => $this->getTableName("catalog_category_entity_int")),
+                                    "k.product_id = ex.entity_id AND ex.attribute_id = :is_exclude",
+                                    ""
+                                )
+                        ->where("k.type = :type AND (ci.value = 0 OR ex.value = 1 OR k.product_id NOT IN ?)",
                                 $this->getConnection()
                                 ->select()
                                 ->from(
@@ -2280,7 +2369,8 @@ class Klevu_Search_Model_Product_Sync extends Klevu_Search_Model_Sync {
                         ->group(array('k.product_id', 'k.parent_id'))
                         ->bind(array(
                             'type'=>"categories",
-                            'is_active' => $isActiveAttributeId
+                            'is_active' => $isActiveAttributeId,
+							'is_exclude' => $isExcludeAttributeId,
                         )),
                     'update' => 
                             $this->getConnection()
@@ -2320,12 +2410,17 @@ class Klevu_Search_Model_Product_Sync extends Klevu_Search_Model_Sync {
                                     "c.entity_id = ci.entity_id AND ci.attribute_id = :is_active AND ci.value = 1",
                                     ""
                                 )
+								->joinLeft(
+                                    array('ex' => $this->getTableName("catalog_category_entity_int")),
+                                    "ci.entity_id = ex.entity_id AND ex.attribute_id = :is_exclude",
+                                    ""
+                                )
                                 ->joinLeft(
                                     array('k' => $this->getTableName("klevu_search/product_sync")),
                                     "ci.entity_id = k.product_id AND k.store_id = :store_id AND k.test_mode = :test_mode AND k.type = :type",
                                     ""
                                 )
-                                ->where("k.product_id IS NULL")
+                                ->where("k.product_id IS NULL AND (ex.value IS NULL OR ex.value = 0)")
                                 ->where("c.path LIKE ?","{$rootStoreCategory}%")
 								->group(array('c.entity_id'))
                         ->bind(array(
@@ -2333,6 +2428,7 @@ class Klevu_Search_Model_Product_Sync extends Klevu_Search_Model_Sync {
                             'store_id' => $store->getId(),
                             'is_active' => $isActiveAttributeId,
                             'test_mode' => $this->isTestModeEnabled(),
+							'is_exclude' => $isExcludeAttributeId,
                         )),
                 );
             $errors = 0;

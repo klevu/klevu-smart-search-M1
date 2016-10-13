@@ -129,21 +129,26 @@ cursor:auto;
 	margin-bottom:5px !important;
 }
 	
-table.kuPlanDetails{
+ul.kuPlanDetails{
 	width: 85%;
     margin: 0 auto;
     margin-top: 15px;
+	text-align: center;
 }
 
-table.kuPlanColumn {
+li.kuPlanColumn {
 	width:175px;
+	display:inline-table;
 	background-color:#ffffff;
 	border:1px solid #ddd;
 	border-radius:5px;
 	margin: 0 auto;
+	margin-left:10px;
+	margin-right:10px;
+	margin-bottom:5px;
 }
 
-table.kuPlanColumn tr:first-child td{
+li.kuPlanColumn .kuPlanName{
 	border-bottom:1px solid #ddd;
 	padding:5px;
 	text-align:center;
@@ -154,74 +159,48 @@ table.kuPlanColumn tr:first-child td{
 	border-top-right-radius:5px;
 }
 
-table.kuPlanColumn tr:first-child td input[type="radio"]{
+li.kuPlanColumn .kuPlanName input[type="radio"]{
 	margin-top:-3px;
 }
 
-table.kuPlanColumn tr:first-child td label{
+li.kuPlanColumn .kuPlanName label{
     color:#ffffff;
     font-family: Arial;
 }
 
+li.kuPlanColumn .kuPlanImg{
+	text-align:center;
+}
 
-table.kuOtherPlan{
-	width:100%;
+li.kuEnterprise, li.kuMicro{
+	width:45%;
 	margin-top:20px;
+	margin-left:5px;
+	border:none;
+	
 }
 
-table.kuOtherPlan td{
-	width:40%;
+li.kuEnterprise .kuPlanName, li.kuMicro .kuPlanName{
+	float: left;
+    width: 27%;
+    border-top-right-radius: 0px;
+    border-bottom-left-radius:5px;
+    border-bottom: 0px;
+    height: 24px;
+    padding-top: 5px;
+    font-size: 14px;
+    margin-top: 15px;
 }
 
-table.kuOtherPlanBox{
-	width: 96%;
-    margin: 0 auto;
-	background-color:#fff;
-	border:1px solid #ddd;
-	border-radius:5px;
+li.kuEnterprise .kuPlanImg, li.kuMicro .kuPlanImg{
+	float: left;
+    border: 1px solid #ddd;
+    border-radius: 5px;
 }
 
-
-table.kuOtherPlan table.kuOtherPlanBox td.kuOtherPlanHeader{
-	width:20% !important;
-	background-color: #009ACD;
-    border-top-left-radius: 5px;
-	font-size:15px;
-	text-align:center;
-	padding:5px !important;
-	border-right:1px solid #dddddd;
-	line-height:24px;
-}
-
-table.kuOtherPlan table.kuOtherPlanBox td.kuOtherPlanHeader input[type="radio"]{
-	margin-top:-3px;
-}
-
-table.kuOtherPlan table.kuOtherPlanBox td.kuOtherPlanPrice{
-	width:20% !important;
-	background-color: #ffffff;
-	font-size:13px;
-	padding:3px;
-	text-align:center;
-	color:#1772b0;
-	border-right:1px solid #dddddd;
-	border-bottom-left-radius: 5px;
-}
-
-table.kuOtherPlan table.kuOtherPlanBox td.kuOtherPlanPrice span{
-	font-size:12px;
-	color:#888888;
-}
-
-table.kuOtherPlan table.kuOtherPlanBox td.kuOtherPlanDesc{
-	padding:8px !important;
-	text-align:center;'
-	width:80% !important;
-	vertical-align:middle;
-}
-
-table.kuOtherPlanBox td:first-child label{
-	color:#ffffff;
+li.kuEnterprise .kuPlanImg img, li.kuMicro .kuPlanImg img{
+	max-width:100%;
+	 border-radius: 5px;
 }
 
 .visuallyhidden {
@@ -303,6 +282,7 @@ table.kuOtherPlanBox td:first-child label{
 	margin-right:0px;
 }
 
+
 .kuTooltip {
     outline: none;
     text-decoration: none;
@@ -331,8 +311,12 @@ table.kuOtherPlanBox td:first-child label{
     box-shadow: 2px 2px 2px #999;
 }
 
+.kuTooltip:hover span{
+	display:none;
+}
+
 /*a.tooltip > span:hover,*/
-.kuTooltip:hover > span {
+.kuMicro .kuTooltip:hover > span {
     opacity: 1;
     text-decoration: none;
     visibility: visible;
@@ -342,7 +326,7 @@ table.kuOtherPlanBox td:first-child label{
     margin-left: -90px;
 }
 
-.kuTooltip span b {
+.kuMicro .kuTooltip span b {
     width: 18px;
     height: 18px;
     margin-left: 40px;
@@ -355,16 +339,21 @@ table.kuOtherPlanBox td:first-child label{
     transform: rotate(-45deg);
 }    
 
-.kuTooltip > span {
+.kuMicro .kuTooltip > span {
 	color: #000000; 
 	background: #FBF5E6;
 	border: 1px solid #CFB57C;	     
 }    
 	  
-.kuTooltip span b {
+.kuMicro .kuTooltip span b {
 	background: #FBF5E6;
 	border-bottom: 1px solid #CFB57C;
 	border-left: 1px solid #CFB57C;
+}
+
+/* disable Micro plan */
+.kuDisableMicro .kuPlanImg, .kuDisableMicro label{
+	opacity:0.5;
 }
 
 .kuGuideLink{
@@ -410,4 +399,16 @@ table.kuOtherPlanBox td:first-child label{
 h4.kuCompleteWarning{
     text-align: right;
     font-size: 12px;
+}
+
+.kuErrorPlanMsg {
+    text-align: center;
+    font-size: 14px;
+    line-height: 22px;
+    width: 65%;
+    margin: 0 auto;
+    margin-top: 80px;
+    background: #fff9e9;
+    padding: 10px;
+    border: 1px solid #eee2be;
 }

@@ -367,9 +367,9 @@ class Klevu_Content_Model_Content extends Klevu_Search_Model_Product_Sync
             $value["name"] = $value["title"];
             $value["id"] = "pageid_" . $value["page_id"];
             $value["url"] = $base_url . $value["identifier"];
-            $value["desc"] = strip_tags($value["content"]);
+            $value["desc"] = preg_replace('#\{{.*?\}}#s','',strip_tags(Mage::helper("content")->ripTags($value["content"])));
             $value["metaDesc"] = $value["meta_description"] . $value["meta_keywords"];
-            $value["shortDesc"] = substr(strip_tags($value["content"]) , 0, 200);
+            $value["shortDesc"] = substr(preg_replace('#\{{.*?\}}#s','',strip_tags(Mage::helper("content")->ripTags($value["content"]))),0,200);
             $value["listCategory"] = "KLEVU_CMS";
             $value["category"] = "pages";
             $value["salePrice"] = 0;

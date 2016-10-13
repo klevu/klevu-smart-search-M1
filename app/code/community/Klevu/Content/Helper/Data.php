@@ -258,5 +258,31 @@ class Klevu_Content_Helper_Data extends Mage_Core_Helper_Abstract
         Mage::helper("klevu_search/config")->setStoreConfig(static::XML_PATH_EXCLUDEDCMS_PAGES, serialize($map), $store);
         return $this;
     }
+	
+	/** 
+     *  function starts here
+     *  Remove html tags and replace it with space.
+     *
+     * @param $string
+     *
+     * @return $string
+     */
+ 
+	function ripTags($string) { 
+	 
+	    // ----- remove HTML TAGs ----- 
+	    $string = preg_replace ('/<[^>]*>/', ' ', $string); 
+	 
+	    // ----- remove control characters ----- 
+	    $string = str_replace("\r", '', $string);    
+	    $string = str_replace("\n", ' ', $string);   
+	    $string = str_replace("\t", ' ', $string);   
+	 
+	    // ----- remove multiple spaces ----- 
+	    $string = trim(preg_replace('/ {2,}/', ' ', $string));
+	 
+	    return $string; 
+	 
+	}
 
 }
