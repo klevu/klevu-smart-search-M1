@@ -132,20 +132,20 @@ class Klevu_Search_Model_Order_Sync extends Klevu_Search_Model_Sync {
                                 if ($this->getApiKey($item->getStoreId())) {
                                         $result = $this->sync($item,$value['klevu_session_id'],$value['ip_address'],$value['date'],$value['email']);
                                         if ($result === true) {
-                                            $this->removeItemFromQueue($item_id);
+                                            $this->removeItemFromQueue($value['order_item_id']);
                                             $items_synced++;
                                         } else {
-                                            $this->log(Zend_Log::INFO, sprintf("Skipped order item %d: %s", $item_id, $result));
+                                            $this->log(Zend_Log::INFO, sprintf("Skipped order item %d: %s", $value['order_item_id'], $result));
                                             $errors++;
                                         }
                                 }
                             } else {
-                                $this->log(Zend_Log::ERR, sprintf("Skipped item %d: Order Sync is not enabled for this store.", $item_id));
-                                $this->removeItemFromQueue($item_id);
+                                $this->log(Zend_Log::ERR, sprintf("Skipped item %d: Order Sync is not enabled for this store.", $value['order_item_id']));
+                                $this->removeItemFromQueue($value['order_item_id']);
                             }
                         } else {
-                            $this->log(Zend_Log::ERR, sprintf("Order item %d does not exist: Removed from sync!", $item_id));
-                            $this->removeItemFromQueue($item_id);
+                            $this->log(Zend_Log::ERR, sprintf("Order item %d does not exist: Removed from sync!", $value['order_item_id']));
+                            $this->removeItemFromQueue($value['order_item_id']);
                             $errors++;
                         }
                     }

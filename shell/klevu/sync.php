@@ -1,5 +1,5 @@
 <?php
-require_once('../abstract.php');
+require_once dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'abstract.php';
 class Klevu_Shell_Sync extends Mage_Shell_Abstract
 {
     protected $_argname = array();

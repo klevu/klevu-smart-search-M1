@@ -206,8 +206,12 @@ class Klevu_Search_Model_Api_Action_Addrecords extends Klevu_Search_Model_Api_Ac
             $key = $this->sanitiseOtherAttribute($key);
             
             if(is_array($value)){
-                $label = $this->sanitiseOtherAttribute($value['label']);
-                $value = $this->sanitiseOtherAttribute($value['values']);
+				if(isset($value['label'])) {
+					$label = $this->sanitiseOtherAttribute($value['label']);
+			    }
+				if(isset($value['values'])) {
+					$value = $this->sanitiseOtherAttribute($value['values']);
+				}
             }else {
                 $label = $this->sanitiseOtherAttribute($key);
                 $value = $this->sanitiseOtherAttribute($value);

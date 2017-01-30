@@ -454,6 +454,16 @@
                             <show_in_website>0</show_in_website>
                             <show_in_store>0</show_in_store>
                         </enable_external_call>
+						<collection_method translate="label comment">
+							<label>Enable Product Sync using the Collections method</label>
+							<comment><![CDATA[Use this option to speed up product data synchronization. It is useful when you have a large catalog]]></comment>
+							<frontend_type>select</frontend_type>
+							<source_model>adminhtml/system_config_source_yesno</source_model>
+							<sort_order>300</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>0</show_in_website>
+							<show_in_store>0</show_in_store>
+						</collection_method>
                         <log_level translate="label">
                             <label>Log level</label>
                             <frontend_type>select</frontend_type>

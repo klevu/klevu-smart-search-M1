@@ -722,27 +722,30 @@ class Klevu_Search_Model_Product_Sync extends Klevu_Search_Model_Sync {
                 if (isset($skipped_record_ids[$i])) {
                     continue;
                 }
+				if(isset($data[$i])) {
+					$ids = $helper->getMagentoProductId($data[$i]['id']);
 
-                $ids = $helper->getMagentoProductId($data[$i]['id']);
-
-                $where[] = sprintf("(%s AND %s AND %s)",
-                    $connection->quoteInto("product_id = ?", $ids['product_id']),
-                    $connection->quoteInto("parent_id = ?", $ids['parent_id']),
-                    $connection->quoteInto("type = ?", "products")
-                );
+					$where[] = sprintf("(%s AND %s AND %s)",
+						$connection->quoteInto("product_id = ?", $ids['product_id']),
+						$connection->quoteInto("parent_id = ?", $ids['parent_id']),
+						$connection->quoteInto("type = ?", "products")
+					);
+				}
             }
+			
+			if(!empty($where)) {
+				$where = sprintf("(%s) AND (%s) AND (%s)",
+					$connection->quoteInto("store_id = ?", $this->getStore()->getId()),
+					$connection->quoteInto("test_mode = ?", $this->isTestModeEnabled()),
+					implode(" OR ", $where)
+				);
 
-            $where = sprintf("(%s) AND (%s) AND (%s)",
-                $connection->quoteInto("store_id = ?", $this->getStore()->getId()),
-                $connection->quoteInto("test_mode = ?", $this->isTestModeEnabled()),
-                implode(" OR ", $where)
-            );
-
-            $this->getConnection()->update(
-                $this->getTableName('klevu_search/product_sync'),
-                array('last_synced_at' => Mage::helper("klevu_search/compat")->now()),
-                $where
-            );
+				$this->getConnection()->update(
+					$this->getTableName('klevu_search/product_sync'),
+					array('last_synced_at' => Mage::helper("klevu_search/compat")->now()),
+					$where
+				);
+			}
             
             $skipped_count = count($skipped_record_ids);
             if ($skipped_count > 0) {
@@ -812,12 +815,28 @@ class Klevu_Search_Model_Product_Sync extends Klevu_Search_Model_Sync {
                     "products"
                 );
             }
+			
+			if(!empty($data)) {
+				foreach($data as $key => $value){
+					$write = $this->getConnection();
+					$query = "replace into ".$this->getTableName('klevu_search/product_sync')
+						   . "(product_id, parent_id, store_id, test_mode, last_synced_at, type) values "
+						   . "(:product_id, :parent_id, :store_id, :test_mode, :last_synced_at, :type)";
 
-            $this->getConnection()->insertArray(
-                $this->getTableName('klevu_search/product_sync'),
-                array("product_id", "parent_id", "store_id", "test_mode", "last_synced_at","type"),
-                $data
-            );
+					$binds = array(
+						'product_id' => $value[0],
+						'parent_id' => $value[1],
+						'store_id' => $value[2],
+						'test_mode' => $value[3],
+						'last_synced_at'  => $value[4],
+						'type' => $value[5]
+					);
+					$write->query($query, $binds);
+				}
+			}
+			
+			
+		
 
             $skipped_count = count($skipped_record_ids);
             if ($skipped_count > 0) {
@@ -864,6 +883,7 @@ class Klevu_Search_Model_Product_Sync extends Klevu_Search_Model_Sync {
             ->addIdFilter($product_ids)
             ->setStore($this->getStore())
             ->addStoreFilter()
+			->addFinalPrice()
             ->addAttributeToSelect($this->getUsedMagentoAttributes());
 
         $data->load()
@@ -902,15 +922,19 @@ class Klevu_Search_Model_Product_Sync extends Klevu_Search_Model_Sync {
 				}
 			}
 			
-            //$item = $data->getItemById($product['product_id']);
-            $item = Mage::getModel('catalog/product')->load($product['product_id']);
-            $item->setCustomerGroupId(Mage_Customer_Model_Group::NOT_LOGGED_IN_ID);
+			if($config->getCollectionMethod()) {
+				$item = $data->getItemById($product['product_id']);
+				$parent = ($product['parent_id'] != 0) ?  $data->getItemById($product['parent_id']) : null;
+				$this->log(Zend_Log::DEBUG, sprintf("Retrieve data for product ID %d using collection method", $product['product_id']));
+				$this->log(Zend_Log::DEBUG, sprintf("Retrieve data for product ID Parent ID %d using collection method", $product['parent_id']));
+			} else {
+				$item = Mage::getModel('catalog/product')->load($product['product_id']);
+				$item->setCustomerGroupId(Mage_Customer_Model_Group::NOT_LOGGED_IN_ID);
+				$this->log(Zend_Log::DEBUG, sprintf("Retrieve data for product ID %d", $product['product_id']));
+				$parent = ($product['parent_id'] != 0) ? Mage::getModel('catalog/product')->load($product['parent_id'])->setCustomerGroupId(Mage_Customer_Model_Group::NOT_LOGGED_IN_ID): null;
+				$this->log(Zend_Log::DEBUG, sprintf("Retrieve data for product ID Parent ID %d", $product['parent_id']));
+			}
 			
-			
-			$this->log(Zend_Log::DEBUG, sprintf("Retrieve data for product ID %d", $product['product_id']));
-            //$parent = ($product['parent_id'] != 0) ?  $data->getItemById($product['parent_id']) : null;
-            $parent = ($product['parent_id'] != 0) ? Mage::getModel('catalog/product')->load($product['parent_id'])->setCustomerGroupId(Mage_Customer_Model_Group::NOT_LOGGED_IN_ID): null;
-			$this->log(Zend_Log::DEBUG, sprintf("Retrieve data for product ID Parent ID %d", $product['parent_id']));
             if (!$item) {
                 // Product data query did not return any data for this product
                 // Remove it from the list to skip syncing it
@@ -1282,8 +1306,10 @@ class Klevu_Search_Model_Product_Sync extends Klevu_Search_Model_Sync {
 			}
 			
 			if($parent) {
-			    $parent->clearInstance();
-				$parent = null;
+				if(!$config->getCollectionMethod()) {
+					$parent->clearInstance();
+					$parent = null;
+				}
 			}
             unset($product['product_id']);
             unset($product['parent_id']);
@@ -1883,6 +1909,9 @@ class Klevu_Search_Model_Product_Sync extends Klevu_Search_Model_Sync {
     protected function processPrice($price, $tax_class_id, $pro) {
         if($price < 0){$price = 0;}else{$price = $price;}
         $config = Mage::helper('klevu_search/config');
+		if (($pro->getData('type_id') == Mage_Catalog_Model_Product_Type::TYPE_GROUPED || $pro->getData('type_id')==Mage_Catalog_Model_Product_Type::TYPE_BUNDLE )&& $config->getCollectionMethod() == 1) {
+		    return $this->convertPrice($price);	
+		}
         if($config->isTaxEnabled($this->getStore()->getId())) {
            return $this->convertPrice(Mage::helper("tax")->getPrice($pro, $price, true, null, null, null, $this->getStore(),false));
         } else {

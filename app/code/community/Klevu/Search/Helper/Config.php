@@ -42,7 +42,7 @@ class Klevu_Search_Helper_Config extends Mage_Core_Helper_Abstract {
     const XML_PATH_UPGRADE_TIRES_URL = "klevu_search/general/tiers_url";
 	const XML_PATH_CONFIG_IMAGE_FLAG = "klevu_search/image_setting/enabled";
 	const XML_PATH_CONFIG_SYNC_FREQUENCY = "klevu_search/product_sync/frequency";
-
+	const XML_PATH_COLLETION_METHOD = "klevu_search/developer/collection_method";
     const DATETIME_FORMAT = "Y-m-d H:i:s T";
     protected $_klevu_features_response;
     protected $_klevu_enabled_feature_response;
@@ -430,18 +430,18 @@ class Klevu_Search_Helper_Config extends Mage_Core_Helper_Abstract {
      * @return bool
      */
     public function isProductSyncEnabled($store_id = null) {
+		
+			$flag = $this->getProductSyncEnabledFlag($store_id);
 
-        $flag = $this->getProductSyncEnabledFlag($store_id);
-
-        // static::KLEVU_PRODUCT_FORCE_OLDERVERSION for handling of older version of klevu 
-        //if (Mage::helper("klevu_search")->isProductionDomain(Mage::getBaseUrl())) {
-            return in_array($flag, array(
-                Klevu_Search_Model_System_Config_Source_Yesnoforced::YES,
-                static::KLEVU_PRODUCT_FORCE_OLDERVERSION
-            ));
-        //} else {
-        //    return $flag === Klevu_Search_Model_System_Config_Source_Yesnoforced::FORCED;
-        //}
+			// static::KLEVU_PRODUCT_FORCE_OLDERVERSION for handling of older version of klevu 
+			//if (Mage::helper("klevu_search")->isProductionDomain(Mage::getBaseUrl())) {
+				return in_array($flag, array(
+					Klevu_Search_Model_System_Config_Source_Yesnoforced::YES,
+					static::KLEVU_PRODUCT_FORCE_OLDERVERSION
+				));
+			//} else {
+			//    return $flag === Klevu_Search_Model_System_Config_Source_Yesnoforced::FORCED;
+			//}
     }
 
     /**
@@ -865,4 +865,13 @@ class Klevu_Search_Helper_Config extends Mage_Core_Helper_Abstract {
 			return true;
 		}
 	}
+	
+	/**
+     * Return the minimum log level configured. Default to Zend_Log::WARN.
+     *
+     * @return int
+     */
+    public function getCollectionMethod() {
+       return Mage::getStoreConfigFlag(static::XML_PATH_COLLETION_METHOD);
+    }
 }

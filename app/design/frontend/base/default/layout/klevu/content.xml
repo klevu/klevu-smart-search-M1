@@ -29,7 +29,7 @@
             <action method="setTemplate"><template>page/1column.phtml</template></action>   
         </reference>   
         <reference name="content"> 
-            <remove name="search_index"/>        
+            <remove name="search_index"/>	
             <block type="core/template" name="search_content_index" template="klevu/content/search.phtml"/>   
         </reference>   
     </search_index_index>  
