@@ -22,17 +22,17 @@ Klevu’s Ajax-based search for Magento goes  beyond fast response and auto-comp
 <br /><br />
 <h3>Klevu Search Features</h3>
 
-<li>●  <b>Fastest Search:</b> Lightning fast results in less than 200 milliseconds </li>
-<li>●  <b>Advanced Search Technology:</b> Ajax based search beyond solr and Lucene</li>
-<li>●  <b>Awesome search UI:</b> grid view, list view, advance filters and search landing page</li>
-<li>● <b>Secure:</b> 100% cloud hosted, CDN backed and secure backups</li>
-<li>●  <b>Self-learning:</b> Search results get optimized based on search queries on your store</li>
-<li>●  <b>Product Promotions:</b> Customized product boosting in search results </li>
-<li>●  <b>Error Tolerant:</b> Automatically take care of spelling mistakes </li>
-<li>● <b>Responsive Design:</b> Automatically formats search results for mobiles/tablets</li>
-<li>●  <b>Search Analytics:</b> Advanced data to boost your conversions and optimize SEO</li>
-<li>●  <b>Multi-language:</b> Supports search in multi-languages</li>
-<li>●  <b>Easy Integration</b> Process</li>
+<li>  <b>Fastest Search:</b> Lightning fast results in less than 200 milliseconds </li>
+<li>  <b>Advanced Search Technology:</b> Ajax based search beyond solr and Lucene</li>
+<li>  <b>Awesome search UI:</b> grid view, list view, advance filters and search landing page</li>
+<li> <b>Secure:</b> 100% cloud hosted, CDN backed and secure backups</li>
+<li>  <b>Self-learning:</b> Search results get optimized based on search queries on your store</li>
+<li>  <b>Product Promotions:</b> Customized product boosting in search results </li>
+<li>  <b>Error Tolerant:</b> Automatically take care of spelling mistakes </li>
+<li> <b>Responsive Design:</b> Automatically formats search results for mobiles/tablets</li>
+<li>  <b>Search Analytics:</b> Advanced data to boost your conversions and optimize SEO</li>
+<li>  <b>Multi-language:</b> Supports search in multi-languages</li>
+<li>  <b>Easy Integration</b> Process</li>
 <br />
 <br />
 
