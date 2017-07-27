@@ -202,6 +202,7 @@ class Klevu_Search_Model_Api_Action_Addrecords extends Klevu_Search_Model_Api_Ac
      * @param string
      */
     protected function prepareOtherAttributeToIndexParameters(&$record) {
+		
         foreach ($record['otherAttributeToIndex'] as $key => &$value) {
             $key = $this->sanitiseOtherAttribute($key);
             
@@ -220,7 +221,9 @@ class Klevu_Search_Model_Api_Action_Addrecords extends Klevu_Search_Model_Api_Ac
             if (is_array($value)) {
                 $value = implode(",", $value);
             }
-
+			if($key == 'created_at') {
+				$value = date('Y-m-d',strtotime(substr($value,0,strpos($value,"T"))));
+			}
             $value = sprintf("%s:%s:%s", $key, $label, $value);
         }
         $record['otherAttributeToIndex'] = implode(";", $record['otherAttributeToIndex']);

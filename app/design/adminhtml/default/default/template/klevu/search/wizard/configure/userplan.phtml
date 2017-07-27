@@ -34,11 +34,11 @@
 	</div>
 		<ul class="form-list kuPlanDetails">
 		<?php foreach($getPlans as $key => $value) { ?>
-		    <li class="kuPlanColumn ku<?php echo ucfirst($value['planName']); if($getProductCount > 501 && $value['planName']=="micro") { echo " kuDisableMicro"; } ?>">
+		    <li class="kuPlanColumn <?php if($getProductCount > 501 && $value['planName']=="micro") { echo " kuDisableMicro"; } ?>">
 						<div class="kuPlanName">
 						  <div class="kuTooltip">
-							<input type="radio" name="userPlan" <?php if($getProductCount > 501 && $value['planName']=="micro") { ?> disabled="disabled" <?php } ?> value="<?php echo $value['planName'];?>" id="kuEnterprise"> 
-							<label for="kuEnterprise"><?php echo ucfirst($value['planName']);?></label>
+							<input type="radio" name="userPlan" <?php if($getProductCount > 501 && $value['planName']=="micro") { ?> disabled="disabled" <?php } ?> value="<?php echo $value['planName'];?>" > 
+							<label><?php echo ucfirst($value['planName']);?></label>
 							<span> <?php if($getProductCount > 501) {
 								echo $this->__("Sorry, you are not eligible to select the Micro (Plan). There are more than 500 records in your store and the Micro plan allows only upto 500 records. You can select any of the other listed plans and start a 14-day free trial.");
 							 } else {

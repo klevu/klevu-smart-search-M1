@@ -36,9 +36,22 @@ class Klevu_Search_Model_Product_Sync extends Klevu_Search_Model_Sync {
      * deleting removed products since last sync.
      */
     public function run() {
-    
         try {
-           
+			
+			// reset the flag for fail message
+			Mage::getSingleton('core/session')->setKlevuFailedFlag(0);
+			
+			// check the status of indexing when collection method selected to sync data 
+			$config = Mage::helper('klevu_search/config');
+			if($config->getCollectionMethod()) {
+				if(Mage::helper('klevu_search')->getStatuOfIndexing()) {
+					$this->notify(Mage::helper('klevu_search')->__("Product sync failed:One of your Magento indexes is not up-to-date.  Please, rebuild your indexes (see System > Index Management)."),null);
+					Mage::helper('klevu_search')->log(Zend_Log::INFO, "Product sync failed:One of your Magento indexes is not up-to-date.  Please, rebuild your indexes (see System > Index Management).");
+
+					return true;
+				}
+			}
+			
             /* mark for update special price product */
             $this->markProductForUpdate();
             
@@ -73,7 +86,7 @@ class Klevu_Search_Model_Product_Sync extends Klevu_Search_Model_Sync {
             }
             
             $stores = Mage::app()->getStores();
-            $config = Mage::helper('klevu_search/config');
+            
             
             foreach ($stores as $store) {
                 $this->reset();
@@ -368,6 +381,7 @@ class Klevu_Search_Model_Product_Sync extends Klevu_Search_Model_Sync {
                         return;
                     }
                     $method = $action . "Products";
+				
                     $products = $this->getConnection()->fetchAll($statement, $statement->getBind());
 					
 
@@ -600,14 +614,14 @@ class Klevu_Search_Model_Product_Sync extends Klevu_Search_Model_Sync {
                     )
                 );*/
             } else {
-                $this->notify(
-                    Mage::helper('klevu_search')->__(
-                        "Product Sync failed for %s (%s): %s",
-                        $store->getWebsite()->getName(),
-                        $store->getName(),
-                        $response->getMessage()
-                    ),$store
-                );
+				$this->notify(
+					Mage::helper('klevu_search')->__(
+						"Product Sync failed for %s (%s): %s",
+						$store->getWebsite()->getName(),
+						$store->getName(),
+						$response->getMessage()
+					),$store
+				);
             }
 
             return false;
@@ -625,18 +639,23 @@ class Klevu_Search_Model_Product_Sync extends Klevu_Search_Model_Sync {
      * @return bool|string
      */
     protected function deleteProducts(array $data) {
+		Mage::getSingleton('core/session')->setKlevuFailedFlag(0);
         $total = count($data);
-
+		$baseDomain = $this->getStore()->getBaseUrl(Mage_Core_Model_Store::URL_TYPE_LINK,true);
+		foreach($data as $key => $value){
+			$data[$key]['url'] = $baseDomain; 
+		}
         $response = Mage::getModel('klevu_search/api_action_deleterecords')
             ->setStore($this->getStore())
             ->execute(array(
             'sessionId' => $this->getSessionId(),
             'records'   => array_map(function ($v) {
-                return array('id' => Mage::helper('klevu_search')->getKlevuProductId($v['product_id'], $v['parent_id']));
+                return array('id' => Mage::helper('klevu_search')->getKlevuProductId($v['product_id'], $v['parent_id']),'url' => $v['url']);
             }, $data)
         ));
 
         if ($response->isSuccessful()) {
+			
             $connection = $this->getConnection();
 
             $select = $connection
@@ -677,11 +696,13 @@ class Klevu_Search_Model_Product_Sync extends Klevu_Search_Model_Sync {
                 return true;
             }
         } else {
+			Mage::getSingleton('core/session')->setKlevuFailedFlag(1);
             return sprintf("%d product%s failed (%s)",
                 $total,
                 ($total > 1) ? "s" : "",
                 $response->getMessage()
             );
+			
         }
     }
 
@@ -696,6 +717,7 @@ class Klevu_Search_Model_Product_Sync extends Klevu_Search_Model_Sync {
      * @return bool|string
      */
     protected function updateProducts(array $data) {
+		Mage::getSingleton('core/session')->setKlevuFailedFlag(0);
         $total = count($data);
         $dataToSend = $this->addProductSyncData($data);
 		if(!empty($dataToSend) && is_numeric($dataToSend)){
@@ -709,6 +731,7 @@ class Klevu_Search_Model_Product_Sync extends Klevu_Search_Model_Sync {
         ));
 
         if ($response->isSuccessful()) {
+			
             $helper = Mage::helper('klevu_search');
             $connection = $this->getConnection();
 
@@ -758,11 +781,13 @@ class Klevu_Search_Model_Product_Sync extends Klevu_Search_Model_Sync {
                 return true;
             }
         } else {
+			Mage::getSingleton('core/session')->setKlevuFailedFlag(1);
             return sprintf("%d product%s failed (%s)",
                 $total,
                 ($total > 1) ? "s" : "",
                 $response->getMessage()
             );
+			
         }
     }
 
@@ -777,6 +802,7 @@ class Klevu_Search_Model_Product_Sync extends Klevu_Search_Model_Sync {
      * @return bool|string
      */
     protected function addProducts(array $data) {
+		Mage::getSingleton('core/session')->setKlevuFailedFlag(0);
         $total = count($data);
         $dataToSend = $this->addProductSyncData($data);
 		if(!empty($dataToSend) && is_numeric($dataToSend)){
@@ -790,7 +816,6 @@ class Klevu_Search_Model_Product_Sync extends Klevu_Search_Model_Sync {
         ));
 
         if ($response->isSuccessful()) {
-
             $skipped_record_ids = array();
             if ($skipped_records = $response->getSkippedRecords()) {
                 $skipped_record_ids = array_flip($skipped_records["index"]);
@@ -849,6 +874,7 @@ class Klevu_Search_Model_Product_Sync extends Klevu_Search_Model_Sync {
                 return true;
             }
         } else {
+			Mage::getSingleton('core/session')->setKlevuFailedFlag(1);
             return sprintf("%d product%s failed (%s)",
                 $total,
                 ($total > 1) ? "s" : "",
@@ -1008,6 +1034,40 @@ class Klevu_Search_Model_Product_Sync extends Klevu_Search_Model_Sync {
                                 $product[$key] = $item->getData($attribute);
                                 break;
                             }
+                        }
+                        break;
+					case "desc":
+                        foreach ($attributes as $attribute) {
+								if ($parent && $parent->getData($attribute)) {
+									$product[$key] = $parent->getData($attribute).$item->getData($attribute);
+									break;
+								} else {
+									$product[$key] = $item->getData($attribute);
+									break;
+								}
+                        }
+                        break;
+					case "shortDesc":
+                        foreach ($attributes as $attribute) {
+							if($config->isUseConfigDescription($this->getStore()->getId())) {
+								if ($parent && $parent->getData($attribute)) {
+									$product[$key] = $parent->getData($attribute);
+									break;
+								} else {
+									$product[$key] = $item->getData($attribute);
+									break;
+								}
+							} else {
+								if ($item->getData($attribute)) {
+									$product[$key] = $item->getData($attribute);
+									break;
+								} else {
+                                    if ($parent && $parent->getData($attribute)) {
+                                        $product[$key] = $parent->getData($attribute);
+                                        break;
+                                    }
+								}
+							}
                         }
                         break;
                     case "image":
@@ -1503,9 +1563,11 @@ class Klevu_Search_Model_Product_Sync extends Klevu_Search_Model_Sync {
             $additional_attributes = Mage::helper('klevu_search/config')->getAdditionalAttributesMap($this->getStore());
             $attribute_map = $this->prepareAttributeMap($attribute_map, $additional_attributes);
 
-
+			$default_attribute_to_index =  array("news_from_date","news_to_date","created_at");
             // Add otherAttributeToIndex to $attribute_map.
-            $otherAttributeToIndex = Mage::helper('klevu_search/config')->getOtherAttributesToIndex($this->getStore());
+            $otherAttributeToIndex = array_merge($default_attribute_to_index,Mage::helper('klevu_search/config')->getOtherAttributesToIndex($this->getStore()));
+			
+			
             if(!empty($otherAttributeToIndex)) {
                 $attribute_map['otherAttributeToIndex'] = $otherAttributeToIndex;
             }
@@ -1648,12 +1710,13 @@ class Klevu_Search_Model_Product_Sync extends Klevu_Search_Model_Sync {
      *               each category in the path, the last element being the
      *               name of the category referenced by the ID.
      */
-    protected function getCategoryPaths() {
+	protected function getCategoryPaths() {
         if (!$category_paths = $this->getData('category_paths')) {
             $category_paths = array();
             $rootId = $this->getStore()->getRootCategoryId();  
             $collection = Mage::getResourceModel('catalog/category_collection')
                 ->setStoreId($this->getStore()->getId())
+				->addAttributeToSelect('exclude_in_search')
                 ->addFieldToFilter('level', array('gt' => 1))
                 ->addFieldToFilter('path', array('like'=> "1/$rootId/%"))
                 ->addIsActiveFilter()
@@ -1664,14 +1727,16 @@ class Klevu_Search_Model_Product_Sync extends Klevu_Search_Model_Sync {
                     $path_ids = $category->getPathIds();
                     foreach ($path_ids as $id) {
                         if ($item = $collection->getItemById($id)) {
-                            $category_paths[$category->getId()][] = $item->getName();
+							if($category->getExcludeInSearch() != 1) {
+								$category_paths[$category->getId()][] = $item->getName();
+				
+							}
                         }
                     }
+				
             }
-
             $this->setData('category_paths', $category_paths);
         }
-
         return $category_paths;
     }
 
@@ -1909,7 +1974,7 @@ class Klevu_Search_Model_Product_Sync extends Klevu_Search_Model_Sync {
     protected function processPrice($price, $tax_class_id, $pro) {
         if($price < 0){$price = 0;}else{$price = $price;}
         $config = Mage::helper('klevu_search/config');
-		if (($pro->getData('type_id') == Mage_Catalog_Model_Product_Type::TYPE_GROUPED || $pro->getData('type_id')==Mage_Catalog_Model_Product_Type::TYPE_BUNDLE )&& $config->getCollectionMethod() == 1) {
+		if (($pro->getData('type_id') == Mage_Catalog_Model_Product_Type::TYPE_GROUPED || $pro->getData('type_id')==Mage_Catalog_Model_Product_Type::TYPE_BUNDLE )) {
 		    return $this->convertPrice($price);	
 		}
         if($config->isTaxEnabled($this->getStore()->getId())) {
@@ -2027,7 +2092,7 @@ class Klevu_Search_Model_Product_Sync extends Klevu_Search_Model_Sync {
      *
      * @return $this
      */
-    protected function notify($message, $store = null) {
+    public function notify($message, $store = null) {
         $type = ($store === null) ? static::NOTIFICATION_GLOBAL_TYPE : static::NOTIFICATION_STORE_TYPE_PREFIX . $store->getId();
         /** @var Klevu_Search_Model_Notification $notification */
         $notification = Mage::getResourceModel('klevu_search/notification_collection')
@@ -2496,6 +2561,7 @@ class Klevu_Search_Model_Product_Sync extends Klevu_Search_Model_Sync {
      */
     protected function addCategory(array $data)
     {
+		Mage::getSingleton('core/session')->setKlevuFailedFlag(0);
         $total = count($data);
         $data = $this->addcategoryData($data);
         $response = Mage::getModel('klevu_search/api_action_addrecords')->setStore($this->getStore())->execute(array(
@@ -2503,6 +2569,7 @@ class Klevu_Search_Model_Product_Sync extends Klevu_Search_Model_Sync {
             'records' => $data
         ));
         if ($response->isSuccessful()) {
+			Mage::getSingleton('core/session')->setKlevuFailedFlag(0);
             $skipped_record_ids = array();
             if ($skipped_records = $response->getSkippedRecords()) {
                 $skipped_record_ids = array_flip($skipped_records["index"]);
@@ -2540,7 +2607,10 @@ class Klevu_Search_Model_Product_Sync extends Klevu_Search_Model_Sync {
             }
         }
         else {
-            return sprintf("%d category%s failed (%s)", $total, ($total > 1) ? "s" : "", $response->getMessage());
+            Mage::getSingleton('core/session')->setKlevuFailedFlag(1);
+			return sprintf("%d category%s failed (%s)", $total, ($total > 1) ? "s" : "", $response->getMessage());
+			
+			
         }
     }
     /**
@@ -2555,6 +2625,7 @@ class Klevu_Search_Model_Product_Sync extends Klevu_Search_Model_Sync {
      */
     protected function addcategoryData(&$pages)
     {
+        $config = Mage::helper('klevu_search/config');
         $category_ids = array();
         foreach($pages as $key => $value) {
             $category_ids[] = $value["category_id"];
@@ -2590,6 +2661,7 @@ class Klevu_Search_Model_Product_Sync extends Klevu_Search_Model_Sync {
      */
     protected function updateCategory(array $data)
     {
+		Mage::getSingleton('core/session')->setKlevuFailedFlag(0);
         $total = count($data);
         $data = $this->addcategoryData($data);
         $response = Mage::getModel('klevu_search/api_action_updaterecords')->setStore($this->getStore())->execute(array(
@@ -2624,6 +2696,7 @@ class Klevu_Search_Model_Product_Sync extends Klevu_Search_Model_Sync {
             }
         }
         else {
+			Mage::getSingleton('core/session')->setKlevuFailedFlag(1);
             return sprintf("%d category%s failed (%s)", $total, ($total > 1) ? "s" : "", $response->getMessage());
         }
     }
@@ -2639,13 +2712,19 @@ class Klevu_Search_Model_Product_Sync extends Klevu_Search_Model_Sync {
      */
     protected function deleteCategory(array $data)
     {
+		$baseDomain = $this->getStore()->getBaseUrl(Mage_Core_Model_Store::URL_TYPE_LINK,true);
+		
+		foreach($data as $key => $value){
+			$data[$key]['url'] = $baseDomain; 
+		}
         $total = count($data);
         $response = Mage::getModel('klevu_search/api_action_deleterecords')->setStore($this->getStore())->execute(array(
             'sessionId' => $this->getSessionId() ,
             'records' => array_map(function ($v)
             {
                 return array(
-                    'id' => "categoryid_" . $v['category_id']
+                    'id' => "categoryid_" . $v['category_id'],
+					'url' => $v['url']
                 );
             }
             , $data)

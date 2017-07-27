@@ -166,8 +166,9 @@ class Klevu_Search_Model_Api_Request extends Varien_Object {
      * @return Zend_Http_Client
      */
     protected function build() {
-        $client = new Zend_Http_Client();
-
+		$client = new Zend_Http_Client();
+        $config = array('timeout' => 60);
+        $client->setConfig($config);
         $client
             ->setUri($this->getEndpoint())
             ->setMethod($this->getMethod())

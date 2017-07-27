@@ -163,3 +163,152 @@
 		margin-bottom: 55px;
 	}
 }
+
+/*-----------------------CSS for enabling filters in mobile and filter tags----------------------------*/
+
+@media only screen and (max-width: 640px) {
+.kuPagination {
+	display: none !important;
+}
+.kuBottomPagi .kuPagination {
+	display: block !important;
+}
+.kuBottomPagi .kuPerPage {
+	display: block;
+}
+.kuSortby {
+	width: 100%;
+}
+.kuSortHeader {
+	text-align: right;
+}
+.kuPerPage {
+	display: none;
+}
+.kuTotalResultsTab {
+	text-align: left;
+}
+.kuTotalResultsTab .kuTabs a {
+	padding: 0px 8px;
+	display: inline-block;
+}
+.kuTotalResultsTab .kuTabs a:hover {
+	border-bottom: 0px solid #c7c8ca;
+	text-decoration: none;
+	background: #eee;
+}
+.kuTotalResultsTab a.kuTabSelected {
+	border-bottom: 0px solid #c7c8ca;
+	background: #eee;
+	transition: all 0.3s ease;
+}
+.kuFilterRefineMobile {
+	border: none;
+	display: block;
+	font-size: 13px;
+	font-weight: 600;
+	height: 32px;
+	line-height: 32px;
+	margin: 10px 0px;
+	padding-right: 30px;
+	text-align: center;
+	text-transform: uppercase;
+	color: #383838;
+	background-color: #eee;
+	cursor: pointer;
+}
+.kuFilterRefineMobile.kuExpand::after {
+	top: 10px
+}
+.kuFilterRefineMobile.kuCollapse::after {
+	top: 14px
+}
+.kuFilters {
+	display: block !important;	/* change none to block*/
+	float: none !important;
+	width: 100% !important;
+	margin-bottom: 20px;
+}
+.kuFilterBox {
+	margin-bottom: 0px;
+}
+.kuFilterRefineMobile .KuFilterLabelTxt {
+	position: relative
+}
+.kuFilterRefineMobile.kuExpand .KuFilterLabelTxt::after {
+	-moz-border-bottom-colors: none;
+	-moz-border-left-colors: none;
+	-moz-border-right-colors: none;
+	-moz-border-top-colors: none;
+	border-color: #000;
+	border-image: none;
+	border-style: solid;
+	border-width: 0 1px 1px 0;
+	content: "";
+	display: inline-block;
+	padding: 3px;
+	position: absolute;
+	right: -18px;
+	top: 3px;
+	transform: rotate(45deg);
+	transition: all 0.3s ease;
+}
+.kuFilterRefineMobile.kuCollapse .KuFilterLabelTxt::after {
+	-moz-border-bottom-colors: none;
+	-moz-border-left-colors: none;
+	-moz-border-right-colors: none;
+	-moz-border-top-colors: none;
+	border-color: #000;
+	border-image: none;
+	border-style: solid;
+	border-width: 0 1px 1px 0;
+	content: "";
+	display: inline-block;
+	padding: 3px;
+	position: absolute;
+	right: -18px;
+	top: 8px;
+	transform: rotate(-135deg);
+	transition: all 0.3s ease;
+}
+/* css for filter tags*/
+.kuContainer #ku-search-filter-tags {
+	display: block !important;
+	color: #222222;
+	margin-bottom: 10px;
+	width: 100%;
+	text-align: left;
+	padding-bottom: 8px;
+	padding-left: 0px;
+	position: relative;
+}
+.ku-search-filter-tag {
+	background: #eee;
+	border: 0px solid #f8f8f8;
+	margin-right: 4px;
+	border-radius: 0px;
+	font-size: 11px;
+	padding: 0px 5px;
+	color: #222;
+	margin-bottom: 4px;
+	display: inline-block;
+	line-height: 20px;
+}
+.ku-search-filter-remove, .ku-search-filter-remove-all {
+	cursor: pointer;
+	font-size: 12px;
+	color: #222222;
+	text-decoration: none;
+}
+.ku-search-filter-remove-all a {
+	color: #222222;
+	font-size: 12px;
+	text-decoration: none;
+	cursor: pointer;
+}
+.ku-search-filter-remove-all a:hover {
+	color: #333;
+}
+
+}
+/*-----------------------ends CSS for enabling filters in mobile and filter tags----------------------------*/

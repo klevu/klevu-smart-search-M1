@@ -424,7 +424,8 @@ class Klevu_Search_Helper_Data extends Mage_Core_Helper_Abstract {
      * @return count
      */
 	public function getPlans() {
-		$response = Mage::getModel('klevu_search/api_action_getplans')->execute(array("store"=>"magento"));
+		$extension_version = Mage::getConfig()->getModuleConfig('Klevu_Search')->version;
+		$response = Mage::getModel('klevu_search/api_action_getplans')->execute(array("store"=>"magento","extension_version" => (string)$extension_version));
 		if ($response->isSuccessful()) {
 		    $plans = $response->getData();
 			return $plans['plans']['plan'];
@@ -432,5 +433,46 @@ class Klevu_Search_Helper_Data extends Mage_Core_Helper_Abstract {
 			return;
 		}
     }
+	
+	/**
+     * Check for invalid index
+     *
+     * @return bool
+     */
+	public function getStatuOfIndexing() {
+		if(Mage::getEdition() != "Enterprise") {
+			$flat_status = Mage::helper('klevu_search/config')->getFlatCatalogStatus();
+			$allIndex= Mage::getSingleton('index/indexer')->getProcessesCollection();
+			foreach ($allIndex as $index) {
+				if($flat_status == 0) {
+					if(strpos($index->getIndexerCode(), "flat") === false) 
+					{
+						if($index->getStatus() == "require_reindex") {
+							return true;
+						}
+					}
+				} else {
+					if($index->getStatus() == "require_reindex") {
+						return true;
+					}	
+				}
+			}	
+		}
+    }
+	
+	/**
+     * get for base domain
+     *
+     * @return string
+     */
+	public function getBaseDomain() {
+		$base_domain = Mage::app()->getStore(Mage::helper('klevu_search/config')->scopeId())->getBaseUrl(Mage_Core_Model_Store::URL_TYPE_LINK);
+		if(!empty($base_domain)) {
+			$base_url_value = parse_url($base_domain);
+			return $base_url_value['host'];
+		}
+    }
+	
+	
 	
 }

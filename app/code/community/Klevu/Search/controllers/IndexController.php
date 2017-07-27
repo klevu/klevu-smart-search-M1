@@ -10,7 +10,7 @@ class Klevu_Search_IndexController extends Mage_Core_Controller_Front_Action {
         $query = $this->getRequest()->getParam('q');
         if(!empty($query)) {   
             $head = $this->getLayout()->getBlock('head');        
-            $head->setTitle($this->__(sprintf("Search results for: '%s'",$query)));
+            $head->setTitle($this->__("Search results for: '%s'",$query));
         } else {
             $this->getLayout()->getBlock("head")->setTitle($this->__("Search"));
         }
@@ -21,10 +21,18 @@ class Klevu_Search_IndexController extends Mage_Core_Controller_Front_Action {
                 "link"  => Mage::getBaseUrl()
 		   ));
 
-            $breadcrumbs->addCrumb("Search Result", array(
-                "label" => $this->__("Search Result"),
-                "title" => $this->__("Search Result")
-		   ));
+			if(!empty($query)) {   
+				$breadcrumbs->addCrumb("Search Result", array(
+                "label" => $this->__($this->__("Search results for: '%s'",$query)),
+                "title" => $this->__($this->__("Search results for: '%s'",$query))
+				));
+				
+			} else {
+				$breadcrumbs->addCrumb("Search Result", array(
+                "label" => $this->__("Search results"),
+                "title" => $this->__("Search results")
+				));
+			}
         }
         $this->renderLayout(); 
     }
@@ -91,12 +99,7 @@ class Klevu_Search_IndexController extends Mage_Core_Controller_Front_Action {
                     }else {
                         Mage::getSingleton('core/session')->addSuccess($response->getMessage());
                     }
-                    //send index status data
-                    $content ="";
-                    $allIndex= Mage::getSingleton('index/indexer')->getProcessesCollection();
-                    foreach ($allIndex as $index) {
-                        $content .= $index->getIndexerCode().":".$index->getStatus().'<br>';
-                    }
+                    
                     $response = Mage::getModel("klevu_search/api_action_debuginfo")->debugKlevu(array('apiKey'=>$debugapi,'klevuLog'=>$content,'type'=>'index'));
                     if($response->getMessage()=="success") {
                         Mage::getSingleton('core/session')->addSuccess("Status of magento indices sent.");

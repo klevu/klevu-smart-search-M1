@@ -237,18 +237,25 @@ class Klevu_Content_Model_Content extends Klevu_Search_Model_Product_Sync
      */
     protected function deletecms(array $data)
     {
+		Mage::getSingleton('core/session')->setKlevuFailedFlag(0); 
+		$baseDomain = $this->getStore()->getBaseUrl(Mage_Core_Model_Store::URL_TYPE_LINK,true);
+		foreach($data as $key => $value){
+			$data[$key]['url'] = $baseDomain; 
+		}
         $total = count($data);
         $response = Mage::getModel('klevu_search/api_action_deleterecords')->setStore($this->getStore())->execute(array(
             'sessionId' => $this->getSessionId() ,
             'records' => array_map(function ($v)
             {
                 return array(
-                    'id' => "pageid_" . $v['page_id']
+                    'id' => "pageid_" . $v['page_id'],
+					'url' => $v['url']
                 );
             }
             , $data)
         ));
         if ($response->isSuccessful()) {
+			
             $connection = $this->getConnection();
             $select = $connection->select()->from(array(
                 'k' => $this->getTableName("klevu_search/product_sync")
@@ -273,8 +280,8 @@ class Klevu_Content_Model_Content extends Klevu_Search_Model_Product_Sync
             else {
                 return true;
             }
-        }
-        else {
+        } else {
+			Mage::getSingleton('core/session')->setKlevuFailedFlag(1);
             return sprintf("%d cms%s failed (%s)", $total, ($total > 1) ? "s" : "", $response->getMessage());
         }
     }
@@ -290,6 +297,7 @@ class Klevu_Content_Model_Content extends Klevu_Search_Model_Product_Sync
      */
     protected function addCms(array $data)
     {
+		Mage::getSingleton('core/session')->setKlevuFailedFlag(0);
         $total = count($data);
         $data = $this->addCmsData($data);
         $response = Mage::getModel('klevu_search/api_action_addrecords')->setStore($this->getStore())->execute(array(
@@ -334,6 +342,7 @@ class Klevu_Content_Model_Content extends Klevu_Search_Model_Product_Sync
             }
         }
         else {
+			Mage::getSingleton('core/session')->setKlevuFailedFlag(1);
             return sprintf("%d cms%s failed (%s)", $total, ($total > 1) ? "s" : "", $response->getMessage());
         }
     }
@@ -391,6 +400,7 @@ class Klevu_Content_Model_Content extends Klevu_Search_Model_Product_Sync
      */
     protected function updateCms(array $data)
     {
+		Mage::getSingleton('core/session')->setKlevuFailedFlag(0);
         $total = count($data);
         $data = $this->addCmsData($data);
         $response = Mage::getModel('klevu_search/api_action_updaterecords')->setStore($this->getStore())->execute(array(
@@ -425,6 +435,7 @@ class Klevu_Content_Model_Content extends Klevu_Search_Model_Product_Sync
             }
         }
         else {
+			Mage::getSingleton('core/session')->setKlevuFailedFlag(1);
             return sprintf("%d cms%s failed (%s)", $total, ($total > 1) ? "s" : "", $response->getMessage());
         }
     }

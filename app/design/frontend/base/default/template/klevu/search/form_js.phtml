@@ -7,7 +7,7 @@
         ));
 ?>
 <script type="text/javascript">
-	var klevu_sessionId = '<?php echo session_id();?>';
+	var klevu_sessionId = '<?php echo md5(session_id());?>';
     var allInputs = document.getElementsByTagName( 'input' );
     var klevu_current_version = '<?php  echo Mage::getConfig()->getModuleConfig('Klevu_Search')->version; ?>';
     <?php 
@@ -91,7 +91,7 @@
     if($login) { ?>
 	    <script type="text/javascript">
             var klevu_loginCustomerGroup = "<?php echo Mage::getSingleton('customer/session')->getCustomerGroupId(); ?>";
-			var klevu_loginCustomerEmail = "<?php echo Mage::getSingleton('customer/session')->getCustomer()->getEmail(); ?>";
+			var klevu_idCode = "<?php echo "enc-".md5(Mage::getSingleton('customer/session')->getCustomer()->getEmail()); ?>";
 	    </script>
 <?php }?>
 <?php 

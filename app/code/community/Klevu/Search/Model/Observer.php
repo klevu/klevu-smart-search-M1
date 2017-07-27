@@ -21,7 +21,8 @@ class Klevu_Search_Model_Observer extends Varien_Object {
             $this->setIsProductSyncScheduled(true);
         }
     }
-
+	
+	
     /**
      * Schedule an Order Sync to run immediately. If the observed event
      * contains an order, add it to the sync queue before scheduling.
@@ -274,5 +275,7 @@ class Klevu_Search_Model_Observer extends Varien_Object {
 			Mage::helper('klevu_search')->log(Zend_Log::CRIT, sprintf("Exception thrown in %s::%s - %s", __CLASS__, __METHOD__, $e->getMessage()));
 		}
     }
+	
+	
     
 }

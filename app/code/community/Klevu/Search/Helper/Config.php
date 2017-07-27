@@ -43,6 +43,9 @@ class Klevu_Search_Helper_Config extends Mage_Core_Helper_Abstract {
 	const XML_PATH_CONFIG_IMAGE_FLAG = "klevu_search/image_setting/enabled";
 	const XML_PATH_CONFIG_SYNC_FREQUENCY = "klevu_search/product_sync/frequency";
 	const XML_PATH_COLLETION_METHOD = "klevu_search/developer/collection_method";
+    const XML_PATH_TRIGGER_OPTIONS = "klevu_search/developer/trigger_option";
+	const XML_PATH_DESCRIPTION_FLAG = "klevu_search/description_setting/enabled";
+	const XML_PATH_FLAT_CATALOG = "catalog/frontend/flat_catalog_product";
     const DATETIME_FORMAT = "Y-m-d H:i:s T";
     protected $_klevu_features_response;
     protected $_klevu_enabled_feature_response;
@@ -638,7 +641,8 @@ class Klevu_Search_Helper_Config extends Mage_Core_Helper_Abstract {
                 "price",
                 "tax_class_id",
                 "weight",
-                "rating"),
+                "rating",
+                "msrp"),
             "klevu_attribute" => array(
                 "name",
                 "sku",
@@ -651,7 +655,8 @@ class Klevu_Search_Helper_Config extends Mage_Core_Helper_Abstract {
                 "salePrice",
                 "salePrice",
                 "weight",
-                "rating"
+                "rating",
+                "msrp"
             )
         );
     }
@@ -874,4 +879,63 @@ class Klevu_Search_Helper_Config extends Mage_Core_Helper_Abstract {
     public function getCollectionMethod() {
        return Mage::getStoreConfigFlag(static::XML_PATH_COLLETION_METHOD);
     }
+
+     /**
+     * save trigger option value
+     *
+     * @param string $value
+     *
+     * @return
+     */
+    public function saveTrigger($value) {
+        $this->setGlobalConfig(static::XML_PATH_TRIGGER_OPTIONS, $value);
+        return $this;
+    }
+
+    /**
+     * Return the configuration flag for trigger options.
+     *
+     *
+     * @return int
+     */
+    public function getTriggerOptionsFlag() {
+        return Mage::getStoreConfig(static::XML_PATH_TRIGGER_OPTIONS);
+    }
+	
+	
+	/**
+     * Return the configuration flag for sending config image.
+     *
+     * @param Mage_Core_Model_Store|int $store
+     *
+     * @return bool
+     */
+	public function isUseConfigDescription($store=null){
+		return Mage::getStoreConfigFlag(static::XML_PATH_DESCRIPTION_FLAG, $store);
+	}
+	
+	/**
+     * Return the store from api key.
+     *
+     * @param $klevuApi
+     *
+     * @return int
+     */
+	public function scopeId($klevuApi){
+		$configs =  Mage::getModel('core/config_data')->getCollection()
+                    ->addFieldToFilter('value',$this->getJsApiKey())->load();
+        $scope_id = $configs->getData();
+		return intval($scope_id[0]['scope_id']);
+	}
+	
+	/**
+     * Return the store from api key.
+     *
+     * @return bool
+     */
+	public function getFlatCatalogStatus(){
+		return Mage::getStoreConfig(static::XML_PATH_FLAT_CATALOG);
+
+	}
+
 }

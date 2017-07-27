@@ -945,6 +945,22 @@ transition: background 200ms;
 	color: #414042;
 }
 
+/* div to display or query message */
+.kuOrQueryMessage{
+	text-align: center;
+    margin-top: 10px;
+    color: #414042;
+    background: #ebebeb;
+    font-size: 13px;
+    padding: 7px 0px !important;
+    margin: 10px 15px;
+}
+
+.kuOrQueryMessage span {
+	font-weight: 600;
+}
+
+
 /* show variants */
 .kuVariants{
 	font-size: 10px;
@@ -1109,3 +1125,102 @@ transition: background 200ms;
 	opacity:0.3;
 	pointer-events: none;	
 }
+
+/*-----------------------css for enabling filters in mobile  and filter tags--------------------------------------------*/
+/* css for filter tags*/
+.kuContainer #ku-search-filter-tags {
+	display: block;
+	color: #222222;
+	margin-top: 10px;
+	margin-bottom: 10px;
+	width: 100%;
+	text-align: left;
+	padding-bottom: 0px;
+	padding-left: 0px;
+	position: relative;
+}
+.ku-search-filter-tag {
+	background: #eee;
+	border: 0px solid #f8f8f8;
+	margin-right: 4px;
+	border-radius: 0px;
+	font-size: 11px;
+	padding: 0px 5px;
+	color: #222;
+	margin-bottom: 4px;
+	display: inline-block;
+	line-height: 20px;
+}
+.ku-search-filter-remove, .ku-search-filter-remove-all {
+	cursor: pointer;
+	font-size: 12px;
+	color: #222222;
+	text-decoration: none;
+}
+.ku-search-filter-remove-all a {
+	color: #222222;
+	font-size: 12px;
+	text-decoration: none;
+	cursor: pointer;
+}
+.ku-search-filter-remove-all a:hover {
+	color: #333;
+}
+/* ends css for filter tags*/
+.kuFilterHead {
+	cursor: pointer;
+}
+.kuExpand {
+	position: relative !important;
+	transition: all 0.3s ease;
+}
+.kuFilterHead.kuExpand::after {
+	-moz-border-bottom-colors: none;
+	-moz-border-left-colors: none;
+	-moz-border-right-colors: none;
+	-moz-border-top-colors: none;
+	border-color: #000;
+	border-image: none;
+	border-style: solid;
+	border-width: 0 1px 1px 0;
+	content: "";
+	display: inline-block;
+	padding: 4px;
+	position: absolute;
+	right: 12px;
+	top: 10px;
+	transform: rotate(45deg);
+	transition: all 0.3s ease 0s;
+}
+.kuCollapse {
+	position: relative !important;
+	transition: all 0.3s ease;
+}
+.kuFilterHead.kuCollapse::after {
+	-moz-border-bottom-colors: none;
+	-moz-border-left-colors: none;
+	-moz-border-right-colors: none;
+	-moz-border-top-colors: none;
+	border-color: #000;
+	border-image: none;
+	border-style: solid;
+	border-width: 0 1px 1px 0;
+	content: "";
+	display: inline-block;
+	padding: 4px;
+	position: absolute;
+	right: 12px;
+	top: 16px;
+	transform: rotate(-135deg);
+	transition: all 0.3s ease;
+}
+/* to remove arrow border when filtrs on top*/
+.kuContainer.kuFiltersTop .kuFilterHead.kuCollapse::after {
+	border-width: 1px 0px 0px 1px;
+	position: initial;
+}
+.kuContainer.kuFiltersTop .kuFilterHead.kuExpand::after {
+	border-width: 0 1px 1px 0;
+	position: initial;
+}
+/*-----------------------ends css for enabling filters in mobile and filter tags--------------------------------------------*/

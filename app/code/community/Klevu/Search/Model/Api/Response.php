@@ -95,11 +95,27 @@ class Klevu_Search_Model_Api_Response extends Varien_Object {
                 case 503:
                     $message = "API server unavailable.";
                     break;
+				case 400:
+                    $message = "Klevu Product sync has issues indexing your products. <b>".Mage::helper('klevu_search')->getBaseDomain()."</b> is not listed as an allowed base URL for the Klevu Search API key <b>'".Mage::helper('klevu_search/config')->getJsApiKey()."'</b>. Please <a href='http://support.klevu.com/knowledgebase/base-urls
+' target='_blank'>click here</a> for more information.";
+					break;
                 default:
                     $message = "Unexpected error.";
             }
-
-            $this->setMessage(sprintf("Failed to connect to Klevu: %s", $message));
+			if($response->getStatus() == 400) {
+				$this->setMessage(sprintf("%s", $message));
+				$storefromscope = Mage::app()->getStore(Mage::helper('klevu_search/config')->scopeId());
+				Mage::getModel('klevu_search/product_sync')->notify(
+					Mage::helper('klevu_search')->__(
+						"Product Sync failed for %s (%s): %s",
+						$storefromscope->getWebsite()->getName(),
+						$storefromscope->getName(),
+						$message
+					),null
+				);
+			} else {
+				$this->setMessage(sprintf("Failed to connect to Klevu: %s", $message));
+			}
             Mage::helper('klevu_search')->log(Zend_Log::ERR, sprintf("Unsuccessful HTTP response: %s %s", $response->getStatus(), $response->responseCodeAsText($response->getStatus())));
         }
 

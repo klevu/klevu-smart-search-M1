@@ -14,7 +14,11 @@ class Klevu_Search_Model_Api_Action_Getplans extends Klevu_Search_Model_Api_Acti
         if (!isset($parameters["store"])) {
             $errors["store"] = "Missing store value.";
         }
-          
+		
+		if (!isset($parameters["extension_version"])) {
+            $errors["extension_version"] = "Missing extension version.";
+        }
+		
         if (count($errors) == 0) {
             return true;
         }
@@ -28,7 +32,7 @@ class Klevu_Search_Model_Api_Action_Getplans extends Klevu_Search_Model_Api_Acti
      * @return Klevu_Search_Model_Api_Response
      */
     public function execute($parameters = array()) {
-
+		
         $validation_result = $this->validate($parameters);
         if ($validation_result !== true) {
             return Mage::getModel('klevu_search/api_response_invalid')->setErrors($validation_result);
