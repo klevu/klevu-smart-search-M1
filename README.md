@@ -113,10 +113,10 @@ Klevu analytics help create razor sharp SEO and promotional campaigns. Concrete 
 <h2><a href="http://www.klevu.com/magento-pricing.html#comparePlans">Compare plans </a></h2>
 
 
-<b>This prices are valid for signups from 11th Feb, 2016.</b>
+<b>This prices are valid for signups from 13th July, 2017.</b>
 
 <br />
-If you have signed up before 11th Feb 2016, you are not obliged to move to the new model. It applies even if you upgrade to the latest Klevu Magento release. You may continue using old pricing model with the latest plugin :). 
+If you have signed up before 13th July 2017, you are not obliged to move to the new model. It applies even if you upgrade to the latest Klevu Magento release. You may continue using old pricing model with the latest plugin :). 
 
 <br />
 If you have questions, feel free to write to us.
