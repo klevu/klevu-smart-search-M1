@@ -1,0 +1,12 @@
+{
+  "name": "klevu/smart-search-m1",
+  "type": "magento-module",
+  "homepage": "https://github.com/klevu/klevu-smart-search-M1",
+  "description": "Klevu Smart Search Magento Extension for M1",
+  "authors": [
+    {
+      "name": "Klevu",
+      "email": "support@klevu.com"
+    }
+  ]
+}
