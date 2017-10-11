@@ -1,9 +1,9 @@
-<?php 
-$config = Mage::helper('content'); 
+<?php
+$config = Mage::helper('content');
 if($config->isCmsSyncEnabledOnFront()) {?>
     <?php
-        $url = Mage::getUrl('catalogsearch/result/')."?q=".Mage::app()->getRequest()->getParam("q");
-        $url_content = Mage::getUrl('content/search')."?q=".Mage::app()->getRequest()->getParam("q");
+        $url = Mage::getUrl('catalogsearch/result/')."?q=".Mage::helper('catalogsearch')->getEscapedQueryText();
+        $url_content = Mage::getUrl('content/search')."?q=".Mage::helper('catalogsearch')->getEscapedQueryText();
     ?>
     <div class="page-title">
     <?php $selected_tab = Mage::app()->getRequest()->getModuleName(); ?>
