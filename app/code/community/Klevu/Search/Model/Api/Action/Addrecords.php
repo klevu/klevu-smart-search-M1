@@ -205,7 +205,15 @@ class Klevu_Search_Model_Api_Action_Addrecords extends Klevu_Search_Model_Api_Ac
 		
         foreach ($record['otherAttributeToIndex'] as $key => &$value) {
             $key = $this->sanitiseOtherAttribute($key);
-            
+
+            if($key == 'created_at' or $key == 'updated_at') {
+                if(strpos($value,'T') !== false) {
+                    $value = date('Y-m-d',strtotime(substr($value,0,strpos($value,"T"))));
+                }
+                else{
+                    $value = date('Y-m-d',strtotime($value));
+                }
+            }
             if(is_array($value)){
 				if(isset($value['label'])) {
 					$label = $this->sanitiseOtherAttribute($value['label']);
@@ -217,13 +225,10 @@ class Klevu_Search_Model_Api_Action_Addrecords extends Klevu_Search_Model_Api_Ac
                 $label = $this->sanitiseOtherAttribute($key);
                 $value = $this->sanitiseOtherAttribute($value);
             }
-            
+
             if (is_array($value)) {
                 $value = implode(",", $value);
             }
-			if($key == 'created_at') {
-				$value = date('Y-m-d',strtotime(substr($value,0,strpos($value,"T"))));
-			}
             $value = sprintf("%s:%s:%s", $key, $label, $value);
         }
         $record['otherAttributeToIndex'] = implode(";", $record['otherAttributeToIndex']);
