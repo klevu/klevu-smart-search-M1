@@ -13,17 +13,19 @@ class Klevu_Shell_Sync extends Mage_Shell_Abstract
  
     // Shell script point of entry
     public function run() {
-		if(file_exists("klevu_running_index.lock")){
+
+        $lockFilePath =  Mage::getBaseDir()."/shell/klevu/"."klevu_running_index.lock";
+		if(file_exists($lockFilePath)){
 			echo "Klevu indexing process is in running state";
 			return;
 		} 
 		
-		fopen("klevu_running_index.lock", "w");
+		fopen($lockFilePath, "w");
 		
         try {
             if ($this->getArg('updatesonly')) {
                 Mage::getModel('klevu_search/product_sync')->run();
-                Mage::getModel("content/content")->run();
+                //Mage::getModel("content/content")->run(); // disabled content sync as we are not using
 				$failedMessage = Mage::getSingleton('core/session')->getKlevuFailedFlag();
 				if(!empty($failedMessage) && $failedMessage == 1) {
 					echo "Product sync failed.Please consult klevu_search.log file for more information.";
@@ -88,15 +90,20 @@ class Klevu_Shell_Sync extends Mage_Shell_Abstract
 						$this->createThumb($ProductModel->getImage());
 					}
 				}	
-			} else {
+			} else if($this->getArg('storecodes')) {
+                $storeCodesToSync = explode(',',$this->getArg('storecodes'));
+                $syncedStores = Mage::getModel('klevu_search/product_sync')->syncStores($storeCodesToSync);
+                echo "Synced Stores Codes: ".implode(',',$syncedStores);
+
+            } else {
                 echo $this->usageHelp();
             }
         } catch(Exception $e){
             echo $e->getMessage();
         }
 		
-		if(file_exists("klevu_running_index.lock")){
-			unlink("klevu_running_index.lock");
+		if(file_exists($lockFilePath)){
+			unlink($lockFilePath);
 		}
 		
 	
@@ -132,6 +139,8 @@ Usage:  php -f sync.php -- [options]
   --updatesonly If you are using this option, only the products updated since the last successful synchronization will be synchronized with the Klevu servers. Klevu uses the updated_at timestamp of the catalog_product_entity table to figure out which products to synchronize.
   
   --alldata     If you are using this option, the entire product catalog is considered for synchronization.
+  
+  --storecodes  If you want to sync complete data for particular store then pass store codes separated by , e.g (en_ae,en_ar)
   
   
   

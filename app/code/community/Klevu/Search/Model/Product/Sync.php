@@ -2842,6 +2842,81 @@ class Klevu_Search_Model_Product_Sync extends Klevu_Search_Model_Sync {
         $this->getConnection()->delete($this->getTableName("cron_schedule"),$condition);   
     }
 	
+    /**
+     * This function created to sync All data store wise
+     *
+     * @param $storeCodesToSync Array of store codes
+     * @throws Exception
+     */
+    public function syncStores($storeCodesToSync) {
 
+        try {
+
+            // reset the flag for fail message
+            Mage::getSingleton('core/session')->setKlevuFailedFlag(0);
+
+            // check the status of indexing when collection method selected to sync data
+            $config = Mage::helper('klevu_search/config');
+
+            $stores = Mage::app()->getStores();
+            foreach ($stores as $store) {
+                if(in_array($store->getCode(),$storeCodesToSync)){
+                    $this->markAllProductsForUpdate($store->getId());
+                }
+            }
+
+            /* update boosting rule event */
+            try {
+                Mage::helper('klevu_search')->log(Zend_Log::INFO, "Boosting rule update is started");
+                Mage::dispatchEvent('update_rule_of_products', array());
+            } catch(Exception $e) {
+                Mage::helper('klevu_search')->log(Zend_Log::WARN, "Unable to update boosting rule");
+            }
+
+            // Sync Data only for selected store from config wizard
+            $firstSync = Mage::getSingleton('klevu_search/session')->getFirstSync();
+
+            if(!empty($firstSync)){
+                /** @var Mage_Core_Model_Store $store */
+                $this->reset();
+                $onestore = Mage::app()->getStore($firstSync);
+                if (!$this->setupSession($onestore)) {
+                    return;
+                }
+                $this->syncData($onestore);
+                return;
+            }
+
+            if ($this->isRunning(2)) {
+                // Stop if another copy is already running
+                $this->log(Zend_Log::INFO, "Stopping because another copy is already running.");
+                return;
+            }
+
+            $stores = Mage::app()->getStores();
+            $syncedStores = array();
+            foreach ($stores as $store) {
+                if(in_array($store->getCode(),$storeCodesToSync)){
+                    $this->reset();
+                    if (!$this->setupSession($store)) {
+                        continue;
+                    }
+                    $this->syncData($store);
+                    $syncedStores[] = $store->getCode();
+                }
+            }
+
+            // update rating flag after all store view sync
+            $rating_upgrade_flag = $config->getRatingUpgradeFlag();
+            if($rating_upgrade_flag==0) {
+                $config->saveRatingUpgradeFlag(1);
+            }
+            return $syncedStores;
+        } catch (Exception $e) {
+            // Catch the exception that was thrown, log it, then throw a new exception to be caught the Magento cron.
+            Mage::helper('klevu_search')->log(Zend_Log::CRIT, sprintf("Exception thrown in %s::%s - %s", __CLASS__, __METHOD__, $e->getMessage()));
+            throw $e;
+        }
+    }
 	
 }
