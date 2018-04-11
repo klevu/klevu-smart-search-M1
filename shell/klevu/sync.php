@@ -25,7 +25,7 @@ class Klevu_Shell_Sync extends Mage_Shell_Abstract
         try {
             if ($this->getArg('updatesonly')) {
                 Mage::getModel('klevu_search/product_sync')->run();
-                //Mage::getModel("content/content")->run(); // disabled content sync as we are not using
+                Mage::getModel("content/content")->run(); // disabled content sync as we are not using
 				$failedMessage = Mage::getSingleton('core/session')->getKlevuFailedFlag();
 				if(!empty($failedMessage) && $failedMessage == 1) {
 					echo "Product sync failed.Please consult klevu_search.log file for more information.";
