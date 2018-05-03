@@ -1,11 +1,13 @@
 <?php
 
-class Klevu_Search_Test_Helper_Data extends EcomDev_PHPUnit_Test_Case {
+class Klevu_Search_Test_Helper_Data extends EcomDev_PHPUnit_Test_Case
+{
 
     /** @var Klevu_Search_Helper_Data $helper */
     protected $helper;
 
-    protected function setUp() {
+    protected function setUp() 
+    {
         parent::setUp();
 
         $this->helper = Mage::helper("klevu_search");
@@ -15,7 +17,8 @@ class Klevu_Search_Test_Helper_Data extends EcomDev_PHPUnit_Test_Case {
      * @test
      * @dataProvider dataProvider
      */
-    public function testGetLanguageFromLocale($input, $output) {
+    public function testGetLanguageFromLocale($input, $output) 
+    {
         $this->assertEquals($output, $this->helper->getLanguageFromLocale($output));
     }
 
@@ -23,7 +26,8 @@ class Klevu_Search_Test_Helper_Data extends EcomDev_PHPUnit_Test_Case {
      * @test
      * @dataProvider dataProvider
      */
-    public function testIsProductionDomain($domain, $result) {
+    public function testIsProductionDomain($domain, $result) 
+    {
         $this->assertEquals(
             $result,
             $this->helper->isProductionDomain($domain),
@@ -35,7 +39,8 @@ class Klevu_Search_Test_Helper_Data extends EcomDev_PHPUnit_Test_Case {
      * @test
      * @dataProvider dataProvider
      */
-    public function testBytesToHumanReadable($input, $output) {
+    public function testBytesToHumanReadable($input, $output) 
+    {
         $this->assertEquals($output, $this->helper->bytesToHumanReadable($input));
     }
 
@@ -43,7 +48,8 @@ class Klevu_Search_Test_Helper_Data extends EcomDev_PHPUnit_Test_Case {
      * @test
      * @dataProvider dataProvider
      */
-    public function testHumanReadableToBytes($input, $output) {
+    public function testHumanReadableToBytes($input, $output) 
+    {
         $this->assertEquals($output, $this->helper->humanReadableToBytes($input));
     }
 }

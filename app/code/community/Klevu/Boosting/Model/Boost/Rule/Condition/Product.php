@@ -14,6 +14,7 @@ class Klevu_Boosting_Model_Boost_Rule_Condition_Product extends Mage_CatalogRule
         if ('category_ids' == $attrCode) {
             return $this->validateAttribute($object->getAvailableInCategories());
         }
+
         if ('attribute_set_id' == $attrCode) {
             return $this->validateAttribute($object->getData($attrCode));
         }
@@ -59,8 +60,9 @@ class Klevu_Boosting_Model_Boost_Rule_Condition_Product extends Mage_CatalogRule
     {
         $attribute = $object->getResource()->getAttribute($this->getAttribute());
         if ($attribute && $attribute->getBackendType() == 'datetime') {
-            $value = date('Y-m-d',strtotime($value));
+            $value = date('Y-m-d', strtotime($value));
         }
+
         return $value;
     }
 
@@ -77,6 +79,7 @@ class Klevu_Boosting_Model_Boost_Rule_Condition_Product extends Mage_CatalogRule
         if ($attribute && $attribute->getFrontendInput() == 'multiselect') {
             $value = strlen($value) ? explode(',', $value) : array();
         }
+
         return $value;
     }
     

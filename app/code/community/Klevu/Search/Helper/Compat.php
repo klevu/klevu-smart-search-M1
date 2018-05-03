@@ -1,6 +1,7 @@
 <?php
 
-class Klevu_Search_Helper_Compat extends Mage_Core_Helper_Abstract {
+class Klevu_Search_Helper_Compat extends Mage_Core_Helper_Abstract
+{
 
     /**
      * Return a Select statement for retrieving URL rewrites for the given list of products.
@@ -13,7 +14,8 @@ class Klevu_Search_Helper_Compat extends Mage_Core_Helper_Abstract {
      *
      * @return Varien_Db_Select
      */
-    public function getProductUrlRewriteSelect(array $product_ids, $category_id, $store_id) {
+    public function getProductUrlRewriteSelect(array $product_ids, $category_id, $store_id) 
+    {
         if (version_compare(Mage::getVersion(), '1.8.0', '>=')) {
             $factory_model_class = Mage::app()->getConfig()->getModelClassName("catalog/factory");
                 if (class_exists($factory_model_class)) {
@@ -40,7 +42,8 @@ class Klevu_Search_Helper_Compat extends Mage_Core_Helper_Abstract {
      *
      * @return string
      */
-    public function now($withoutTime = false) {
+    public function now($withoutTime = false) 
+    {
         if (method_exists("Varien_Date", "now")) {
             return Varien_Date::now($withoutTime);
         } else {

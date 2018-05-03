@@ -1,9 +1,11 @@
 <?php
 
-class Klevu_Search_Adminhtml_Klevu_SearchController extends Mage_Adminhtml_Controller_Action {
+class Klevu_Search_Adminhtml_Klevu_SearchController extends Mage_Adminhtml_Controller_Action
+{
 
     /* Sync data based on sync options selected */
-    public function sync_allAction() {
+    public function sync_allAction() 
+    {
         $store = $this->getRequest()->getParam("store");
         if ($store !== null) {
             try {
@@ -15,7 +17,6 @@ class Klevu_Search_Adminhtml_Klevu_SearchController extends Mage_Adminhtml_Contr
         }
 
         if (Mage::helper('klevu_search/config')->isProductSyncEnabled()) {
-            
             if(Mage::helper('klevu_search/config')->getSyncOptionsFlag() == "2") {
                 if(Mage::helper("klevu_search/config")->isExternalCronEnabled()) {
                     Mage::getModel('klevu_search/product_sync')
@@ -27,15 +28,21 @@ class Klevu_Search_Adminhtml_Klevu_SearchController extends Mage_Adminhtml_Contr
                 }
 
                 if ($store) {
-                    Mage::helper("klevu_search")->log(Zend_Log::INFO, sprintf("Product Sync scheduled to re-sync ALL products in %s (%s).",
-                        $store->getWebsite()->getName(),
-                        $store->getName()
-                    ));
+                    Mage::helper("klevu_search")->log(
+                        Zend_Log::INFO, sprintf(
+                            "Product Sync scheduled to re-sync ALL products in %s (%s).",
+                            $store->getWebsite()->getName(),
+                            $store->getName()
+                        )
+                    );
 
-                    Mage::getSingleton("adminhtml/session")->addSuccess($this->__("Klevu Search Product Sync scheduled to be run on the next cron run for ALL products in %s (%s).",
-                        $store->getWebsite()->getName(),
-                        $store->getName()
-                    ));
+                    Mage::getSingleton("adminhtml/session")->addSuccess(
+                        $this->__(
+                            "Klevu Search Product Sync scheduled to be run on the next cron run for ALL products in %s (%s).",
+                            $store->getWebsite()->getName(),
+                            $store->getName()
+                        )
+                    );
                 } else {
                     Mage::helper("klevu_search")->log(Zend_Log::INFO, "Product Sync scheduled to re-sync ALL products.");
 
@@ -48,15 +55,18 @@ class Klevu_Search_Adminhtml_Klevu_SearchController extends Mage_Adminhtml_Contr
             Mage::getSingleton('adminhtml/session')->addError($this->__("Klevu Search Product Sync is disabled."));
         }
         
-        Mage::dispatchEvent('sync_all_external_data', array(
+        Mage::dispatchEvent(
+            'sync_all_external_data', array(
             'store' => $store
-        ));
+            )
+        );
 
         return $this->_redirectReferer("adminhtml/dashboard");
     }
     
     /* Run the product sync externally */
-    public function manual_syncAction() {
+    public function manual_syncAction() 
+    {
         Mage::getModel("klevu_search/product_sync")->runManually();
         /* Use event For other content sync */
         Mage::dispatchEvent('content_data_to_sync', array());
@@ -67,52 +77,57 @@ class Klevu_Search_Adminhtml_Klevu_SearchController extends Mage_Adminhtml_Contr
     }
     
     /* Run the product sync */ 
-    public function syncWithoutCron() {
+    public function syncWithoutCron() 
+    {
         try {
             Mage::getModel("klevu_search/product_sync")->run();
             /* Use event For other content sync */
             Mage::dispatchEvent('content_data_to_sync', array());
-			$memoryMessage = Mage::getSingleton('core/session')->getMemoryMessage();
-			$failedMessage = Mage::getSingleton('core/session')->getKlevuFailedFlag();
-		
-			if(!empty($memoryMessage)) {
-				$failedMessage = Mage::getSingleton('core/session')->getKlevuFailedFlag();
-				if(!empty($failedMessage) && $failedMessage == 1) {
-					$message = $this->__("Product sync failed.Please consult klevu_search.log file for more information.");
-				} else {
-					$message = $this->__("Data updates have been sent to Klevu.").$memoryMessage;
-					Mage::getSingleton('core/session')->setMemoryMessage("");
-				}
-			} else {
-				if(!empty($failedMessage) && $failedMessage == 1) {
-					$message = $this->__("Product sync failed.Please consult klevu_search.log file for more information.");
-				} else {
-					$message = $this->__("Data updates have been sent to Klevu.");
-				}
-			}
+            $memoryMessage = Mage::getSingleton('core/session')->getMemoryMessage();
+            $failedMessage = Mage::getSingleton('core/session')->getKlevuFailedFlag();
+        
+            if(!empty($memoryMessage)) {
+                $failedMessage = Mage::getSingleton('core/session')->getKlevuFailedFlag();
+                if(!empty($failedMessage) && $failedMessage == 1) {
+                    $message = $this->__("Product sync failed.Please consult klevu_search.log file for more information.");
+                } else {
+                    $message = $this->__("Data updates have been sent to Klevu.").$memoryMessage;
+                    Mage::getSingleton('core/session')->setMemoryMessage("");
+                }
+            } else {
+                if(!empty($failedMessage) && $failedMessage == 1) {
+                    $message = $this->__("Product sync failed.Please consult klevu_search.log file for more information.");
+                } else {
+                    $message = $this->__("Data updates have been sent to Klevu.");
+                }
+            }
+
             Mage::getSingleton('adminhtml/session')->addSuccess($message);
-			Mage::getSingleton('core/session')->setKlevuFailedFlag(1);
-			
+            Mage::getSingleton('core/session')->setKlevuFailedFlag(1);
         } catch (Mage_Core_Model_Store_Exception $e) {
             Mage::logException($e);
         }
+
         $storeId = Mage_Core_Model_App::ADMIN_STORE_ID;
         Mage::app()->setCurrentStore($storeId);
         return $this->_redirectReferer("adminhtml/dashboard");
     }
     
     /* save sync options using Ajax */
-    public function save_sync_options_configAction() {
+    public function save_sync_options_configAction() 
+    {
         $sync_options = $this->getRequest()->getParam("sync_options");
         Mage::helper('klevu_search/config')->saveSyncOptions($sync_options);
     }
     
-    public function trigger_options_configAction() {
+    public function trigger_options_configAction() 
+    {
         $triggeroptions = $this->getRequest()->getParam("triggeroptions");
         Mage::helper('klevu_search/config')->saveTrigger($triggeroptions);
     }
     /* clear the cron entry */
-    public function clear_klevu_cronAction() {
+    public function clear_klevu_cronAction() 
+    {
         Mage::getModel("klevu_search/product_sync")->clearKlevuCron();
         Mage::getSingleton('adminhtml/session')->addSuccess($this->__("Running Klevu product Sync entry cleared from cron_schedule table."));
         return $this->_redirectReferer("adminhtml/dashboard");
@@ -124,10 +139,10 @@ class Klevu_Search_Adminhtml_Klevu_SearchController extends Mage_Adminhtml_Contr
         $resource = Mage::getSingleton('core/resource');
         $write = $resource->getConnection('core_write');
         $dbname = (string)Mage::getConfig()->getNode('global/resources/default_setup/connection/dbname');
-		$catalog_product_index_price = $resource->getTableName("catalog_product_index_price");
-		$klevu_product_sync = $resource->getTableName("klevu_search/product_sync");
-		$catalogrule_product_price = $resource->getTableName("catalogrule_product_price");
-		$cataloginventory_stock_status = $resource->getTableName("cataloginventory_stock_status");
+        $catalog_product_index_price = $resource->getTableName("catalog_product_index_price");
+        $klevu_product_sync = $resource->getTableName("klevu_search/product_sync");
+        $catalogrule_product_price = $resource->getTableName("catalogrule_product_price");
+        $cataloginventory_stock_status = $resource->getTableName("cataloginventory_stock_status");
         try
         {
             if(Mage::helper('klevu_search/config')->getTriggerOptionsFlag() == "1") 
@@ -145,13 +160,15 @@ class Klevu_Search_Adminhtml_Klevu_SearchController extends Mage_Adminhtml_Contr
                 $trigger->setTarget($catalog_product_index_price);
 
                 // Set Body
-                $trigger->setBody("IF NEW.price <> OLD.price || NEW.final_price <> OLD.final_price THEN
+                $trigger->setBody(
+                    "IF NEW.price <> OLD.price || NEW.final_price <> OLD.final_price THEN
                 IF (SELECT COUNT(*) FROM information_schema.tables WHERE table_schema = '".$dbname."' AND  table_name = '{$klevu_product_sync}') <> 0 THEN
                 UPDATE {$klevu_product_sync}
                 SET last_synced_at = '0000-00-00 00:00:00'
                 WHERE product_id = NEW.entity_id;
                 END IF ;
-                END IF ;");
+                END IF ;"
+                );
 
                 // Assemble query, returns direct SQL for trigger
                 $triggerCreateFinalPriceQuery = $trigger->assemble();
@@ -169,13 +186,15 @@ class Klevu_Search_Adminhtml_Klevu_SearchController extends Mage_Adminhtml_Contr
                 $trigger->setTarget($cataloginventory_stock_status);
 
                 // Set Body
-                $trigger->setBody("IF NEW.stock_status <> OLD.stock_status THEN
+                $trigger->setBody(
+                    "IF NEW.stock_status <> OLD.stock_status THEN
                 IF (SELECT COUNT(*) FROM information_schema.tables WHERE table_schema = '".$dbname."' AND table_name = '{$klevu_product_sync}') <> 0 THEN
                 UPDATE {$klevu_product_sync}
                 SET last_synced_at = '0000-00-00 00:00:00'
                 WHERE product_id = NEW.product_id;
                 END IF ;
-                END IF ;");
+                END IF ;"
+                );
 
                 // Assemble query, returns direct SQL for trigger
                 $triggerCreateStockQuery = $trigger->assemble();
@@ -185,11 +204,12 @@ class Klevu_Search_Adminhtml_Klevu_SearchController extends Mage_Adminhtml_Contr
                 //reset previous query for executing new query
                 $trigger->reset();
                 // Set time SQL_TIME_BEFORE / SQL_TIME_AFTER
-				if(Mage::getEdition() == "Enterprise") {
+                if(Mage::getEdition() == "Enterprise") {
                     $trigger->setTime($trigger::SQL_TIME_BEFORE);
-				} else {
-					$trigger->setTime($trigger::SQL_TIME_AFTER);
-				}
+                } else {
+                    $trigger->setTime($trigger::SQL_TIME_AFTER);
+                }
+
                 $trigger->setName("Update_KlevuProductSync_For_CPP");
                 // Set time SQL_EVENT_INSERT / SQL_EVENT_UPDATE / SQL_EVENT_DELETE
                 $trigger->setEvent($trigger::SQL_EVENT_UPDATE);
@@ -198,13 +218,15 @@ class Klevu_Search_Adminhtml_Klevu_SearchController extends Mage_Adminhtml_Contr
                 $trigger->setTarget($catalogrule_product_price);
 
                 // Set Body
-                $trigger->setBody("IF NEW.rule_price <> OLD.rule_price THEN
+                $trigger->setBody(
+                    "IF NEW.rule_price <> OLD.rule_price THEN
                 IF (SELECT COUNT(*) FROM information_schema.tables WHERE table_schema = '".$dbname."' AND table_name = '{$klevu_product_sync}') <> 0 THEN
                 UPDATE {$klevu_product_sync}
                 SET last_synced_at = '0000-00-00 00:00:00'
                 WHERE product_id = NEW.product_id;
                 END IF ;
-                END IF ;");
+                END IF ;"
+                );
 
                 // Assemble query, returns direct SQL for trigger
                 $triggerCreateRulePriceQuery = $trigger->assemble();

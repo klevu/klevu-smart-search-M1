@@ -1,12 +1,16 @@
 <?php
 
-class Klevu_Search_Model_Api_Response_Empty extends Klevu_Search_Model_Api_Response {
+class Klevu_Search_Model_Api_Response_Empty extends Klevu_Search_Model_Api_Response
+{
 
-    public function _construct() {
+    public function _construct() 
+    {
         $this->successful = false;
-        $this->addData(array(
+        $this->addData(
+            array(
             'message' => "No HTTP response received. if you are using PHP version 5.4, please make sure to enable the openssl in your php.ini file."
-        ));
+            )
+        );
     }
 
     /**
@@ -16,7 +20,8 @@ class Klevu_Search_Model_Api_Response_Empty extends Klevu_Search_Model_Api_Respo
      *
      * @return $this
      */
-    protected function parseRawResponse(Zend_Http_Response $response) {
+    protected function parseRawResponse(Zend_Http_Response $response) 
+    {
         // Do nothing
         return $this;
     }

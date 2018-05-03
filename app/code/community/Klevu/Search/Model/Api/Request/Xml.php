@@ -1,8 +1,10 @@
 <?php
 
-class Klevu_Search_Model_Api_Request_Xml extends Klevu_Search_Model_Api_Request {
+class Klevu_Search_Model_Api_Request_Xml extends Klevu_Search_Model_Api_Request
+{
 
-    public function __toString() {
+    public function __toString() 
+    {
         $string = parent::__toString();
 
         return sprintf("%s\n%s\n", $string, $this->getDataAsXml());
@@ -13,7 +15,8 @@ class Klevu_Search_Model_Api_Request_Xml extends Klevu_Search_Model_Api_Request 
      *
      * @return string
      */
-    public function getDataAsXml() {
+    public function getDataAsXml() 
+    {
         $xml = new SimpleXMLElement("<request/>");
         $this->_convertArrayToXml($this->getData(), $xml);
         return $xml->asXML();
@@ -24,10 +27,11 @@ class Klevu_Search_Model_Api_Request_Xml extends Klevu_Search_Model_Api_Request 
      *
      * @return Zend_Http_Client
      */
-    protected function build() {
+    protected function build() 
+    {
         $client = parent::build();
         $convertDataToXml = $this->getDataAsXml();
-        $gZen = gzencode($convertDataToXml,5);
+        $gZen = gzencode($convertDataToXml, 5);
         if($gZen !== false) {
             $client
                 ->setHeaders("Content-Encoding", "gzip") 
@@ -38,6 +42,7 @@ class Klevu_Search_Model_Api_Request_Xml extends Klevu_Search_Model_Api_Request 
                 ->setHeaders("Content-Type", "application/xml")
                 ->setRawData($convertDataToXml);
         }
+
         return $client;
     }
 
@@ -116,7 +121,8 @@ class Klevu_Search_Model_Api_Request_Xml extends Klevu_Search_Model_Api_Request 
      * @param array            $array  The data to convert.
      * @param SimpleXmlElement $parent XML element used as a parent for the data.
      */
-    protected function _convertArrayToXml(array $array, SimpleXmlElement &$parent) {
+    protected function _convertArrayToXml(array $array, SimpleXmlElement &$parent) 
+    {
         foreach ($array as $key => $value) {
             if (is_array($value)) {
                 if (is_numeric($key)) {

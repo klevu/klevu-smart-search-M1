@@ -1,8 +1,10 @@
 <?php
 
-class Klevu_Search_Model_Api_Response_Message extends Klevu_Search_Model_Api_Response {
+class Klevu_Search_Model_Api_Response_Message extends Klevu_Search_Model_Api_Response
+{
 
-    protected function parseRawResponse(Zend_Http_Response $response) {
+    protected function parseRawResponse(Zend_Http_Response $response) 
+    {
         parent::parseRawResponse($response);
 
         if ($this->isSuccessful()) {

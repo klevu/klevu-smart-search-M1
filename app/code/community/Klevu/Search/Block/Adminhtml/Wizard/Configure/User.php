@@ -1,13 +1,15 @@
 <?php
 
-class Klevu_Search_Block_Adminhtml_Wizard_Configure_User extends Mage_Adminhtml_Block_Template {
+class Klevu_Search_Block_Adminhtml_Wizard_Configure_User extends Mage_Adminhtml_Block_Template
+{
 
     /**
      * Return the submit URL for the user configuration form.
      *
      * @return string
      */
-    protected function getFormActionUrl() {
+    protected function getFormActionUrl() 
+    {
         return $this->getUrl('adminhtml/klevu_search_wizard/configure_user_post');
     }
 
@@ -16,7 +18,8 @@ class Klevu_Search_Block_Adminhtml_Wizard_Configure_User extends Mage_Adminhtml_
      *
      * @return string
      */
-    protected function getStoreUrl() {
+    protected function getStoreUrl() 
+    {
         return $this->getBaseUrl();
     }
     

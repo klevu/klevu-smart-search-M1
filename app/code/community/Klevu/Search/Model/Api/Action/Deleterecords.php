@@ -1,6 +1,7 @@
 <?php
 
-class Klevu_Search_Model_Api_Action_Deleterecords extends Klevu_Search_Model_Api_Action_Addrecords {
+class Klevu_Search_Model_Api_Action_Deleterecords extends Klevu_Search_Model_Api_Action_Addrecords
+{
 
     const ENDPOINT = "/rest/service/deleteRecords";
     const METHOD   = "POST";

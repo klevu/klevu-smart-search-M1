@@ -1,8 +1,10 @@
 <?php
 
-class Klevu_Search_Model_System_Config_Source_Additional_Attributes {
+class Klevu_Search_Model_System_Config_Source_Additional_Attributes
+{
 
-    public function toOptionArray() {
+    public function toOptionArray() 
+    {
         $helper = Mage::helper('klevu_search');
 
         return array(

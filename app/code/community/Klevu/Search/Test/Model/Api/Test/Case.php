@@ -1,8 +1,10 @@
 <?php
 
-abstract class Klevu_Search_Test_Model_Api_Test_Case extends EcomDev_PHPUnit_Test_Case {
+abstract class Klevu_Search_Test_Model_Api_Test_Case extends EcomDev_PHPUnit_Test_Case
+{
 
-    protected function getDataFileContents($file) {
+    protected function getDataFileContents($file) 
+    {
         $directory_tree = array(
             Mage::getModuleDir('', 'Klevu_Search'),
             'Test',
@@ -27,7 +29,8 @@ abstract class Klevu_Search_Test_Model_Api_Test_Case extends EcomDev_PHPUnit_Tes
      *
      * @return $this
      */
-    protected function replaceApiActionByMock($alias, $response) {
+    protected function replaceApiActionByMock($alias, $response) 
+    {
         $mock = $this->getModelMock($alias, array("execute"));
         $mock
             ->expects($this->once())
@@ -47,7 +50,8 @@ abstract class Klevu_Search_Test_Model_Api_Test_Case extends EcomDev_PHPUnit_Tes
      *
      * @return $this
      */
-    protected function replaceSessionByMock($alias) {
+    protected function replaceSessionByMock($alias) 
+    {
         $session_mock = $this->getModelMockBuilder($alias)
             ->disableOriginalConstructor()
             ->setMethods(array("init"))

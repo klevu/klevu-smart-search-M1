@@ -29,7 +29,7 @@
 }
 
 #klevu_search_wizard .button-set {
-    margin: 10px 5px;
+    margin: 3px 3px;
 }
 
 #klevu_search_wizard .button-set:before,
@@ -103,3 +103,37 @@
     width:190px;
     text-align:right;
 }
+
+.form-list.form-main-block td.value input.input-text, .form-list.form-main-block td.value textarea {
+    width: 274px;
+    padding: 5px;
+    background: #FFF;
+    border-color: #ccc7c7;
+}
+
+table.form-list.form-main-block {
+    width: 60% !important;
+    margin: 0px auto;
+}
+.form-main-block.form-list .button-set {
+    margin: 2px 5px;
+}
+.form-list.form-main-block td.value {     
+	padding-top: 5px !important;
+    padding-bottom: 5px !important;
+	padding-right: 10px !important;
+	}
+	.terms-row td, .button-row td {
+    padding-bottom: 0px !important;
+    margin-bottom: 0px !important;
+    padding-left: 5px !important;
+}
+.form-main-block.form-list  .button-set {    margin: 0px !important;
+    padding: 0px !important;}
+.form-main-block.form-list  .button-set  button, .form-main-block.form-list .button-set  .button-set a {
+	    float: left !important;
+    margin-left: 0px !important;
+    padding: 4px 20px;
+	
+}
+.formLink { margin-left:2px; margin-right:2px;}

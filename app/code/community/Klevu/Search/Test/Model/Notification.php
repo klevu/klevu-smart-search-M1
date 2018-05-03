@@ -1,8 +1,10 @@
 <?php
 
-class Klevu_Search_Test_Model_Notification extends EcomDev_PHPUnit_Test_Case {
+class Klevu_Search_Test_Model_Notification extends EcomDev_PHPUnit_Test_Case
+{
 
-    protected function tearDown() {
+    protected function tearDown() 
+    {
         $resource = Mage::getModel("core/resource");
         $resource->getConnection("core_write")->delete($resource->getTableName("klevu_search/notification"));
 
@@ -13,7 +15,8 @@ class Klevu_Search_Test_Model_Notification extends EcomDev_PHPUnit_Test_Case {
      * @test
      * @loadFixture
      */
-    public function testLoad() {
+    public function testLoad() 
+    {
         $notification = Mage::getModel("klevu_search/notification")->load(1);
 
         $this->assertEquals(1, $notification->getId());
@@ -25,13 +28,16 @@ class Klevu_Search_Test_Model_Notification extends EcomDev_PHPUnit_Test_Case {
     /**
      * @test
      */
-    public function testSave() {
+    public function testSave() 
+    {
         $notification = Mage::getModel("klevu_search/notification");
 
-        $notification->setData(array(
+        $notification->setData(
+            array(
             "type" => "test",
             "message" => "Testing"
-        ));
+            )
+        );
 
         $notification->save();
 

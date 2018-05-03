@@ -5,9 +5,11 @@
  *
  * @method setErrors($errors)
  */
-class Klevu_Search_Model_Api_Response_Invalid extends Klevu_Search_Model_Api_Response {
+class Klevu_Search_Model_Api_Response_Invalid extends Klevu_Search_Model_Api_Response
+{
 
-    public function _construct() {
+    public function _construct() 
+    {
         $this->successful = false;
     }
 
@@ -16,7 +18,8 @@ class Klevu_Search_Model_Api_Response_Invalid extends Klevu_Search_Model_Api_Res
      *
      * @return array
      */
-    public function getErrors() {
+    public function getErrors() 
+    {
         $errors = $this->getData('errors');
 
         if (!$errors) {
@@ -35,7 +38,8 @@ class Klevu_Search_Model_Api_Response_Invalid extends Klevu_Search_Model_Api_Res
      *
      * @return string
      */
-    public function getMessage() {
+    public function getMessage() 
+    {
         $message = "Invalid request";
 
         $errors = $this->getErrors();
@@ -53,7 +57,8 @@ class Klevu_Search_Model_Api_Response_Invalid extends Klevu_Search_Model_Api_Res
      *
      * @return $this
      */
-    protected function parseRawResponse(Zend_Http_Response $response) {
+    protected function parseRawResponse(Zend_Http_Response $response) 
+    {
         // Do nothing
         return $this;
     }

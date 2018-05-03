@@ -14,6 +14,7 @@
 	padding:10px;
 }
 
+
 /* klevu container for fluid layout*/
 .kuProListing{
 	margin-top:20px;
@@ -195,7 +196,7 @@ transition: background 200ms;
 	border: 1px solid #414042;
 }
 
-.kuMulticheck .kuFilterNames ul li a:hover span.kuFilterLabel:after{
+.kuMulticheck .kuHover .kuFilterNames ul li a:hover span.kuFilterLabel:after{
     content: '';
     position: absolute;
     width: 9px;
@@ -938,12 +939,185 @@ transition: background 200ms;
 }
 
 /* div to display No records found message */
-.kuNoRecordFound{
-	text-align:center;
-	margin-top:10%;
-	margin-bottom:10%;
+
+/* No result found css*/ 
+
+.kuNoRecordFound {
+	text-align: center;
+	margin-top: 5%;
+	margin-bottom: 5%;
 	color: #414042;
+	font-size: 13px;
+	background: #FFF;
+	display:none;
+	
 }
+.kuNoResults-lp {
+	background: #FFF;
+	width: 100%;
+	margin: 30px auto;
+	max-width: 850px;
+}
+.kuNoResults-lp ul {
+	margin: 0px;
+	
+	padding: 0px;
+}
+
+.kuNoResults-lp-message {
+	font-size: 18px;
+	padding: 25px 5%;
+	text-align: center;
+}
+.kuNoResults-lp-relatedProducts {
+	width: 95%;
+	margin: 30px auto;
+}
+.kuNoResults-lp-title {
+	text-align: center;
+	text-transform: uppercase;
+	margin-bottom: 40px;
+	font-size: 18px;
+	display: block;
+}
+.kuNoResults-lp-relatedProduct-list > li {
+	display: inline-block;
+	margin-right: 2%;
+	width: 23%;
+	min-height: 120px;
+	margin-bottom: 25px;
+	-moz-box-sizing: border-box;
+	-webkit-box-sizing: border-box;
+	box-sizing: border-box;
+	vertical-align: top;
+	padding: 0;
+	text-align: center;
+}
+.kuNoResults-lp-relatedProduct-list > li a.kuRelatedProductbox-lp {
+	position: relative;
+	text-decoration: none;
+	color: #000;
+	outline: none;
+	display: block;
+	height: auto;
+	min-height: 200px;
+}
+.kuNoResults-lp-relatedProduct-list > li:hover a {
+	text-decoration: none;
+}
+.kuNoResults-lp-relatedProduct-list > li:hover {
+	text-decoration: none;
+}
+.kuNoResults-lp-relatedProduct-list > li:hover .ku-Name {
+	text-decoration: underline;
+}
+.kuNoResults-lp-relatedProduct-list > li:last-child {
+	margin-right: 0px;
+}
+.kuNoResultsImgWrap-lp {	
+	float: none;
+	height: 180px;
+	margin: 0 auto;
+	max-width: 180px;
+	overflow: hidden;
+	text-align: center;
+	width: 100%;
+}
+.kuNoResultsImgWrap-lp img {
+	max-width: 100%;
+	max-height: 180px;	
+	-webkit-transition: all 0.5s ease-in-out;
+	-moz-transition: all 0.5s ease-in-out;
+	-o-transition: all 0.5s ease-in-out;
+	-ms-transition: all 0.5s ease-in-out;
+	transition: all 0.5s ease-in-out;
+	vertical-align: middle;
+	width: auto;
+	height: auto;
+	border: none;
+	outline: none;
+}
+.kuRelatedProductbox-lp .kuProduct-desc {
+	font-size: 12px;
+	padding: 5px 0 0;
+	float: none;
+}
+.kuRelatedProductbox-lp .kuDiscount-badge {
+	background: #000;
+	padding: 3px 8px;
+	color: #FFF;
+	font-weight: bold;
+	position: absolute;
+	top: 0px;
+	left: 0px;
+	display: none;
+}
+.kuRelatedProductbox-lp .ku-Name {
+	font-size: 12px;
+	text-decoration: none;
+	color: #000;
+	line-height: 16px;
+	min-height: 22px;
+	margin-top: 5px;
+	text-align: center;
+}
+.kuRelatedProductbox-lp .ku-Desc {
+	display: none;
+}
+.kuRelatedProductbox-lp .kuStarsSmall {
+	height: 13px;	
+	vertical-align: bottom;
+	background: transparent url(https://js.klevu.com/klevu-js-v1/img-1-1/star-gray.png) top left repeat-x;
+	width: 65px;
+	display: none;
+}
+.kuRelatedProductbox-lp .kuPrice {
+	margin-bottom: 5px;
+	margin-top: 5px;
+	float: none;
+	padding: 0px;
+	text-align: center;
+}
+.kuRelatedProductbox-lp .kuSalePrice {
+	display: inline-block;
+	font-weight: bold;
+	font-size: 13px;
+	color: #000;
+}
+.kuRelatedProductbox-lp .kuOrigPrice {
+	display: inline-block;
+	font-size: 12px;
+	text-decoration: line-through;
+	color: #555;
+}
+.kuRelatedProductbox-lp .kuVariants {
+	font-size: 12px;
+	text-align: left;
+	color: #777;
+	display: none;
+}
+.kuRelatedProductbox-lp .kuSalePrice span.klevuPriceGreyText{
+	font-weight: normal;
+	font-size: 13px !important;
+	margin-bottom: 5px;
+	color: #393939 !important;
+	display:none;
+}
+.kuNoResults-lp .kuNoResults-lp-pSearch {
+	text-align: center;
+}
+.kuNoResults-lp .kuNoResults-lp-pSearch strong { font-weight:600;}
+.kuNoResults-lp .kuNoResults-lp-pSearch > a {
+	font-size: 13px;
+	text-transform: capitalize;
+	text-decoration: none;
+	color: #000;
+	display: inline-block;
+}
+.kuNoResults-lp .kuNoResults-lp-pSearch > a:hover {
+	text-decoration: underline;
+}
+/* ends No result found css */ 
 
 /* div to display or query message */
 .kuOrQueryMessage{

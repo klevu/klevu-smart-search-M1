@@ -1,15 +1,19 @@
 <?php
 
-class Klevu_Search_Model_Api_Request_Post extends Klevu_Search_Model_Api_Request {
+class Klevu_Search_Model_Api_Request_Post extends Klevu_Search_Model_Api_Request
+{
 
-    public function __toString() {
+    public function __toString() 
+    {
         $string = parent::__toString();
 
         $parameters = $this->getData();
         if (count($parameters) > 0) {
-            array_walk($parameters, function(&$value, $key) {
+            array_walk(
+                $parameters, function (&$value, $key) {
                 $value = sprintf("%s: %s", $key, $value);
-            });
+                }
+            );
         }
 
         return sprintf("%s\nPOST parameters:\n%s\n", $string, implode("\n", $parameters));
@@ -20,7 +24,8 @@ class Klevu_Search_Model_Api_Request_Post extends Klevu_Search_Model_Api_Request
      *
      * @return Zend_Http_Client
      */
-    protected function build() {
+    protected function build() 
+    {
         $client = parent::build();
 
         $client

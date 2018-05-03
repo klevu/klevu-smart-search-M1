@@ -2,9 +2,11 @@
 
 use EcomDev_PHPUnit_Test_Case_Util as TestUtil;
 
-class Klevu_Search_Test_Model_Observer extends EcomDev_PHPUnit_Test_Case {
+class Klevu_Search_Test_Model_Observer extends EcomDev_PHPUnit_Test_Case
+{
 
-    public function setUp() {
+    public function setUp() 
+    {
         parent::setUp();
 
         $collection = $this->getProductSyncCronScheduleCollection();
@@ -18,7 +20,8 @@ class Klevu_Search_Test_Model_Observer extends EcomDev_PHPUnit_Test_Case {
         }
     }
 
-    public function tearDown() {
+    public function tearDown() 
+    {
         $collection = $this->getProductSyncCronScheduleCollection();
         foreach ($collection as $item) {
             $item->delete();
@@ -36,28 +39,34 @@ class Klevu_Search_Test_Model_Observer extends EcomDev_PHPUnit_Test_Case {
         parent::tearDown();
     }
 
-    public function testScheduleProductSync() {
+    public function testScheduleProductSync() 
+    {
         $observer = Mage::getModel("klevu_search/observer");
 
         $observer->scheduleProductSync(new Varien_Event_Observer());
 
-        $this->assertEquals(1, $this->getProductSyncCronScheduleCollection()->getSize(),
-        "Failed to assert that scheduleProductSync() schedules the Product Sync cron when called.");
+        $this->assertEquals(
+            1, $this->getProductSyncCronScheduleCollection()->getSize(),
+            "Failed to assert that scheduleProductSync() schedules the Product Sync cron when called."
+        );
     }
 
     /**
      * @test
      * @loadFixture
      */
-    public function testScheduleOrderSync() {
+    public function testScheduleOrderSync() 
+    {
         $model = Mage::getModel("klevu_search/observer");
 
         $order = Mage::getModel("sales/order")->load(1);
         $event = new Varien_Event();
-        $event->addData(array(
+        $event->addData(
+            array(
             "event_name" => "sales_order_place_after",
             "order" => $order
-        ));
+            )
+        );
         $observer = new Varien_Event_Observer();
         $observer->addData(array("event" => $event));
 
@@ -65,7 +74,8 @@ class Klevu_Search_Test_Model_Observer extends EcomDev_PHPUnit_Test_Case {
         
         $this->assertEquals(array(array("order_item_id" => "2")), $this->getOrderSyncQueue());
 
-        $this->assertEquals(1, $this->getOrderSyncCronScheduleCollection()->getSize(),
+        $this->assertEquals(
+            1, $this->getOrderSyncCronScheduleCollection()->getSize(),
             "Failed to assert that scheduleOrderSync() schedules the Order Sync cron when called."
         );
     }
@@ -74,7 +84,8 @@ class Klevu_Search_Test_Model_Observer extends EcomDev_PHPUnit_Test_Case {
      * @test
      * @loadFixture
      */
-    public function testLandingPageRewritesDisabled() {
+    public function testLandingPageRewritesDisabled() 
+    {
         Mage::getModel("klevu_search/observer")->applyLandingPageModelRewrites(new Varien_Event_Observer());
 
         foreach ($this->getLandingPageRewrites() as $type => $rewrites) {
@@ -89,8 +100,10 @@ class Klevu_Search_Test_Model_Observer extends EcomDev_PHPUnit_Test_Case {
                         $object = Mage::getModel($name);
                 }
 
-                $this->assertNotInstanceOf($class, $object,
-                    sprintf("Failed asserting that %s %s is not rewritten when landing page is disabled.",
+                $this->assertNotInstanceOf(
+                    $class, $object,
+                    sprintf(
+                        "Failed asserting that %s %s is not rewritten when landing page is disabled.",
                         $name,
                         $type
                     )
@@ -103,7 +116,8 @@ class Klevu_Search_Test_Model_Observer extends EcomDev_PHPUnit_Test_Case {
      * @test
      * @loadFixture
      */
-    public function testLandingPageRewritesEnabled() {
+    public function testLandingPageRewritesEnabled() 
+    {
         Mage::getModel("klevu_search/observer")->applyLandingPageModelRewrites(new Varien_Event_Observer());
 
         foreach ($this->getLandingPageRewrites() as $type => $rewrites) {
@@ -118,8 +132,10 @@ class Klevu_Search_Test_Model_Observer extends EcomDev_PHPUnit_Test_Case {
                         $object = Mage::getModel($name);
                 }
 
-                $this->assertInstanceOf($class, $object,
-                    sprintf("Failed asserting that %s %s gets rewritten to %s when landing page is enabled.",
+                $this->assertInstanceOf(
+                    $class, $object,
+                    sprintf(
+                        "Failed asserting that %s %s gets rewritten to %s when landing page is enabled.",
                         $name,
                         $type,
                         $class
@@ -134,7 +150,8 @@ class Klevu_Search_Test_Model_Observer extends EcomDev_PHPUnit_Test_Case {
      *
      * @return Mage_Cron_Model_Mysql4_Schedule_Collection
      */
-    protected function getProductSyncCronScheduleCollection() {
+    protected function getProductSyncCronScheduleCollection() 
+    {
         return Mage::getResourceModel("cron/schedule_collection")
                 ->addFieldToFilter("job_code", Mage::getModel("klevu_search/product_sync")->getJobCode());
     }
@@ -144,7 +161,8 @@ class Klevu_Search_Test_Model_Observer extends EcomDev_PHPUnit_Test_Case {
      *
      * @return Mage_Cron_Model_Mysql4_Schedule_Collection
      */
-    protected function getOrderSyncCronScheduleCollection() {
+    protected function getOrderSyncCronScheduleCollection() 
+    {
         return Mage::getResourceModel("cron/schedule_collection")
             ->addFieldToFilter("job_code", Mage::getModel("klevu_search/order_sync")->getJobCode());
     }
@@ -154,10 +172,12 @@ class Klevu_Search_Test_Model_Observer extends EcomDev_PHPUnit_Test_Case {
      *
      * @return array
      */
-    protected function getOrderSyncQueue() {
+    protected function getOrderSyncQueue() 
+    {
         $resource = Mage::getModel("core/resource");
         $connection = $resource->getConnection("core_write");
-        return $connection->fetchAll($connection
+        return $connection->fetchAll(
+            $connection
             ->select()
             ->from($resource->getTableName("klevu_search/order_sync"))
         );
@@ -168,7 +188,8 @@ class Klevu_Search_Test_Model_Observer extends EcomDev_PHPUnit_Test_Case {
      *
      * @return array
      */
-    protected function getLandingPageRewrites() {
+    protected function getLandingPageRewrites() 
+    {
         return array(
             "resource" => array(
                 "catalogsearch/fulltext_collection" => "Klevu_Search_Model_CatalogSearch_Resource_Fulltext_Collection",

@@ -1,8 +1,10 @@
 <?php
 
-class Klevu_Content_Test_Model_Content extends Klevu_Search_Test_Model_Api_Test_Case {
+class Klevu_Content_Test_Model_Content extends Klevu_Search_Test_Model_Api_Test_Case
+{
 
-    protected function tearDown() {
+    protected function tearDown() 
+    {
         $resource = Mage::getModel('core/resource');
         $resource->getConnection("core_write")->delete($resource->getTableName("klevu_search/product_sync"));
         parent::tearDown();
@@ -12,11 +14,14 @@ class Klevu_Content_Test_Model_Content extends Klevu_Search_Test_Model_Api_Test_
      * @test
      * @loadFixture
      */
-    public function testCmsRun() {
+    public function testCmsRun() 
+    {
         $this->replaceApiActionByMock("klevu_search/api_action_startsession", $this->getSuccessfulSessionResponse());
-        $model = $this->getModelMock("content/content", array(
+        $model = $this->getModelMock(
+            "content/content", array(
             "isBelowMemoryLimit", "deletecms", "updatecms", "addcms"
-        ));
+            )
+        );
         $model
             ->expects($this->any())
             ->method("isBelowMemoryLimit")
@@ -25,24 +30,30 @@ class Klevu_Content_Test_Model_Content extends Klevu_Search_Test_Model_Api_Test_
         $model
             ->expects($this->once())
             ->method("deletecms")
-            ->with(array(
+            ->with(
+                array(
                 array("product_id" => "1", "parent_id" => "0"),
-            ))
+                )
+            )
             ->will($this->returnValue(true));
         $model
             ->expects($this->once())
             ->method("updatecms")
-            ->with(array(
+            ->with(
+                array(
                 array("product_id" => "2", "parent_id" => "0"),
 
-            ))
+                )
+            )
             ->will($this->returnValue(true));
         $model
             ->expects($this->once())
             ->method("addcms")
-            ->with(array(
+            ->with(
+                array(
                 array("product_id" => "3", "parent_id" => "0"),
-            ))
+                )
+            )
             ->will($this->returnValue(true));
 
        Mage::getModel("content/content")->runCms();
@@ -52,7 +63,8 @@ class Klevu_Content_Test_Model_Content extends Klevu_Search_Test_Model_Api_Test_
      * @test
      * @loadFixture
      */
-    public function testDeleteCms() {
+    public function testDeleteCms() 
+    {
 
         $this->replaceApiActionByMock("klevu_search/api_action_startsession", $this->getSuccessfulSessionResponse());
         $this->replaceApiActionByMock("klevu_search/api_action_deleterecords", $this->getSuccessfulMessageResponse());
@@ -66,7 +78,8 @@ class Klevu_Content_Test_Model_Content extends Klevu_Search_Test_Model_Api_Test_
      * @test
      * @loadFixture
      */
-    public function testUpdateCms() {
+    public function testUpdateCms() 
+    {
 
         $this->replaceApiActionByMock("klevu_search/api_action_startsession", $this->getSuccessfulSessionResponse());
         $this->replaceApiActionByMock("klevu_search/api_action_updaterecords", $this->getSuccessfulMessageResponse());
@@ -81,7 +94,8 @@ class Klevu_Content_Test_Model_Content extends Klevu_Search_Test_Model_Api_Test_
      * @test
      * @loadFixture
      */
-    public function testAddCms() {
+    public function testAddCms() 
+    {
  
         $this->replaceApiActionByMock("klevu_search/api_action_startsession", $this->getSuccessfulSessionResponse());
         $this->replaceApiActionByMock("klevu_search/api_action_addrecords", $this->getSuccessfulMessageResponse());
@@ -100,7 +114,8 @@ class Klevu_Content_Test_Model_Content extends Klevu_Search_Test_Model_Api_Test_
      *
      * @return Klevu_Search_Model_Api_Response_Message
      */
-    protected function getSuccessfulSessionResponse() {
+    protected function getSuccessfulSessionResponse() 
+    {
         $model = Mage::getModel('klevu_search/api_response_message')->setRawResponse(
             new Zend_Http_Response(200, array(), $this->getDataFileContents("startsession_response_success.xml"))
         );
@@ -113,7 +128,8 @@ class Klevu_Content_Test_Model_Content extends Klevu_Search_Test_Model_Api_Test_
      *
      * @return Klevu_Search_Model_Api_Response_Message
      */
-    protected function getSuccessfulMessageResponse() {
+    protected function getSuccessfulMessageResponse() 
+    {
         $model = Mage::getModel('klevu_search/api_response_message')->setRawResponse(
             new Zend_Http_Response(200, array(), $this->getDataFileContents("message_response_success.xml"))
         );
@@ -128,14 +144,16 @@ class Klevu_Content_Test_Model_Content extends Klevu_Search_Test_Model_Api_Test_
      *
      * @return array
      */
-    protected function getProductSyncTableContents($where = null) {
+    protected function getProductSyncTableContents($where = null) 
+    {
         $resource = Mage::getModel('core/resource');
         $connection = $resource->getConnection("core_write");
         $select = $connection->select()->from($resource->getTableName('klevu_search/product_sync'))
-        ->where('type=?',"pages");
+        ->where('type=?', "pages");
         if ($where) {
             $select->where($where);
         }
+
         return $connection->fetchAll($select);
     }
 
@@ -146,7 +164,8 @@ class Klevu_Content_Test_Model_Content extends Klevu_Search_Test_Model_Api_Test_
      *
      * @return array
      */
-    protected function getProductSyncTableContentsForUpdate($where = null) {
+    protected function getProductSyncTableContentsForUpdate($where = null) 
+    {
         $resource = Mage::getModel('core/resource');
         $connection = $resource->getConnection("core_write");
         $select = $connection->select()->from($resource->getTableName('klevu_search/product_sync'));
@@ -155,10 +174,12 @@ class Klevu_Content_Test_Model_Content extends Klevu_Search_Test_Model_Api_Test_
         if ($where) {
             $select->where($where);
         }
+
         return $connection->fetchAll($select);
     }
    
-    protected function getDataFileContents($file) {
+    protected function getDataFileContents($file) 
+    {
         $directory_tree = array(
             Mage::getModuleDir('', 'Klevu_Search'),
             'Test',

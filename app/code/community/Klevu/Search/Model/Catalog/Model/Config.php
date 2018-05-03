@@ -23,7 +23,6 @@ class Klevu_Search_Model_Catalog_Model_Config extends Mage_Catalog_Model_Config
             'name' => Mage::helper('catalog')->__('Name'),
             'price' => Mage::helper('catalog')->__('Price'), 
             );
-        
         }
 
         return $options;

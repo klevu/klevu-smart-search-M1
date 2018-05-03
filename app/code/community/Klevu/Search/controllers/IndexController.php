@@ -2,38 +2,47 @@
 /**
  * Klevu FrontEnd Controller
  */
-class Klevu_Search_IndexController extends Mage_Core_Controller_Front_Action {
+class Klevu_Search_IndexController extends Mage_Core_Controller_Front_Action
+{
     
-    public function IndexAction() {
+    public function IndexAction() 
+    {
       
-	    $this->loadLayout();  
-        $query = $this->getRequest()->getParam('q');
+        $this->loadLayout();  
+        $query = Mage::helper('catalogsearch')->getEscapedQueryText();
         if(!empty($query)) {   
             $head = $this->getLayout()->getBlock('head');        
-            $head->setTitle($this->__("Search results for: '%s'",$query));
+            $head->setTitle($this->__("Search results for: '%s'", $query));
         } else {
             $this->getLayout()->getBlock("head")->setTitle($this->__("Search"));
         }
-	    if($breadcrumbs = $this->getLayout()->getBlock("breadcrumbs")) {
-            $breadcrumbs->addCrumb("home", array(
+
+        if($breadcrumbs = $this->getLayout()->getBlock("breadcrumbs")) {
+            $breadcrumbs->addCrumb(
+                "home", array(
                 "label" => $this->__("Home"),
                 "title" => $this->__("Home"),
                 "link"  => Mage::getBaseUrl()
-		   ));
+                )
+            );
 
-			if(!empty($query)) {   
-				$breadcrumbs->addCrumb("Search Result", array(
-                "label" => $this->__($this->__("Search results for: '%s'",$query)),
-                "title" => $this->__($this->__("Search results for: '%s'",$query))
-				));
-				
-			} else {
-				$breadcrumbs->addCrumb("Search Result", array(
-                "label" => $this->__("Search results"),
-                "title" => $this->__("Search results")
-				));
-			}
+            if(!empty($query)) {   
+                $breadcrumbs->addCrumb(
+                    "Search Result", array(
+                    "label" => $this->__($this->__("Search results for: '%s'", $query)),
+                    "title" => $this->__($this->__("Search results for: '%s'", $query))
+                    )
+                );
+            } else {
+                $breadcrumbs->addCrumb(
+                    "Search Result", array(
+                    "label" => $this->__("Search results"),
+                    "title" => $this->__("Search results")
+                    )
+                );
+            }
         }
+
         $this->renderLayout(); 
     }
 
@@ -46,7 +55,8 @@ class Klevu_Search_IndexController extends Mage_Core_Controller_Front_Action {
     /**
      * Send different logs to klevu server to debug the data
      */
-    public function runexternalyAction(){
+    public function runexternalyAction()
+    {
         try {
                 $config = Mage::helper('klevu_search/config');
                 if($config->isExternalCallEnabled()){
@@ -54,7 +64,6 @@ class Klevu_Search_IndexController extends Mage_Core_Controller_Front_Action {
                         Mage::getModel('klevu_search/product_sync')->run();
                         Mage::getModel("content/content")->run();
                         Mage::getSingleton('core/session')->addSuccess("Updated Data has been sent to klevu.");
-                        
                     } else if($this->getRequest()->getParam('data') == "alldata") {
                         // Modified the updated date klevu_product_sync table
                         Mage::getModel('klevu_search/product_sync')->markAllProductsForUpdate();
@@ -62,10 +71,9 @@ class Klevu_Search_IndexController extends Mage_Core_Controller_Front_Action {
                         Mage::getModel('klevu_search/product_sync')->run();
                         Mage::getModel("content/content")->run();
                         Mage::getSingleton('core/session')->addSuccess("All products Data sent to klevu.");
-
                     }
-
                 }
+
                 $debugapi = Mage::getModel('klevu_search/product_sync')->getApiDebug();
                 $content="";
                 if($this->getRequest()->getParam('debug') == "klevu") {
@@ -76,7 +84,8 @@ class Klevu_Search_IndexController extends Mage_Core_Controller_Front_Action {
                     }else {
                         $line = 100;
                     }
-                    $content.= $this->getLastlines($path,$line,true);
+
+                    $content.= $this->getLastlines($path, $line, true);
                    
                     //send php and magento version
                     $content.= "</br>".'****Current Magento version on store:'.Mage::getVersion()."</br>";
@@ -106,22 +115,25 @@ class Klevu_Search_IndexController extends Mage_Core_Controller_Front_Action {
                     }else {
                         Mage::getSingleton('core/session')->addSuccess($response->getMessage());
                     }
+
                     Mage::helper('klevu_search')->log(Zend_Log::DEBUG, sprintf("klevu debug data was sent to klevu server successfully."));
                 }
+
                 $rest_api = $this->getRequest()->getParam('api');
                 if(!empty($rest_api)) {
                     Mage::getModel('klevu_search/product_sync')->sheduleCronExteranally($rest_api);
                     Mage::getSingleton('core/session')->addSuccess("Cron scheduled externally."); 
                 }
+
                 $this->_redirect('search/index/runexternalylog');
-                
         }
         catch(Exception $e) {
               Mage::helper('klevu_search')->log(Zend_Log::DEBUG, sprintf("Product Synchronization was Run externally:\n%s", $e->getMessage()));
         }
     }
     
-    function getLastlines($filepath, $lines, $adaptive = true) {
+    function getLastlines($filepath, $lines, $adaptive = true) 
+    {
         // Open file
         $f = @fopen($filepath, "rb");
         if ($f === false) return false;
@@ -149,12 +161,14 @@ class Klevu_Search_IndexController extends Mage_Core_Controller_Front_Action {
         // Decrease our line counter
         $lines -= substr_count($chunk, "\n");
         }
+
         // While we have too many lines
         // (Because of buffer size we might have read too many)
         while ($lines++ < 0) {
         // Find first newline and remove all text before that
         $output = substr($output, strpos($output, "\n") + 1);
         }
+
         // Close file and return
         fclose($f);
         return trim($output);

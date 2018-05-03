@@ -1,13 +1,15 @@
 <?php
 
-class Klevu_Boosting_Model_System_Config_Source_Boosting_Attribute extends Klevu_Search_Model_System_Config_Source_Boosting_Attribute {
+class Klevu_Boosting_Model_System_Config_Source_Boosting_Attribute extends Klevu_Search_Model_System_Config_Source_Boosting_Attribute
+{
 
     /**
      * Fetch all integer and decimal attributes and return in as options array.
      *
      * @return array
      */
-    public function toOptionArray() {
+    public function toOptionArray() 
+    {
         $attributes = $this->getAttributeCollection();
         $boost_option = array(
             'value' => null,
@@ -20,6 +22,7 @@ class Klevu_Boosting_Model_System_Config_Source_Boosting_Attribute extends Klevu
                 'label' => 'Apply Product Boosting Rules'
             );
         }
+
         $options = array(
             array(
                 'value' => null,

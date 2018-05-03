@@ -209,6 +209,18 @@ function termsofservice()
 function upgradeLink(url){
   window.open(url,'_blank');
 }
+
+function hide_registration() {
+	var x = document.getElementById('klevu_signup_form');
+	var y = document.getElementById('klevu_login_form');
+    if (x.style.display === 'none') {
+        x.style.display = 'block';
+		y.style.display = 'none';
+    } else {
+        x.style.display = 'none';
+		y.style.display = 'block';
+    }
+}
 var klevu_search_wizard_configure_user_form = new varienForm('klevu_search_wizard_configure_user_form');
 
 

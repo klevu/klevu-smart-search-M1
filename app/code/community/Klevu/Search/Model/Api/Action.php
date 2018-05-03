@@ -1,6 +1,7 @@
 <?php
 
-class Klevu_Search_Model_Api_Action extends Varien_Object {
+class Klevu_Search_Model_Api_Action extends Varien_Object
+{
 
     const ENDPOINT = "";
     const METHOD   = "GET";
@@ -21,7 +22,8 @@ class Klevu_Search_Model_Api_Action extends Varien_Object {
      *
      * @return $this
      */
-    public function setRequest(Klevu_Search_Model_Api_Request $request_model) {
+    public function setRequest(Klevu_Search_Model_Api_Request $request_model) 
+    {
         $this->request = $request_model;
 
         return $this;
@@ -32,7 +34,8 @@ class Klevu_Search_Model_Api_Action extends Varien_Object {
      *
      * @return Klevu_Search_Model_Api_Request
      */
-    public function getRequest() {
+    public function getRequest() 
+    {
         if (!$this->request) {
             $this->request = Mage::getModel(static::DEFAULT_REQUEST_MODEL);
         }
@@ -47,7 +50,8 @@ class Klevu_Search_Model_Api_Action extends Varien_Object {
      *
      * @return $this
      */
-    public function setResponse(Klevu_Search_Model_Api_Response $response_model) {
+    public function setResponse(Klevu_Search_Model_Api_Response $response_model) 
+    {
         $this->response = $response_model;
 
         return $this;
@@ -58,7 +62,8 @@ class Klevu_Search_Model_Api_Action extends Varien_Object {
      *
      * @return Klevu_Search_Model_Api_Response
      */
-    public function getResponse() {
+    public function getResponse() 
+    {
         if (!$this->response) {
             $this->response = Mage::getModel(static::DEFAULT_RESPONSE_MODEL);
         }
@@ -73,7 +78,8 @@ class Klevu_Search_Model_Api_Action extends Varien_Object {
      *
      * @return Klevu_Search_Model_Api_Response
      */
-    public function execute($parameters = array()) {
+    public function execute($parameters = array()) 
+    {
         $validation_result = $this->validate($parameters);
         if ($validation_result !== true) {
             return Mage::getModel('klevu_search/api_response_invalid')->setErrors($validation_result);
@@ -81,7 +87,7 @@ class Klevu_Search_Model_Api_Action extends Varien_Object {
 
         $request = $this->getRequest();
 
-        $endpoint = Mage::helper('klevu_search/api')->buildEndpoint(static::ENDPOINT, $this->getStore(),Mage::helper('klevu_search/config')->getHostname($this->getStore()));
+        $endpoint = Mage::helper('klevu_search/api')->buildEndpoint(static::ENDPOINT, $this->getStore(), Mage::helper('klevu_search/config')->getHostname($this->getStore()));
 
         $request
             ->setResponseModel($this->getResponse())
@@ -96,10 +102,12 @@ class Klevu_Search_Model_Api_Action extends Varien_Object {
      * Get the store used for this request
      * @return Mage_Core_Model_Store
      */
-    public function getStore() {
+    public function getStore() 
+    {
         if(!$this->hasData('store')) {
             $this->setData('store', Mage::app()->getStore());
         }
+
         return $this->getData('store');
     }
 
@@ -112,7 +120,8 @@ class Klevu_Search_Model_Api_Action extends Varien_Object {
      *
      * @return bool|array
      */
-    protected function validate($parameters) {
+    protected function validate($parameters) 
+    {
         return true;
     }
 }

@@ -6,44 +6,48 @@
  * @method setIsProductSyncScheduled($flag)
  * @method bool getIsProductSyncScheduled()
  */
-class Klevu_Search_Model_Observer extends Varien_Object {
+class Klevu_Search_Model_Observer extends Varien_Object
+{
 
     /**
      * Schedule a Product Sync to run immediately.
      *
      * @param Varien_Event_Observer $observer
      */
-    public function scheduleProductSync(Varien_Event_Observer $observer) {
+    public function scheduleProductSync(Varien_Event_Observer $observer) 
+    {
         if (!$this->getIsProductSyncScheduled()) {
-		    if(Mage::helper("klevu_search/config")->isExternalCronEnabled()) {
-				Mage::getModel("klevu_search/product_sync")->schedule();
-			}
+            if(Mage::helper("klevu_search/config")->isExternalCronEnabled()) {
+                Mage::getModel("klevu_search/product_sync")->schedule();
+            }
+
             $this->setIsProductSyncScheduled(true);
         }
     }
-	
-	
+    
+    
     /**
      * Schedule an Order Sync to run immediately. If the observed event
      * contains an order, add it to the sync queue before scheduling.
      *
      * @param Varien_Event_Observer $observer
      */
-    public function scheduleOrderSync(Varien_Event_Observer $observer) {
-		try {
+    public function scheduleOrderSync(Varien_Event_Observer $observer) 
+    {
+        try {
             $store = Mage::app()->getStore($observer->getEvent()->getStore());
-			if(Mage::helper("klevu_search/config")->isOrderSyncEnabled($store->getId())) {
-				$model = Mage::getModel("klevu_search/order_sync");
-				$order = $observer->getEvent()->getOrder();
-				if ($order) {
+            if(Mage::helper("klevu_search/config")->isOrderSyncEnabled($store->getId())) {
+                $model = Mage::getModel("klevu_search/order_sync");
+                $order = $observer->getEvent()->getOrder();
+                if ($order) {
                 $model->addOrderToQueue($order);
-				}
-				$model->schedule();
-			}
-		} catch(Exception $e) {
+                }
+
+                $model->schedule();
+            }
+        } catch(Exception $e) {
             // Catch the exception that was thrown, log it.
             Mage::helper('klevu_search')->log(Zend_Log::CRIT, sprintf("Exception thrown in %s::%s - %s", __CLASS__, __METHOD__, $e->getMessage()));
-            
         }
     }
 
@@ -51,7 +55,8 @@ class Klevu_Search_Model_Observer extends Varien_Object {
      * When products are updated in bulk, update products so that they will be synced.
      * @param Varien_Event_Observer $observer
      */
-    public function setProductsToSync(Varien_Event_Observer $observer) {
+    public function setProductsToSync(Varien_Event_Observer $observer) 
+    {
         $product_ids = $observer->getData('product_ids');
 
         if(empty($product_ids)) {
@@ -75,7 +80,8 @@ class Klevu_Search_Model_Observer extends Varien_Object {
      *
      * @param Varien_Event_Observer $observer
      */
-    public function syncAllProducts(Varien_Event_Observer $observer) {
+    public function syncAllProducts(Varien_Event_Observer $observer) 
+    {
         $store = null;
         $sync = Mage::getModel("klevu_search/product_sync");
 
@@ -96,9 +102,10 @@ class Klevu_Search_Model_Observer extends Varien_Object {
         $sync->markAllProductsForUpdate($store);
 
         if (!$this->getIsProductSyncScheduled()) {
-			if(Mage::helper("klevu_search/config")->isExternalCronEnabled()) {
+            if(Mage::helper("klevu_search/config")->isExternalCronEnabled()) {
                 $sync->schedule();
-			}
+            }
+
             $this->setIsProductSyncScheduled(true);
         }
     }
@@ -106,7 +113,8 @@ class Klevu_Search_Model_Observer extends Varien_Object {
      * When product image updated from admin this will generate the image thumb.
      * @param Varien_Event_Observer $observer
      */
-    public function createThumb(Varien_Event_Observer $observer) {
+    public function createThumb(Varien_Event_Observer $observer) 
+    {
     
         try {
             if($observer->getEvent()->getProduct()->getTypeId() == Mage_Catalog_Model_Product_Type::TYPE_SIMPLE){        
@@ -114,11 +122,11 @@ class Klevu_Search_Model_Observer extends Varien_Object {
                 if(count($parentIds) > 0 && !empty($parentIds)) {
                     Mage::getModel("klevu_search/product_sync")->updateSpecificProductIds($parentIds);
                 }
-				
             }
         } catch(Exception $e) {
             Mage::helper('klevu_search')->log(Zend_Log::DEBUG, sprintf("error while updating bundle product id :\n%s", $e->getMessage()));
         }
+
         $image = $observer->getEvent()->getProduct()->getImage();
         if(($image != "no_selection") && (!empty($image))) {
             try {
@@ -133,7 +141,8 @@ class Klevu_Search_Model_Observer extends Varien_Object {
                                     Mage::helper('klevu_search')->log(Zend_Log::DEBUG, sprintf("Image Deleting Error:\n%s", $image));  
                                 }
                             }
-                            Mage::getModel("klevu_search/product_sync")->thumbImageObj($baseImageUrl,$imageResized);
+
+                            Mage::getModel("klevu_search/product_sync")->thumbImageObj($baseImageUrl, $imageResized);
                     }
                 }
             } catch(Exception $e) {
@@ -147,10 +156,10 @@ class Klevu_Search_Model_Observer extends Varien_Object {
      *
      * @param Varien_Event_Observer $observer
      */
-    public function applyLandingPageModelRewrites(Varien_Event_Observer $observer) {
+    public function applyLandingPageModelRewrites(Varien_Event_Observer $observer) 
+    {
 
         if (Mage::helper("klevu_search/config")->isLandingEnabled() == 1 && Mage::helper("klevu_search/config")->isExtensionConfigured()) {
-
             $rewrites = array(
                 "global/models/catalogsearch_resource/rewrite/fulltext_collection"         => "Klevu_Search_Model_CatalogSearch_Resource_Fulltext_Collection",
                 "global/models/catalogsearch_mysql4/rewrite/fulltext_collection"           => "Klevu_Search_Model_CatalogSearch_Resource_Fulltext_Collection",
@@ -172,7 +181,8 @@ class Klevu_Search_Model_Observer extends Varien_Object {
     /**
      * Call remove testmode
      */
-    public function removeTest() {
+    public function removeTest() 
+    {
         Mage::getModel("klevu_search/product_sync")->removeTestMode();    
         
     }
@@ -180,15 +190,16 @@ class Klevu_Search_Model_Observer extends Varien_Object {
     /**
      * make prodcuts for update when category change products
      */
-    public function setCategoryProductsToSync(Varien_Event_Observer $observer) {
+    public function setCategoryProductsToSync(Varien_Event_Observer $observer) 
+    {
         try {
             $updatedProductsIds = $observer->getData('product_ids');
             
             if (count($updatedProductsIds) == 0) {
                 return;
             }
-            Mage::getModel("klevu_search/product_sync")->updateSpecificProductIds($updatedProductsIds);
 
+            Mage::getModel("klevu_search/product_sync")->updateSpecificProductIds($updatedProductsIds);
         } catch (Exception $e) {
             Mage::helper('klevu_search')->log(Zend_Log::CRIT, sprintf("Exception thrown in %s::%s - %s", __CLASS__, __METHOD__, $e->getMessage()));
         }
@@ -214,12 +225,13 @@ class Klevu_Search_Model_Observer extends Varien_Object {
                 if(count($attributecollection) > 0) {
                     if(count($object->getData('stores')) > 0) {
                         foreach($object->getData('stores') as $key => $value) {
-                            Mage::getModel('catalog/product_action')->updateAttributes(array($productId), array('rating'=>$ratings),$value);
+                            Mage::getModel('catalog/product_action')->updateAttributes(array($productId), array('rating'=>$ratings), $value);
                         }
                     }
+
                     /* update attribute */
                     if(count($allStores) > 1) {
-                        Mage::getModel('catalog/product_action')->updateAttributes(array($productId), array('rating'=>0),0);
+                        Mage::getModel('catalog/product_action')->updateAttributes(array($productId), array('rating'=>0), 0);
                     }
 
                     /* mark product for update to sync data with klevu */
@@ -230,52 +242,55 @@ class Klevu_Search_Model_Observer extends Varien_Object {
             Mage::helper('klevu_search')->log(Zend_Log::CRIT, sprintf("Exception thrown in %s::%s - %s", __CLASS__, __METHOD__, $e->getMessage()));
         }
     }
-	
-	/**
+    
+    /**
      * Update the product ids to sync with klevu for rule 
      */
-	public function catalogRulePriceChange(Varien_Event_Observer $observer){
-		try {
-			$obj = $observer->getEvent()->getRule();
-			$matchIds = $obj->getMatchingProductIds();
-			$rows = array();
-			if(!empty($matchIds)) {
-				if (version_compare(Mage::getVersion(), '1.7.0.2', '<=')===true) {
-					$rows = $matchIds;
-				} else {
-					foreach($matchIds as $key => $value) {
-						if(is_array($value)) {
-							if (in_array(1,$value)) {
-								$rows[] = $key;
-							}
-						}
-					}
-				}
-			}
-			if(!empty($rows)){
-				Mage::getModel("klevu_search/product_sync")->updateSpecificProductIds($rows);
-			}
-	    } catch (Exception $e) {
+    public function catalogRulePriceChange(Varien_Event_Observer $observer)
+    {
+        try {
+            $obj = $observer->getEvent()->getRule();
+            $matchIds = $obj->getMatchingProductIds();
+            $rows = array();
+            if(!empty($matchIds)) {
+                if (version_compare(Mage::getVersion(), '1.7.0.2', '<=')===true) {
+                    $rows = $matchIds;
+                } else {
+                    foreach($matchIds as $key => $value) {
+                        if(is_array($value)) {
+                            if (in_array(1, $value)) {
+                                $rows[] = $key;
+                            }
+                        }
+                    }
+                }
+            }
+
+            if(!empty($rows)){
+                Mage::getModel("klevu_search/product_sync")->updateSpecificProductIds($rows);
+            }
+        } catch (Exception $e) {
             Mage::helper('klevu_search')->log(Zend_Log::CRIT, sprintf("Exception thrown in %s::%s - %s", __CLASS__, __METHOD__, $e->getMessage()));
         }
-	}
-	
-	/**
+    }
+    
+    /**
      * Update the product id when stock item changed through out api
      */
-	public function updateStock($observer){
-		try {
-			if (version_compare(Mage::getVersion(), '1.7.0.2', '<=') !== true) {
-				$productId = $observer->getEvent()->getItem()->getProductId();
-				if(!empty($productId)) {
-					Mage::getModel("klevu_search/product_sync")->updateSpecificProductIds(array($productId));
-				}
-			}
-		} catch(Exception $e) {
-			Mage::helper('klevu_search')->log(Zend_Log::CRIT, sprintf("Exception thrown in %s::%s - %s", __CLASS__, __METHOD__, $e->getMessage()));
-		}
+    public function updateStock($observer)
+    {
+        try {
+            if (version_compare(Mage::getVersion(), '1.7.0.2', '<=') !== true) {
+                $productId = $observer->getEvent()->getItem()->getProductId();
+                if(!empty($productId)) {
+                    Mage::getModel("klevu_search/product_sync")->updateSpecificProductIds(array($productId));
+                }
+            }
+        } catch(Exception $e) {
+            Mage::helper('klevu_search')->log(Zend_Log::CRIT, sprintf("Exception thrown in %s::%s - %s", __CLASS__, __METHOD__, $e->getMessage()));
+        }
     }
-	
-	
+    
+    
     
 }

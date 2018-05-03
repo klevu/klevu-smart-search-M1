@@ -1,6 +1,7 @@
 <?php
 
-class Klevu_Search_Helper_Api extends Mage_Core_Helper_Abstract {
+class Klevu_Search_Helper_Api extends Mage_Core_Helper_Abstract
+{
 
     const ENDPOINT_PROTOCOL = 'https://';
     const ENDPOINT_DEFAULT_HOSTNAME = 'box.klevu.com';
@@ -16,12 +17,14 @@ class Klevu_Search_Helper_Api extends Mage_Core_Helper_Abstract {
      *                 customer_id: the customer ID for the newly created user (on success only).
      *                 message:     a message to be shown to the user.
      */
-    public function createUser($email, $password, $userPlan, $partnerAccount, $url, $merchantEmail,$contactNo) {
+    public function createUser($email, $password, $userPlan, $partnerAccount, $url, $merchantEmail,$contactNo) 
+    {
         $user = Mage::getSingleton('admin/session');
         $userEmail = $user->getUser()->getEmail();
         $mageVersionInfo = Mage::getVersion();
         $storePhone = Mage::getStoreConfig('general/store_information/phone');
-        $response = Mage::getModel("klevu_search/api_action_adduser")->execute(array(
+        $response = Mage::getModel("klevu_search/api_action_adduser")->execute(
+            array(
             "email"    => $email,
             "password" => $password,
             "userPlan" => $userPlan,
@@ -31,7 +34,8 @@ class Klevu_Search_Helper_Api extends Mage_Core_Helper_Abstract {
             "contactNo" => $contactNo,
             "bmVersion" => 1,
             "shopInfo" => $userEmail.";".$storePhone.";".$mageVersionInfo,
-        ));
+            )
+        );
 
         if ($response->isSuccessful()) {
             return array(
@@ -59,11 +63,14 @@ class Klevu_Search_Helper_Api extends Mage_Core_Helper_Abstract {
      *                 webstores: (on success only) A list of webstores the given user has configured.
      *                 message: (on failure only) Error message to be shown to the user.
      */
-    public function getUser($email, $password) {
-        $response = Mage::getModel("klevu_search/api_action_getuserdetail")->execute(array(
+    public function getUser($email, $password) 
+    {
+        $response = Mage::getModel("klevu_search/api_action_getuserdetail")->execute(
+            array(
             "email"    => $email,
             "password" => $password
-        ));
+            )
+        );
 
         if ($response->isSuccessful()) {
             $webstores = array();
@@ -87,6 +94,7 @@ class Klevu_Search_Helper_Api extends Mage_Core_Helper_Abstract {
                         // Convert field names from camelCase to underscore (code taken from Varien_Object)
                         $webstore[strtolower(preg_replace('/(.)([A-Z])/', "$1_$2", $key))] = $value;
                     }
+
                     $webstores[] = new Varien_Object($webstore);
                 }
             }
@@ -114,10 +122,13 @@ class Klevu_Search_Helper_Api extends Mage_Core_Helper_Abstract {
      *                 success: boolean value indicating whether the operation was successful.
      *                 message: (on failure only) Error message to be shown to the user.
      */
-    public function checkUserDetail($email) {
-        $response = Mage::getModel("klevu_search/api_action_checkuserdetail")->execute(array(
+    public function checkUserDetail($email) 
+    {
+        $response = Mage::getModel("klevu_search/api_action_checkuserdetail")->execute(
+            array(
             "email"    => $email,
-        ));
+            )
+        );
 
         if ($response->isSuccessful()) {
             return array(
@@ -143,8 +154,10 @@ class Klevu_Search_Helper_Api extends Mage_Core_Helper_Abstract {
      *                 webstore: (success only) Varien_Object containing Webstore information.
      *                 message: message to be displayed to the user.
      */
-    public function createWebstore($customer_id, Mage_Core_Model_Store $store, $test_mode = false) {
-        $name = sprintf("%s - %s - %s - %s",
+    public function createWebstore($customer_id, Mage_Core_Model_Store $store, $test_mode = false) 
+    {
+        $name = sprintf(
+            "%s - %s - %s - %s",
             $store->getWebsite()->getName(),
             $store->getCode(),
             $store->getName(),
@@ -160,7 +173,8 @@ class Klevu_Search_Helper_Api extends Mage_Core_Helper_Abstract {
         // Convert $test_mode to string
         $test_mode = ($test_mode) ? "true" : "false";
 
-        $response = Mage::getModel("klevu_search/api_action_addwebstore")->execute(array(
+        $response = Mage::getModel("klevu_search/api_action_addwebstore")->execute(
+            array(
             "customerId" => $customer_id,
             "storeName"  => $name,
             "language"   => $language,
@@ -169,9 +183,11 @@ class Klevu_Search_Helper_Api extends Mage_Core_Helper_Abstract {
             "country"    => $country,
             "locale"     => $locale,
             "testMode"   => $test_mode,
-        ));
+            )
+        );
         if ($response->isSuccessful()) {
-            $webstore = new Varien_Object(array(
+            $webstore = new Varien_Object(
+                array(
                 "store_name"           => $name,
                 "js_api_key"           => $response->getJsApiKey(),
                 "rest_api_key"         => $response->getRestApiKey(),
@@ -182,7 +198,8 @@ class Klevu_Search_Helper_Api extends Mage_Core_Helper_Abstract {
                 "js_url"               => $response->getJsUrl(),
                 "rest_hostname"        => $response->getRestUrl(),
                 "tires_url"            => $response->getTiersUrl(),
-            ));
+                )
+            );
 
             return array(
                 "success"  => true,
@@ -197,7 +214,8 @@ class Klevu_Search_Helper_Api extends Mage_Core_Helper_Abstract {
         }
     }
 
-    public function getTimezoneOptions() {
+    public function getTimezoneOptions() 
+    {
         $response = Mage::getModel('klevu_search/api_action_gettimezone')->execute();
 
         if ($response->isSuccessful()) {
@@ -229,7 +247,8 @@ class Klevu_Search_Helper_Api extends Mage_Core_Helper_Abstract {
      * @param null|string $hostname
      * @return string
      */
-    public function buildEndpoint($endpoint, $store = null, $hostname = null) {
+    public function buildEndpoint($endpoint, $store = null, $hostname = null) 
+    {
        
         return static::ENDPOINT_PROTOCOL . (($hostname) ? $hostname : Mage::helper('klevu_search/config')->getHostname($store)) . $endpoint;
     }
@@ -238,7 +257,8 @@ class Klevu_Search_Helper_Api extends Mage_Core_Helper_Abstract {
      * Get the module version number from the module config.
      * @return string
      */
-    public function getVersion() {
+    public function getVersion() 
+    {
         return Mage::getConfig()->getModuleConfig('Klevu_Search')->version;
     }
 }

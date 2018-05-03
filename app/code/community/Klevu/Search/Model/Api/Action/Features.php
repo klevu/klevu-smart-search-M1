@@ -1,13 +1,15 @@
 <?php
 
-class Klevu_Search_Model_Api_Action_Features extends Klevu_Search_Model_Api_Action {
+class Klevu_Search_Model_Api_Action_Features extends Klevu_Search_Model_Api_Action
+{
 
     const ENDPOINT = "/uti/getFeaturesAndUpgradeLink";
     const METHOD   = "POST";
     const DEFAULT_REQUEST_MODEL  = "klevu_search/api_request_post";
     const DEFAULT_RESPONSE_MODEL = "klevu_search/api_response_data";
     
-    protected function validate($parameters) {
+    protected function validate($parameters) 
+    {
 
         $errors = array();
        
@@ -18,6 +20,7 @@ class Klevu_Search_Model_Api_Action_Features extends Klevu_Search_Model_Api_Acti
         if (count($errors) == 0) {
             return true;
         }
+
         return $errors;
     }    
     /**
@@ -27,7 +30,8 @@ class Klevu_Search_Model_Api_Action_Features extends Klevu_Search_Model_Api_Acti
      *
      * @return Klevu_Search_Model_Api_Response
      */
-    public function execute($parameters = array()) {
+    public function execute($parameters = array()) 
+    {
 
         $validation_result = $this->validate($parameters);
         if ($validation_result !== true) {
@@ -36,7 +40,7 @@ class Klevu_Search_Model_Api_Action_Features extends Klevu_Search_Model_Api_Acti
 
         $request = $this->getRequest();
         $store = Mage::getModel('core/store')->load($parameters['store']);
-        $endpoint = Mage::helper('klevu_search/api')->buildEndpoint(static::ENDPOINT, $store,Mage::helper('klevu_search/config')->getTiresUrl($store));
+        $endpoint = Mage::helper('klevu_search/api')->buildEndpoint(static::ENDPOINT, $store, Mage::helper('klevu_search/config')->getTiresUrl($store));
         $request
             ->setResponseModel($this->getResponse())
             ->setEndpoint($endpoint)

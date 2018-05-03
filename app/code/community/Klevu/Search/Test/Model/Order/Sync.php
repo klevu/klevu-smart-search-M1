@@ -1,8 +1,10 @@
 <?php
 
-class Klevu_Search_Test_Model_Order_Sync extends Klevu_Search_Test_Model_Api_Test_Case {
+class Klevu_Search_Test_Model_Order_Sync extends Klevu_Search_Test_Model_Api_Test_Case
+{
 
-    protected function tearDown() {
+    protected function tearDown() 
+    {
         $resource = Mage::getModel("core/resource");
         $connection = $resource->getConnection("core_write");
 
@@ -15,14 +17,16 @@ class Klevu_Search_Test_Model_Order_Sync extends Klevu_Search_Test_Model_Api_Tes
      * @test
      * @loadFixture
      */
-    public function testAddOrderToQueue() {
+    public function testAddOrderToQueue() 
+    {
         $order = Mage::getModel("sales/order");
         $order->load(1);
 
         $model = Mage::getModel("klevu_search/order_sync");
         $model->addOrderToQueue($order);
 
-        $this->assertEquals(array(array("order_item_id" => "2")), $this->getOrderSyncTableContents(),
+        $this->assertEquals(
+            array(array("order_item_id" => "2")), $this->getOrderSyncTableContents(),
             "Failed asserting that addOrderToQueue() adds the child configurable item to Order Sync queue."
         );
     }
@@ -31,18 +35,21 @@ class Klevu_Search_Test_Model_Order_Sync extends Klevu_Search_Test_Model_Api_Tes
      * @test
      * @loadFixture
      */
-    public function testClearQueue() {
+    public function testClearQueue() 
+    {
         $model = Mage::getModel("klevu_search/order_sync");
 
         $model->clearQueue(1);
 
-        $this->assertEquals(array(array("order_item_id" => "3")), $this->getOrderSyncTableContents(),
+        $this->assertEquals(
+            array(array("order_item_id" => "3")), $this->getOrderSyncTableContents(),
             "Failed asserting that clearQueue() only removes order items for the store given."
         );
 
         $model->clearQueue();
 
-        $this->assertEmpty($this->getOrderSyncTableContents(),
+        $this->assertEmpty(
+            $this->getOrderSyncTableContents(),
             "Failed asserting that clearQueue() removes all items if no store is given."
         );
     }
@@ -51,7 +58,8 @@ class Klevu_Search_Test_Model_Order_Sync extends Klevu_Search_Test_Model_Api_Tes
      * @test
      * @loadFixture
      */
-    public function testRun() {
+    public function testRun() 
+    {
         $this->replaceApiActionByMock(
             "klevu_search/api_action_producttracking",
             Mage::getModel("klevu_search/api_response_data")->setRawResponse(
@@ -71,12 +79,14 @@ class Klevu_Search_Test_Model_Order_Sync extends Klevu_Search_Test_Model_Api_Tes
 
         $model->run();
 
-        $this->assertEmpty($this->getOrderSyncTableContents(),
+        $this->assertEmpty(
+            $this->getOrderSyncTableContents(),
             "Failed asserting that order item gets removed from the sync queue."
         );
     }
 
-    protected function getOrderSyncTableContents($where = null) {
+    protected function getOrderSyncTableContents($where = null) 
+    {
         $resource = Mage::getModel("core/resource");
         $connection = $resource->getConnection("core_write");
 

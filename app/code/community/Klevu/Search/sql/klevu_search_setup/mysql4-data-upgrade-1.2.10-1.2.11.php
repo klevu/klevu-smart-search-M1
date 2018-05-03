@@ -6,7 +6,8 @@ $setup = new Mage_Eav_Model_Entity_Setup('core_setup');
 $entityTypeId     = $setup->getEntityTypeId('catalog_category');
 $attributeSetId   = $setup->getDefaultAttributeSetId($entityTypeId);
 $attributeGroupId = $setup->getDefaultAttributeGroupId($entityTypeId, $attributeSetId);
-$setup->addAttribute('catalog_category', 'exclude_in_search', array(
+$setup->addAttribute(
+    'catalog_category', 'exclude_in_search', array(
     'type' => 'int',
     'group'     => 'Display Settings',
     'backend' => '',
@@ -25,6 +26,6 @@ $setup->addAttribute('catalog_category', 'exclude_in_search', array(
     'comparable' => false,
     'visible_on_front' => false,
     'unique' => false,
-));
+    )
+);
 $installer->endSetup();
-?>

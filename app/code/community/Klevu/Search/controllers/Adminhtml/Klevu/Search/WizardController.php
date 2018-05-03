@@ -1,14 +1,17 @@
 <?php
 
-class Klevu_Search_Adminhtml_Klevu_Search_WizardController extends Mage_Adminhtml_Controller_Action {
+class Klevu_Search_Adminhtml_Klevu_Search_WizardController extends Mage_Adminhtml_Controller_Action
+{
     
-    public function configure_userplanAction() {
+    public function configure_userplanAction() 
+    {
         $this->loadLayout();
         $this->initLayoutMessages('klevu_search/session');
         $this->renderLayout();
     }
 
-    public function configure_userplan_postAction() {
+    public function configure_userplan_postAction() 
+    {
         /* if partner account selected as UserPlan then change plan to trial*/
                 $partnerAccount = false;
                 $request = $this->getRequest();
@@ -21,7 +24,6 @@ class Klevu_Search_Adminhtml_Klevu_Search_WizardController extends Mage_Adminhtm
                 if(empty($userPlan)) {
                     $session->addError(Mage::helper("klevu_search")->__("Not sure, which plan to select? Select Premium to try all features free for 14-days."));
                     return $this->_forward("configure_userplan");
-                
                 }
                 
                 $api = Mage::helper("klevu_search/api");
@@ -40,6 +42,7 @@ class Klevu_Search_Adminhtml_Klevu_Search_WizardController extends Mage_Adminhtm
             if (isset($result["message"])) {
                 $session->addSuccess(Mage::helper("klevu_search")->__($result["message"]));
             }
+
             return $this->_forward("configure_store");
         } else {
             $session->addError(Mage::helper("klevu_search")->__($result["message"]));
@@ -49,13 +52,15 @@ class Klevu_Search_Adminhtml_Klevu_Search_WizardController extends Mage_Adminhtm
        
         return $this->_forward("configure_store");
     }    
-    public function configure_userAction() {
+    public function configure_userAction() 
+    {
         $this->loadLayout();
         $this->initLayoutMessages('klevu_search/session');
         $this->renderLayout();
     }
 
-    public function configure_user_postAction() {
+    public function configure_user_postAction() 
+    {
 
         $request = $this->getRequest();
 
@@ -78,6 +83,7 @@ class Klevu_Search_Adminhtml_Klevu_Search_WizardController extends Mage_Adminhtm
                 if (isset($result["message"])) {
                     $session->addSuccess(Mage::helper("klevu_search")->__($result["message"]));
                 }
+
                 return $this->_forward("configure_store");
             } else {
                 $session->addError(Mage::helper("klevu_search")->__($result["message"]));
@@ -97,17 +103,16 @@ class Klevu_Search_Adminhtml_Klevu_Search_WizardController extends Mage_Adminhtm
             || empty($merchantEmail) ) {
                 $session->addError(Mage::helper("klevu_search")->__("Missing details in the form. Please check."));
                 return $this->_forward("configure_user");
-            } else if(!preg_match("/^[_\.0-9a-zA-Z-]+@([0-9a-zA-Z][0-9a-zA-Z-]+\.)+[a-zA-Z]{2,6}$/i",$klevu_new_email)) {
+            } else if(!preg_match("/^[_\.0-9a-zA-Z-]+@([0-9a-zA-Z][0-9a-zA-Z-]+\.)+[a-zA-Z]{2,6}$/i", $klevu_new_email)) {
                 $session->addError(Mage::helper("klevu_search")->__("Please enter valid Primary Email."));
                 return $this->_forward("configure_user");
-            } else if(!preg_match("/^[_\.0-9a-zA-Z-]+@([0-9a-zA-Z][0-9a-zA-Z-]+\.)+[a-zA-Z]{2,6}$/i",$merchantEmail)) {
+            } else if(!preg_match("/^[_\.0-9a-zA-Z-]+@([0-9a-zA-Z][0-9a-zA-Z-]+\.)+[a-zA-Z]{2,6}$/i", $merchantEmail)) {
                 $session->addError(Mage::helper("klevu_search")->__("Please enter valid Retailer Email."));
                 return $this->_forward("configure_user");
             }else if(empty($termsconditions)){
                 $session->addError(Mage::helper("klevu_search")->__("Please accept terms and conditions."));
                 return $this->_forward("configure_user");
             }else {
-                   
                     $result = $api->checkUserDetail(
                         $request->getPost("klevu_new_email")
                     );
@@ -129,7 +134,8 @@ class Klevu_Search_Adminhtml_Klevu_Search_WizardController extends Mage_Adminhtm
 
     }
 
-    public function configure_storeAction() {
+    public function configure_storeAction() 
+    {
         $request = $this->getRequest();
 
         if (!$request->isAjax()) {
@@ -148,7 +154,8 @@ class Klevu_Search_Adminhtml_Klevu_Search_WizardController extends Mage_Adminhtm
         $this->renderLayout();
     }
 
-    public function configure_store_postAction() {
+    public function configure_store_postAction() 
+    {
 
         $request = $this->getRequest();
         if (!$request->isPost() || !$request->isAjax()) {
@@ -212,9 +219,9 @@ class Klevu_Search_Adminhtml_Klevu_Search_WizardController extends Mage_Adminhtm
         $session->addSuccess("Store configured successfully. Saved API credentials.");
 
         // Schedule a Product Sync
-		if(Mage::helper("klevu_search/config")->isExternalCronEnabled()) {
+        if(Mage::helper("klevu_search/config")->isExternalCronEnabled()) {
             Mage::getModel("klevu_search/product_sync")->schedule();
-		}
+        }
        
         $this->loadLayout();
         $this->initLayoutMessages("klevu_search/session");
@@ -222,7 +229,8 @@ class Klevu_Search_Adminhtml_Klevu_Search_WizardController extends Mage_Adminhtm
         return;
     }
 
-    public function configure_attributesAction() {
+    public function configure_attributesAction() 
+    {
         
         $request = $this->getRequest();
 
@@ -247,7 +255,8 @@ class Klevu_Search_Adminhtml_Klevu_Search_WizardController extends Mage_Adminhtm
         $this->renderLayout();
     }
 
-    public function configure_attributes_postAction() {
+    public function configure_attributes_postAction() 
+    {
     
         $request = $this->getRequest();
 
@@ -275,9 +284,9 @@ class Klevu_Search_Adminhtml_Klevu_Search_WizardController extends Mage_Adminhtm
             $session->addSuccess(Mage::helper("klevu_search")->__("Attributes configured successfully. Attribute mappings saved to System Configuration."));
 
             // Schedule a Product Sync
-			if(Mage::helper("klevu_search/config")->isExternalCronEnabled()) {
+            if(Mage::helper("klevu_search/config")->isExternalCronEnabled()) {
                 Mage::getModel("klevu_search/product_sync")->schedule();
-			}
+            }
 
             $this->loadLayout();
             $this->initLayoutMessages("klevu_search/session");
@@ -289,7 +298,8 @@ class Klevu_Search_Adminhtml_Klevu_Search_WizardController extends Mage_Adminhtm
         }
     }
     
-    protected function _isAllowed() {
+    protected function _isAllowed() 
+    {
         return true;
     }
 }

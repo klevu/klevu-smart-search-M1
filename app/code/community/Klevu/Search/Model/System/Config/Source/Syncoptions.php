@@ -1,11 +1,13 @@
 <?php
 
-class Klevu_Search_Model_System_Config_Source_Syncoptions {
+class Klevu_Search_Model_System_Config_Source_Syncoptions
+{
 
     const SYNC_PARTIALLY = 1;
     const SYNC_ALL = 2;
 
-    public function toOptionArray() {
+    public function toOptionArray() 
+    {
         $helper = Mage::helper("klevu_search");
         return array(
             array(

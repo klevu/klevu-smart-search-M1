@@ -10,9 +10,10 @@ class Klevu_Searchterms_Helper_Data extends Mage_Core_Helper_Abstract
      *
      * @return bool
      */
-    public function isPoplularSearchPageEnabled($store_id = null) {
+    public function isPoplularSearchPageEnabled($store_id = null) 
+    {
         return Mage::getStoreConfigFlag(static::XML_PATH_POPULARSEARCH_ENABLED, $store_id);
     }
 
 }
-	 
+     

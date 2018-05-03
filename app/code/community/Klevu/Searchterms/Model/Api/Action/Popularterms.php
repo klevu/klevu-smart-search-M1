@@ -1,13 +1,15 @@
 <?php
 
-class Klevu_Searchterms_Model_Api_Action_Popularterms extends Klevu_Search_Model_Api_Action {
+class Klevu_Searchterms_Model_Api_Action_Popularterms extends Klevu_Search_Model_Api_Action
+{
 
     const ENDPOINT = "/analytics/webstorePopularSearches";
     const METHOD   = "POST";
     const DEFAULT_REQUEST_MODEL  = "klevu_search/api_request_post";
     const DEFAULT_RESPONSE_MODEL = "klevu_search/api_response_data";
-	
-    protected function validate($parameters) {
+    
+    protected function validate($parameters) 
+    {
         $errors = array();
 
         if (!isset($parameters["klevuApiKey"]) || empty($parameters["klevuApiKey"])) {
@@ -17,6 +19,7 @@ class Klevu_Searchterms_Model_Api_Action_Popularterms extends Klevu_Search_Model
         if (count($errors) == 0) {
             return true;
         }
+
         return $errors;
     }
 
@@ -28,7 +31,8 @@ class Klevu_Searchterms_Model_Api_Action_Popularterms extends Klevu_Search_Model
      *
      * @return Klevu_Search_Model_Api_Response
      */
-    public function execute($parameters = array()) {
+    public function execute($parameters = array()) 
+    {
        
         $validation_result = $this->validate($parameters);
         if ($validation_result !== true) {

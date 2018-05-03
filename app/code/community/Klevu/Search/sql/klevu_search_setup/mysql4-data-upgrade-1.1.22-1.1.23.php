@@ -27,34 +27,43 @@ try {
         $write = $resource->getConnection('core_write');
         $entity_type = Mage::getSingleton("eav/entity_type")->loadByCode("catalog_product");
         $entity_typeid = $entity_type->getId();
-        $select = $read->select()->from($this->getTable("eav_attribute_set") , array(
+        $select = $read->select()->from(
+            $this->getTable("eav_attribute_set"), array(
             'attribute_set_id'
-        ))->where("entity_type_id=?", $entity_typeid);
+            )
+        )->where("entity_type_id=?", $entity_typeid);
         $attribute_sets = $read->fetchAll($select);
         foreach($attribute_sets as $attribute_set) {
             $attribute_set_id = $attribute_set['attribute_set_id'];
-            $select = $read->select()->from($this->getTable("eav_attribute") , array(
+            $select = $read->select()->from(
+                $this->getTable("eav_attribute"), array(
                 'attribute_id'
-            ))->where("entity_type_id=?", $entity_typeid)->where("attribute_code=?", "rating");
+                )
+            )->where("entity_type_id=?", $entity_typeid)->where("attribute_code=?", "rating");
             $attribute = $read->fetchRow($select);
             $attribute_id = $attribute['attribute_id'];
-            $select = $read->select()->from($this->getTable("eav_attribute_group") , array(
+            $select = $read->select()->from(
+                $this->getTable("eav_attribute_group"), array(
                 'attribute_group_id'
-            ))->where("attribute_set_id=?", $attribute_set_id)->where("attribute_group_name=?", "General");
+                )
+            )->where("attribute_set_id=?", $attribute_set_id)->where("attribute_group_name=?", "General");
             $attribute_group = $read->fetchRow($select);
             $attribute_group_id = $attribute_group['attribute_group_id'];
             $write->beginTransaction();
-            $write->insert($this->getTable("eav_entity_attribute") , array(
+            $write->insert(
+                $this->getTable("eav_entity_attribute"), array(
                 "entity_type_id" => $entity_typeid,
                 "attribute_set_id" => $attribute_set_id,
                 "attribute_group_id" => $attribute_group_id,
                 "attribute_id" => $attribute_id,
                 "sort_order" => 5
-            ));
+                )
+            );
             $write->commit();
         }
     }
 } catch(Exception $e) {
-    echo '<p>Error occurred while trying to add the attribute. Error: ' . $e->getMessage() . '</p>';
+	Mage::helper('klevu_search')->log(Zend_Log::CRIT, sprintf("Exception thrown in %s::%s - %s", __CLASS__, __METHOD__, $e->getMessage()));
 }
+
 $installer->endSetup();

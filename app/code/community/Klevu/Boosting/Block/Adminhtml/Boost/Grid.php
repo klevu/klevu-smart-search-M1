@@ -17,18 +17,23 @@ class Klevu_Boosting_Block_Adminhtml_Boost_Grid extends Mage_Adminhtml_Block_Wid
     }
     protected function _prepareColumns()
     {
-        $this->addColumn("id", array(
+        $this->addColumn(
+            "id", array(
             "header" => Mage::helper("boosting")->__("ID") ,
             "align" => "right",
             "width" => "50px",
             "type" => "number",
             "index" => "id",
-        ));
-        $this->addColumn("name", array(
+            )
+        );
+        $this->addColumn(
+            "name", array(
             "header" => Mage::helper("boosting")->__("Rule Name") ,
             "index" => "name",
-        ));
-        $this->addColumn('status', array(
+            )
+        );
+        $this->addColumn(
+            'status', array(
             'header' => $this->__('Status') ,
             'align' => 'left',
             'width' => '80px',
@@ -38,25 +43,30 @@ class Klevu_Boosting_Block_Adminhtml_Boost_Grid extends Mage_Adminhtml_Block_Wid
                 1 => $this->__('Active') ,
                 0 => $this->__('Inactive')
             ) ,
-        ));
+            )
+        );
         return parent::_prepareColumns();
     }
     public function getRowUrl($row)
     {
-        return $this->getUrl("*/*/edit", array(
+        return $this->getUrl(
+            "*/*/edit", array(
             "id" => $row->getId()
-        ));
+            )
+        );
     }
     protected function _prepareMassaction()
     {
         $this->setMassactionIdField('id');
         $this->getMassactionBlock()->setFormFieldName('ids');
         $this->getMassactionBlock()->setUseSelectAll(true);
-        $this->getMassactionBlock()->addItem('remove_boost', array(
+        $this->getMassactionBlock()->addItem(
+            'remove_boost', array(
             'label' => Mage::helper('boosting')->__('Remove Rule') ,
             'url' => $this->getUrl('*/boost/massRemove') ,
             'confirm' => Mage::helper('boosting')->__('Are you sure?')
-        ));
+            )
+        );
         return $this;
     }
 }

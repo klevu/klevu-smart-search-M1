@@ -1,6 +1,7 @@
 <?php
 
-class Klevu_Search_Model_Api_Action_Searchtermtracking extends Klevu_Search_Model_Api_Action {
+class Klevu_Search_Model_Api_Action_Searchtermtracking extends Klevu_Search_Model_Api_Action
+{
 
     const ENDPOINT = "/analytics/n-search/search";
     const METHOD   = "POST";
@@ -8,15 +9,18 @@ class Klevu_Search_Model_Api_Action_Searchtermtracking extends Klevu_Search_Mode
     const DEFAULT_REQUEST_MODEL  = "klevu_search/api_request_get";
     const DEFAULT_RESPONSE_MODEL = "klevu_search/api_response_data";
 
-    protected function validate($parameters) {
+    protected function validate($parameters) 
+    {
         $errors = array();
 
         if (!isset($parameters["klevu_apiKey"]) || empty($parameters["klevu_apiKey"])) {
             $errors["klevu_apiKey"] = "Missing JS API key.";
         }
+
         if (!isset($parameters["klevu_term"]) || empty($parameters["klevu_term"])) {
             $errors["klevu_term"] = "Missing klevu term.";
         }
+
         if (!isset($parameters["klevu_totalResults"]) || empty($parameters["klevu_totalResults"])) {
             $errors["klevu_type"] = "Missing Total Results.";
         }
@@ -32,6 +36,7 @@ class Klevu_Search_Model_Api_Action_Searchtermtracking extends Klevu_Search_Mode
         if (count($errors) == 0) {
             return true;
         }
+
         return $errors;
     }
 
@@ -43,7 +48,8 @@ class Klevu_Search_Model_Api_Action_Searchtermtracking extends Klevu_Search_Mode
      *
      * @return Klevu_Search_Model_Api_Response
      */
-    public function execute($parameters = array()) {
+    public function execute($parameters = array()) 
+    {
         $validation_result = $this->validate($parameters);
         if ($validation_result !== true) {
             return Mage::getModel('klevu_search/api_response_invalid')->setErrors($validation_result);

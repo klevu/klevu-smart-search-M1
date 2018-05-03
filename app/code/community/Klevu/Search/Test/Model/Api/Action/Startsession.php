@@ -1,8 +1,10 @@
 <?php
 
-class Klevu_Search_Test_Model_Api_Action_Startsession extends Klevu_Search_Test_Model_Api_Test_Case {
+class Klevu_Search_Test_Model_Api_Action_Startsession extends Klevu_Search_Test_Model_Api_Test_Case
+{
 
-    public function testValidate() {
+    public function testValidate() 
+    {
         $parameters = array(
             'api_key' => "dGVzdC1hcGkta2V5",
             'store'   => null

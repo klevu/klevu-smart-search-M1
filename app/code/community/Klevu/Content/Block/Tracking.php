@@ -6,7 +6,8 @@ class Klevu_Content_Block_Tracking extends Mage_Core_Block_Template
      * @return string
      * @throws Exception
      */
-    public function getJsonTrackingData() {
+    public function getJsonTrackingData() 
+    {
     
         $api_key = Mage::helper('klevu_search/config')->getJsApiKey();
         // Get current Cms page object

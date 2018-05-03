@@ -2,7 +2,6 @@
 class Klevu_Boosting_Block_Adminhtml_Boost extends Mage_Adminhtml_Block_Widget_Grid_Container
 {
     public function __construct()
-
     {
         $this->_controller = "adminhtml_boost";
         $this->_blockGroup = "boosting";

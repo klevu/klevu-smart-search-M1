@@ -11,11 +11,15 @@ class Klevu_Boosting_Helper_Data extends Mage_Core_Helper_Abstract
     public function applyBoostRuleToProduct($id)
     {
         $connection = Mage::getSingleton('core/resource')->getConnection('core_read');
-        $select = $connection->select()->from(Mage::getSingleton('core/resource')->getTableName('boosting/boost') , array(
+        $select = $connection->select()->from(
+            Mage::getSingleton('core/resource')->getTableName('boosting/boost'), array(
             'MAX(boosting) AS boost_value'
-        ))->where("matchingids", array(
-            "finset" => $id
-        ));
+            )
+        )->where(
+            "matchingids", array(
+                "finset" => $id
+                )
+        );
         $result = $connection->fetchCol($select);
         return $result[0];
     }
@@ -31,6 +35,7 @@ class Klevu_Boosting_Helper_Data extends Mage_Core_Helper_Abstract
             foreach($boostRules as $obj) {
                 $boostarr[$obj->getId() ][$obj->getBoosting() ] = $obj->getMatchingids();
             }
+
             return $boostarr;
         }
     }
@@ -52,6 +57,7 @@ class Klevu_Boosting_Helper_Data extends Mage_Core_Helper_Abstract
                     if ($product['prev_boost'] < $boostkey) {
                         $product['curent_boost_value'] = $boostkey;
                     }
+
                     $product['prev_boost'] = $boostkey;
                 }
             }

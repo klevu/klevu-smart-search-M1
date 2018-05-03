@@ -15,7 +15,6 @@ class Klevu_Content_Block_Index extends Mage_Core_Block_Template
      * @return array
      */
     public function getContentFilters()
-
     {
         $filters = Mage::helper("content")->getKlevuFilters();
         return $filters;

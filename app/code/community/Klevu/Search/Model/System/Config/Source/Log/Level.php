@@ -1,8 +1,10 @@
 <?php
 
-class Klevu_Search_Model_System_Config_Source_Log_Level {
+class Klevu_Search_Model_System_Config_Source_Log_Level
+{
 
-    public function toOptionArray() {
+    public function toOptionArray() 
+    {
         $helper = Mage::helper('klevu_search');
 
         return array(

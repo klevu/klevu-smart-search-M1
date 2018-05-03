@@ -1,11 +1,13 @@
 <?php
 
-class Klevu_Search_Test_Model_Api_Response_Empty extends EcomDev_PHPUnit_Test_Case {
+class Klevu_Search_Test_Model_Api_Response_Empty extends EcomDev_PHPUnit_Test_Case
+{
 
     /**
      * @test
      */
-    public function testIsSuccessful() {
+    public function testIsSuccessful() 
+    {
         $model = Mage::getModel('klevu_search/api_response_empty');
 
         $this->assertEquals(

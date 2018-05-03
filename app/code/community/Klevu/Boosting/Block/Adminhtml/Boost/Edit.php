@@ -9,11 +9,13 @@ class Klevu_Boosting_Block_Adminhtml_Boost_Edit extends Mage_Adminhtml_Block_Wid
         $this->_controller = "adminhtml_boost";
         $this->_updateButton("save", "label", Mage::helper("boosting")->__("Save Rule"));
         $this->_updateButton("delete", "label", Mage::helper("boosting")->__("Delete Rule"));
-        $this->_addButton("saveandcontinue", array(
+        $this->_addButton(
+            "saveandcontinue", array(
             "label" => Mage::helper("boosting")->__("Save And Continue Edit") ,
             "onclick" => "saveAndContinueEdit()",
             "class" => "save",
-        ) , -100);
+            ), -100
+        );
         $this->_formScripts[] = "function saveAndContinueEdit(){editForm.submit($('edit_form').action+'back/edit/');}";
 
     }
@@ -24,7 +26,6 @@ class Klevu_Boosting_Block_Adminhtml_Boost_Edit extends Mage_Adminhtml_Block_Wid
         }
         else {
             return Mage::helper("boosting")->__("Add Rule");
-            
         }
     }
 }

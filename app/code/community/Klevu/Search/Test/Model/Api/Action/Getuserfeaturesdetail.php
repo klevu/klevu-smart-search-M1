@@ -1,11 +1,13 @@
 <?php
 
-class Klevu_Search_Test_Model_Api_Action_Getuserfeaturesdetail extends Klevu_Search_Test_Model_Api_Test_Case {
+class Klevu_Search_Test_Model_Api_Action_Getuserfeaturesdetail extends Klevu_Search_Test_Model_Api_Test_Case
+{
 
     /**
      * @test
      */
-    public function testValidate() {
+    public function testValidate() 
+    {
         $parameters = $this->getTestParameters();
 
         $response = Mage::getModel('klevu_search/api_response');
@@ -28,7 +30,8 @@ class Klevu_Search_Test_Model_Api_Action_Getuserfeaturesdetail extends Klevu_Sea
      * @test
      * @dataProvider dataProvider
      */
-    public function testValidateRequiredFields($field) {
+    public function testValidateRequiredFields($field) 
+    {
         $parameters = $this->getTestParameters();
         unset($parameters[$field]);
 
@@ -52,7 +55,8 @@ class Klevu_Search_Test_Model_Api_Action_Getuserfeaturesdetail extends Klevu_Sea
         );
     }
 
-    protected function getTestParameters() {
+    protected function getTestParameters() 
+    {
         return array(
             'restApiKey'    => "a2xldnUtMTQ1MDI3MDEyNTY2NDI0ODc6S2xldnUtMXV1Z3FwNmthbw==",
         );
@@ -62,7 +66,8 @@ class Klevu_Search_Test_Model_Api_Action_Getuserfeaturesdetail extends Klevu_Sea
     /**
      * @test
     */
-    public function testGetFeatures() {
+    public function testGetFeatures() 
+    {
         $http_response = new Zend_Http_Response(200, array(), $this->getDataFileContents("feature_response.xml"));
         $model = Mage::getModel('klevu_search/api_action_features');
         $model->setRawResponse($http_response);

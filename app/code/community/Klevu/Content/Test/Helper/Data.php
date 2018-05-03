@@ -1,17 +1,20 @@
 <?php
 
-class Klevu_Content_Test_Helper_Data extends EcomDev_PHPUnit_Test_Case {
+class Klevu_Content_Test_Helper_Data extends EcomDev_PHPUnit_Test_Case
+{
 
     /** @var Klevu_Content_Helper_Data $helper */
     protected $helper;
 
-    protected function setUp() {
+    protected function setUp() 
+    {
         parent::setUp();
         $this->helper = Mage::helper("content");
         $this->getConfig()->deleteConfig("klevu_search/product_sync/enabledcms");
     }
     
-    protected function getConfig() {
+    protected function getConfig() 
+    {
         return Mage::app()->getConfig();
     }
     
@@ -20,7 +23,8 @@ class Klevu_Content_Test_Helper_Data extends EcomDev_PHPUnit_Test_Case {
      * @test
      * @loadFixture
      */
-    public function testIsCmsEnabledEnabled() {
+    public function testIsCmsEnabledEnabled() 
+    {
         $this->assertEquals(true, $this->helper->isCmsSyncEnabled());
     }
 
@@ -28,7 +32,8 @@ class Klevu_Content_Test_Helper_Data extends EcomDev_PHPUnit_Test_Case {
      * @test
      * @loadFixture
      */
-    public function testIsCmsEnabledDisabled() {
+    public function testIsCmsEnabledDisabled() 
+    {
         $this->assertEquals(false, $this->helper->isCmsSyncEnabled());
     }
 
@@ -36,7 +41,8 @@ class Klevu_Content_Test_Helper_Data extends EcomDev_PHPUnit_Test_Case {
      * @test
      * @dataProvider dataProvider
      */
-    public function testIsCmsSyncEnabled($input, $output) {
+    public function testIsCmsSyncEnabled($input, $output) 
+    {
         $this->assertEquals($output, $this->helper->isCmsSyncEnabled($input));
     }
     

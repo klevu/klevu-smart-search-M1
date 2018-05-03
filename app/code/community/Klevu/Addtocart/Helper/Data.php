@@ -10,8 +10,9 @@ class Klevu_Addtocart_Helper_Data extends Mage_Core_Helper_Abstract
      *
      * @return bool
      */
-    public function isAddtocartEnabled($store_id = null) {
+    public function isAddtocartEnabled($store_id = null) 
+    {
         return Mage::getStoreConfigFlag(static::XML_PATH_ADDTOCART_ENABLED, $store_id);
     }
 }
-	 
+     

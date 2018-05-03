@@ -1,8 +1,10 @@
 <?php
 
-class Klevu_Search_Model_Api_Response_Data extends Klevu_Search_Model_Api_Response {
+class Klevu_Search_Model_Api_Response_Data extends Klevu_Search_Model_Api_Response
+{
 
-    protected function parseRawResponse(Zend_Http_Response $response) {
+    protected function parseRawResponse(Zend_Http_Response $response) 
+    {
         parent::parseRawResponse($response);
 
         if ($this->isSuccessful()) {
@@ -13,6 +15,7 @@ class Klevu_Search_Model_Api_Response_Data extends Klevu_Search_Model_Api_Respon
                 if (strtolower($data['response']) == 'success') {
                     $this->successful = true;
                 }
+
                 unset($data['response']);
             }
 
@@ -31,7 +34,8 @@ class Klevu_Search_Model_Api_Response_Data extends Klevu_Search_Model_Api_Respon
      *
      * @return array
      */
-    protected function xmlToArray(SimpleXMLElement $xml) {
+    protected function xmlToArray(SimpleXMLElement $xml) 
+    {
         return json_decode(json_encode($xml), true);
     }
 }

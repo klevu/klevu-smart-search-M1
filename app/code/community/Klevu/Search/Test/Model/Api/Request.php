@@ -1,12 +1,14 @@
 <?php
 
-class Klevu_Search_Test_Model_Api_Request extends EcomDev_PHPUnit_Test_Case {
+class Klevu_Search_Test_Model_Api_Request extends EcomDev_PHPUnit_Test_Case
+{
 
     /**
      * @test
      * @expectedException Mage_Core_Exception
      */
-    public function testSendNoEndpoint() {
+    public function testSendNoEndpoint() 
+    {
         $model = $this->getModelMock('klevu_search/api_request', array("build"));
         $model
             ->expects($this->never())
@@ -18,7 +20,8 @@ class Klevu_Search_Test_Model_Api_Request extends EcomDev_PHPUnit_Test_Case {
     /**
      * @test
      */
-    public function testSendNoResponse() {
+    public function testSendNoResponse() 
+    {
         $http_client = $this->getMock("Zend_Http_Client", array("request"));
         $http_client
             ->expects($this->once())
@@ -39,7 +42,8 @@ class Klevu_Search_Test_Model_Api_Request extends EcomDev_PHPUnit_Test_Case {
     /**
      * @test
      */
-    public function testSendValidResponse() {
+    public function testSendValidResponse() 
+    {
         $test_raw_response = new Zend_Http_Response(200, array());
 
         $http_client = $this->getMock("Zend_Http_Client", array("request"));

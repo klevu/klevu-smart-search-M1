@@ -1,6 +1,7 @@
 <?php
 
-class Klevu_Search_Model_CatalogSearch_Layer_Filter_Category extends Mage_Catalog_Model_Layer_Filter_Category {
+class Klevu_Search_Model_CatalogSearch_Layer_Filter_Category extends Mage_Catalog_Model_Layer_Filter_Category
+{
 
     /**
      * Get data array for building category filter items
@@ -30,6 +31,7 @@ class Klevu_Search_Model_CatalogSearch_Layer_Filter_Category extends Mage_Catalo
             foreach($filters as $filter) {
                 $category_names[] = $filter['label'];
             }
+
             $category   = $this->getCategory();
             // Get the all categories returned from klevu, and apply the current parent category.
             $categories = Mage::getModel('catalog/category')->getCollection()
@@ -57,6 +59,7 @@ class Klevu_Search_Model_CatalogSearch_Layer_Filter_Category extends Mage_Catalo
                     }
                 } 
             }
+
             $tags = $this->getLayer()->getStateTags();
             $this->getLayer()->getAggregator()->saveCacheData($data, $key, $tags);
         }
@@ -64,12 +67,14 @@ class Klevu_Search_Model_CatalogSearch_Layer_Filter_Category extends Mage_Catalo
         return $data;
     }
 
-    protected function _findKlevuCategory($category, $filters) {
+    protected function _findKlevuCategory($category, $filters) 
+    {
         foreach($filters as $filter) {
             if(strtolower($filter['label']) == strtolower($category->getName())) {
                 return $filter;
             }
         }
+
         return false;
     }
 
@@ -78,7 +83,8 @@ class Klevu_Search_Model_CatalogSearch_Layer_Filter_Category extends Mage_Catalo
      * category is applied as a filter. This isn't expected functionality for Klevu, and has been reset to a null value.
      * @return null
      */
-    public function getResetValue() {
+    public function getResetValue() 
+    {
         if (!Mage::helper('klevu_search/config')->isExtensionConfigured() || !Mage::helper('klevu_search')->isCatalogSearch()) {
             return parent::getResetValue();
         }
@@ -90,7 +96,8 @@ class Klevu_Search_Model_CatalogSearch_Layer_Filter_Category extends Mage_Catalo
      * Returns array of category filters from Klevu  [ 'label' => 'T-Shirts', 'count' => 1, 'selected' => false ]
      * @return array
      */
-    protected function _getKlevuCategoryFilters() {
+    protected function _getKlevuCategoryFilters() 
+    {
         /** @var Klevu_Search_Model_CatalogSearch_Resource_Fulltext_Collection $collection */
         $collection = $this->getLayer()->getProductCollection();
         $klevu_filters = $collection->getKlevuFilters();

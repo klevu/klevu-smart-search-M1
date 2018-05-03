@@ -1,8 +1,10 @@
 <?php
 
-class Klevu_Search_Model_Cron extends Varien_Object {
+class Klevu_Search_Model_Cron extends Varien_Object
+{
 
-    public function clearCronCheckNotification() {
+    public function clearCronCheckNotification() 
+    {
         $collection = Mage::getResourceModel("klevu_search/notification_collection");
         $collection->addFieldToFilter("type", array("eq" => "cron_check"));
 

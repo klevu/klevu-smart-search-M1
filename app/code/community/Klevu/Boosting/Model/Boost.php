@@ -8,7 +8,6 @@ class Klevu_Boosting_Model_Boost extends Mage_CatalogRule_Model_Rule
         $this->_init("boosting/boost");
     }
     public function getConditionsInstance()
-
     {
         return Mage::getModel('boosting/boost_rule_condition_combine');
     }
@@ -26,24 +25,29 @@ class Klevu_Boosting_Model_Boost extends Mage_CatalogRule_Model_Rule
             /** @var $productCollection Mage_Catalog_Model_Resource_Eav_Mysql4_Product_Collection */
             $productCollection = Mage::getResourceModel('catalog/product_collection');
             $this->getConditions()->collectValidatedAttributes($productCollection);
-            Mage::getSingleton('core/resource_iterator')->walk($productCollection->getSelect() , array(
+            Mage::getSingleton('core/resource_iterator')->walk(
+                $productCollection->getSelect(), array(
                 array(
                     $this,
                     'callbackValidateProduct'
                 )
-            ) , array(
+                ), array(
                 'attributes' => $this->getCollectedAttributes() ,
                 'product' => Mage::getModel('catalog/product') ,
-            ));
+                )
+            );
         }
+
         if (version_compare(Mage::getVersion(), '1.7.0.2', '<=')===true) {
             return $this->_productIds;
         }
+
         foreach($this->_productIds as $key => $value) {
             if ($value[0] == 1) {
                 $rows[] = $key;
             }
         }
+
         return $rows;
     }
 }

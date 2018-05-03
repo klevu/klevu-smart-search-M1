@@ -1,6 +1,7 @@
 <?php
 
-class Klevu_Search_Model_Api_Request extends Varien_Object {
+class Klevu_Search_Model_Api_Request extends Varien_Object
+{
 
     protected $endpoint;
 
@@ -10,7 +11,8 @@ class Klevu_Search_Model_Api_Request extends Varien_Object {
 
     protected $response_model;
 
-    public function _construct() {
+    public function _construct() 
+    {
         parent::_construct();
 
         $this->method = Zend_Http_Client::GET;
@@ -25,7 +27,8 @@ class Klevu_Search_Model_Api_Request extends Varien_Object {
      *
      * @return $this
      */
-    public function setEndpoint($url) {
+    public function setEndpoint($url) 
+    {
         $this->endpoint = $url;
 
         return $this;
@@ -36,7 +39,8 @@ class Klevu_Search_Model_Api_Request extends Varien_Object {
      *
      * @return string
      */
-    public function getEndpoint() {
+    public function getEndpoint() 
+    {
         return $this->endpoint;
     }
 
@@ -47,7 +51,8 @@ class Klevu_Search_Model_Api_Request extends Varien_Object {
      *
      * @return $this
      */
-    public function setMethod($method) {
+    public function setMethod($method) 
+    {
         $this->method = $method;
 
         return $this;
@@ -58,7 +63,8 @@ class Klevu_Search_Model_Api_Request extends Varien_Object {
      *
      * @return mixed
      */
-    public function getMethod() {
+    public function getMethod() 
+    {
         return $this->method;
     }
 
@@ -70,7 +76,8 @@ class Klevu_Search_Model_Api_Request extends Varien_Object {
      *
      * @return $this
      */
-    public function setHeader($name, $value) {
+    public function setHeader($name, $value) 
+    {
         $this->headers[$name] = $value;
 
         return $this;
@@ -81,7 +88,8 @@ class Klevu_Search_Model_Api_Request extends Varien_Object {
      *
      * @return array
      */
-    public function getHeaders() {
+    public function getHeaders() 
+    {
         return $this->headers;
     }
 
@@ -92,7 +100,8 @@ class Klevu_Search_Model_Api_Request extends Varien_Object {
      *
      * @return $this
      */
-    public function setResponseModel(Klevu_Search_Model_Api_Response $response_model) {
+    public function setResponseModel(Klevu_Search_Model_Api_Response $response_model) 
+    {
         $this->response_model = $response_model;
 
         return $this;
@@ -103,7 +112,8 @@ class Klevu_Search_Model_Api_Request extends Varien_Object {
      *
      * @return Klevu_Search_Model_Api_Response
      */
-    public function getResponseModel() {
+    public function getResponseModel() 
+    {
         return $this->response_model;
     }
 
@@ -112,7 +122,8 @@ class Klevu_Search_Model_Api_Request extends Varien_Object {
      *
      * @return Klevu_Search_Model_Api_Response
      */
-    public function send() {
+    public function send() 
+    {
         if (!$this->getEndpoint()) {
             // Can't make a request without a URL
             Mage::throwException("Unable to send a Klevu Search API request: No URL specified.");
@@ -129,11 +140,13 @@ class Klevu_Search_Model_Api_Request extends Varien_Object {
             return Mage::getModel('klevu_search/api_response_empty');
         }
 
-        Mage::helper('klevu_search')->log(Zend_Log::DEBUG, sprintf(
-            "API response:\n%s\n%s",
-            $raw_response->getHeadersAsString(true, "\n"),
-            $raw_response->getBody()
-        ));
+        Mage::helper('klevu_search')->log(
+            Zend_Log::DEBUG, sprintf(
+                "API response:\n%s\n%s",
+                $raw_response->getHeadersAsString(true, "\n"),
+                $raw_response->getBody()
+            )
+        );
 
         $response = $this->getResponseModel();
         $response->setRawResponse($raw_response);
@@ -146,14 +159,19 @@ class Klevu_Search_Model_Api_Request extends Varien_Object {
      *
      * @return string
      */
-    public function __toString() {
+    public function __toString() 
+    {
         $headers = $this->getHeaders();
         if (count($headers) > 0) {
-            array_walk($headers, function (&$value, $key) {
+            array_walk(
+                $headers, function (&$value, $key) {
                 $value = ($value !== null && $value !== false) ? sprintf("%s: %s", $key, $value) : null;
-            });
+                }
+            );
         }
-        return sprintf("%s %s\n%s\n",
+
+        return sprintf(
+            "%s %s\n%s\n",
             $this->getMethod(),
             $this->getEndpoint(),
             implode("\n", array_filter($headers))
@@ -165,8 +183,9 @@ class Klevu_Search_Model_Api_Request extends Varien_Object {
      *
      * @return Zend_Http_Client
      */
-    protected function build() {
-		$client = new Zend_Http_Client();
+    protected function build() 
+    {
+        $client = new Zend_Http_Client();
         $config = array('timeout' => 60);
         $client->setConfig($config);
         $client

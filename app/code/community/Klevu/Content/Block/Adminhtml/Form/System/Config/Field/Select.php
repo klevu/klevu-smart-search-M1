@@ -5,6 +5,6 @@ class Klevu_Content_Block_Adminhtml_Form_System_Config_Field_Select extends Mage
     {
         $this->setName($this->getInputName());
         $this->setClass('select');
-        return trim(preg_replace('/\s+/', ' ',parent::_toHtml()));
+        return trim(preg_replace('/\s+/', ' ', parent::_toHtml()));
     }
 }

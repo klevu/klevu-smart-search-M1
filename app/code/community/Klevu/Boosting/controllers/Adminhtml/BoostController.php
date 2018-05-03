@@ -3,7 +3,7 @@ class Klevu_Boosting_Adminhtml_BoostController extends Mage_Adminhtml_Controller
 {
     protected function _initAction()
     {
-        $this->loadLayout()->_setActiveMenu("boosting/boost")->_addBreadcrumb(Mage::helper("adminhtml")->__("Product Boosting Manager") , Mage::helper("adminhtml")->__("Boost Manager"));
+        $this->loadLayout()->_setActiveMenu("boosting/boost")->_addBreadcrumb(Mage::helper("adminhtml")->__("Product Boosting Manager"), Mage::helper("adminhtml")->__("Boost Manager"));
         return $this;
     }
     public function indexAction()
@@ -22,8 +22,8 @@ class Klevu_Boosting_Adminhtml_BoostController extends Mage_Adminhtml_Controller
             Mage::register("boost_data", $model);
             $this->loadLayout();
             $this->_setActiveMenu("boosting/boost");
-            $this->_addBreadcrumb(Mage::helper("adminhtml")->__("Product Boosting Manager") , Mage::helper("adminhtml")->__("Product Boosting Manager"));
-            $this->_addBreadcrumb(Mage::helper("adminhtml")->__("Product Boosting Description") , Mage::helper("adminhtml")->__("Product Boosting Description"));
+            $this->_addBreadcrumb(Mage::helper("adminhtml")->__("Product Boosting Manager"), Mage::helper("adminhtml")->__("Product Boosting Manager"));
+            $this->_addBreadcrumb(Mage::helper("adminhtml")->__("Product Boosting Description"), Mage::helper("adminhtml")->__("Product Boosting Description"));
             $this->getLayout()->getBlock("head")->setCanLoadExtJs(true);
             $this->_addContent($this->getLayout()->createBlock("boosting/adminhtml_boost_edit"))->_addLeft($this->getLayout()->createBlock("boosting/adminhtml_boost_edit_tabs"));
             $this->renderLayout();
@@ -44,12 +44,13 @@ class Klevu_Boosting_Adminhtml_BoostController extends Mage_Adminhtml_Controller
         if (!empty($data)) {
             $model->loadPost($data);
         }
+
         Mage::register("boost_data", $model);
         $this->loadLayout();
         $this->_setActiveMenu("boosting/boost");
         $this->getLayout()->getBlock("head")->setCanLoadExtJs(true);
-        $this->_addBreadcrumb(Mage::helper("adminhtml")->__("Product Boosting Manager") , Mage::helper("adminhtml")->__("Product Boosting Manager"));
-        $this->_addBreadcrumb(Mage::helper("adminhtml")->__("Product Boosting Description") , Mage::helper("adminhtml")->__("Product Boosting Description"));
+        $this->_addBreadcrumb(Mage::helper("adminhtml")->__("Product Boosting Manager"), Mage::helper("adminhtml")->__("Product Boosting Manager"));
+        $this->_addBreadcrumb(Mage::helper("adminhtml")->__("Product Boosting Description"), Mage::helper("adminhtml")->__("Product Boosting Description"));
         $this->_addContent($this->getLayout()->createBlock("boosting/adminhtml_boost_edit"))->_addLeft($this->getLayout()->createBlock("boosting/adminhtml_boost_edit_tabs"));
         $this->renderLayout();
     }
@@ -58,6 +59,7 @@ class Klevu_Boosting_Adminhtml_BoostController extends Mage_Adminhtml_Controller
         if (!$this->getRequest()->getPost()) {
             $this->_redirect('*/*/');
         }
+
         $boostModel = $this->_initBoost();
         $data = $this->getRequest()->getPost();
         try {
@@ -66,20 +68,26 @@ class Klevu_Boosting_Adminhtml_BoostController extends Mage_Adminhtml_Controller
                 foreach($validateResult as $errorMessage) {
                     $this->_getSession()->addError($errorMessage);
                 }
-                $this->_redirect('*/*/edit', array(
+
+                $this->_redirect(
+                    '*/*/edit', array(
                     'id' => $boostModel->getId()
-                ));
+                    )
+                );
                 return;
             }
+
             $data['conditions'] = $data['rule']['conditions'];
             unset($data['rule']);
             $boostModel->loadPost($data);
             $boostModel->save();
             Mage::getSingleton('adminhtml/session')->addSuccess($this->__('The Product rule has been saved.'));
             if ($this->getRequest()->getParam('back')) {
-                return $this->_redirect('*/*/edit', array(
+                return $this->_redirect(
+                    '*/*/edit', array(
                     'id' => $boostModel->getId() ,
-                ));
+                    )
+                );
             }
         }
         catch(Mage_Core_Exception $e) {
@@ -88,11 +96,14 @@ class Klevu_Boosting_Adminhtml_BoostController extends Mage_Adminhtml_Controller
         catch(Exception $e) {
             $this->_getSession()->addError($this->__('An error occurred while saving the rule data. Please review the log and try again.'));
             Mage::logException($e);
-            $this->_redirect('*/*/edit', array(
+            $this->_redirect(
+                '*/*/edit', array(
                 'id' => $this->getRequest()->getParam('id')
-            ));
+                )
+            );
             return;
         }
+
         $this->_redirect('*/*/');
     }
     protected function _initBoost()
@@ -111,6 +122,7 @@ class Klevu_Boosting_Adminhtml_BoostController extends Mage_Adminhtml_Controller
                 return null;
             }
         }
+
         Mage::register('boost_data', $boostModel);
         return $boostModel;
     }
@@ -125,11 +137,14 @@ class Klevu_Boosting_Adminhtml_BoostController extends Mage_Adminhtml_Controller
             }
             catch(Exception $e) {
                 Mage::getSingleton("adminhtml/session")->addError($e->getMessage());
-                $this->_redirect("*/*/edit", array(
+                $this->_redirect(
+                    "*/*/edit", array(
                     "id" => $this->getRequest()->getParam("id")
-                ));
+                    )
+                );
             }
         }
+
         $this->_redirect("*/*/");
     }
     public function massRemoveAction()
@@ -140,11 +155,13 @@ class Klevu_Boosting_Adminhtml_BoostController extends Mage_Adminhtml_Controller
                 $model = Mage::getModel("boosting/boost");
                 $model->setId($id)->delete();
             }
+
             Mage::getSingleton("adminhtml/session")->addSuccess(Mage::helper("adminhtml")->__("Rule(s) were successfully removed."));
         }
         catch(Exception $e) {
             Mage::getSingleton("adminhtml/session")->addError($e->getMessage());
         }
+
         $this->_redirect('*/*/');
     }
 
@@ -157,11 +174,13 @@ class Klevu_Boosting_Adminhtml_BoostController extends Mage_Adminhtml_Controller
         if (!empty($typeArr[1])) {
             $model->setAttribute($typeArr[1]);
         }
+
         $html = '';
         if ($model instanceof Mage_Rule_Model_Condition_Abstract) {
             $model->setJsFormObject($this->getRequest()->getParam('form'));
             $html = $model->asHtmlRecursive();
         }
+
         $this->getResponse()->setBody($html);
     }
     

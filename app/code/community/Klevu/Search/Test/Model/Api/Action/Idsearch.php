@@ -1,12 +1,14 @@
 <?php
 
-class Klevu_Search_Test_Model_Api_Action_Idsearch extends Klevu_Search_Test_Model_Api_Test_Case {
+class Klevu_Search_Test_Model_Api_Action_Idsearch extends Klevu_Search_Test_Model_Api_Test_Case
+{
 
     /**
      * Test that validation passes and successful response is received.
      * @test
      */
-    public function testValidate() {
+    public function testValidate() 
+    {
         $parameters = $this->getTestParameters();
 
         $response = Mage::getModel('klevu_search/api_response');
@@ -29,7 +31,8 @@ class Klevu_Search_Test_Model_Api_Action_Idsearch extends Klevu_Search_Test_Mode
      * @test
      * @dataProvider dataProvider
      */
-    public function testValidateRequiredFields($field) {
+    public function testValidateRequiredFields($field) 
+    {
         $parameters = $this->getTestParameters();
         unset($parameters[$field]);
 
@@ -56,7 +59,8 @@ class Klevu_Search_Test_Model_Api_Action_Idsearch extends Klevu_Search_Test_Mode
     /**
      * @test
      */
-    public function testValidationPaginationStartsFromLessThanZero() {
+    public function testValidationPaginationStartsFromLessThanZero() 
+    {
         $field = 'paginationStartsFrom';
         $parameters = $this->getTestParameters();
         $parameters[$field] = -1;
@@ -81,7 +85,8 @@ class Klevu_Search_Test_Model_Api_Action_Idsearch extends Klevu_Search_Test_Mode
         );
     }
 
-    protected function getTestParameters() {
+    protected function getTestParameters() 
+    {
         return array(
             'ticket' => 'klevu-14255510895641069',
             'noOfResults' => 30,

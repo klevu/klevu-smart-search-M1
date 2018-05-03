@@ -1,12 +1,14 @@
 <?php
 
-class Klevu_Search_Test_Model_System_Config_Source_Test  extends EcomDev_PHPUnit_Test_Case {
+class Klevu_Search_Test_Model_System_Config_Source_Test  extends EcomDev_PHPUnit_Test_Case
+{
 
     /**
      * @test
      * @dataProvider dataProvider
      */
-    public function testIsValidSourceModel($alias) {
+    public function testIsValidSourceModel($alias) 
+    {
         $model = Mage::getModel($alias);
 
         $this->assertTrue($model !== false, sprintf("Model with alias %s not found.", $alias));

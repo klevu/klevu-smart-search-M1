@@ -16,7 +16,7 @@ class Klevu_Content_Helper_Data extends Mage_Core_Helper_Abstract
     public function getContentSearchFilters()
     {
         if (empty($this->_klevu_Content_parameters)) {
-            $q = Mage::app()->getRequest()->getParam('q');
+            $q = Mage::helper('catalogsearch')->getEscapedQueryText();
             $this->_klevu_Content_parameters = array(
                 'ticket' => Mage::helper('klevu_search/config')->getJsApiKey() ,
                 'noOfResults' => 1000,
@@ -31,6 +31,7 @@ class Klevu_Content_Helper_Data extends Mage_Core_Helper_Abstract
             );
             $this->log(Zend_Log::DEBUG, sprintf("Starting search for term: %s", $q));
         }
+
         return $this->_klevu_Content_parameters;
     }
     /**
@@ -42,6 +43,7 @@ class Klevu_Content_Helper_Data extends Mage_Core_Helper_Abstract
         if (!$this->_klevu_Content_response) {
             $this->_klevu_Content_response = Mage::getModel('klevu_search/api_action_idsearch')->execute($this->getContentSearchFilters());
         }
+
         return $this->_klevu_Content_response;
     }
     
@@ -49,8 +51,9 @@ class Klevu_Content_Helper_Data extends Mage_Core_Helper_Abstract
      * Return the Klevu api search filters
      * @return array
      */
-    public function getContentSearchTracking($noOfTrackingResults,$queryType) {
-        $q = Mage::app()->getRequest()->getParam('q');
+    public function getContentSearchTracking($noOfTrackingResults,$queryType) 
+    {
+        $q = $q = Mage::helper('catalogsearch')->getEscapedQueryText();
         $this->_klevu_tracking_parameters = array(
             'klevu_apiKey' => Mage::helper('klevu_search/config')->getJsApiKey(),
             'klevu_term' => $q,
@@ -77,20 +80,24 @@ class Klevu_Content_Helper_Data extends Mage_Core_Helper_Abstract
             if (!$this->getKlevuResponse()->hasData('result')) {
                 return array();
             }
+
             foreach($this->getKlevuResponse()->getData('result') as $key => $value) {
                 $value["name"] = $value['name'];
                 $value["url"] = $value["url"];
                 if (!empty($value['shortDesc'])) {
                     $value["shortDesc"] = $value['shortDesc'];
                 }
+
                 $cms_data[] = $value;
             }
+
             $this->_klevu_Cms_Data = $cms_data;
             
             $response_meta = $this->getKlevuResponse()->getData('meta');
-            Mage::getModel('klevu_search/api_action_searchtermtracking')->execute($this->getContentSearchTracking(count($this->_klevu_Cms_Data),$response_meta['typeOfQuery']));
+            Mage::getModel('klevu_search/api_action_searchtermtracking')->execute($this->getContentSearchTracking(count($this->_klevu_Cms_Data), $response_meta['typeOfQuery']));
             $this->log(Zend_Log::DEBUG, sprintf("Cms count returned: %s", count($this->_klevu_Cms_Data)));
         }
+
         return $this->_klevu_Cms_Data;
     }
     /**
@@ -128,6 +135,7 @@ class Klevu_Content_Helper_Data extends Mage_Core_Helper_Abstract
         if (is_array($values)) {
             return $values;
         }
+
         return array();
     }
     
@@ -153,9 +161,11 @@ class Klevu_Content_Helper_Data extends Mage_Core_Helper_Abstract
     public function isCmsSyncEnabled($store = null)
     {
         $flag = $this->getCmsSyncEnabledFlag($store);
-        return in_array($flag, array(
+        return in_array(
+            $flag, array(
             Klevu_Search_Model_System_Config_Source_Yesnoforced::YES,
-        ));
+            )
+        );
     }
     /**
      * Get value of cms synchronize for the given store.
@@ -178,9 +188,11 @@ class Klevu_Content_Helper_Data extends Mage_Core_Helper_Abstract
     public function isCmsSyncEnabledOnFront($store = null)
     {
         $flag = $this->getCmsSyncEnabledOnFront($store);
-        return in_array($flag, array(
+        return in_array(
+            $flag, array(
             Klevu_Search_Model_System_Config_Source_Yesnoforced::YES,
-        ));
+            )
+        );
     }
     /**
      * Get the type filters for Content from Klevu .
@@ -195,6 +207,7 @@ class Klevu_Content_Helper_Data extends Mage_Core_Helper_Abstract
         if (empty($filters)) {
             return array();
         }
+
         foreach($filters as $filter) {
             $key = (string)$filter['key'];
             $attributes[$key] = array(
@@ -211,6 +224,7 @@ class Klevu_Content_Helper_Data extends Mage_Core_Helper_Abstract
                 }
             }
         }
+
         return $attributes;
     }
     /**
@@ -232,12 +246,16 @@ class Klevu_Content_Helper_Data extends Mage_Core_Helper_Abstract
                 $prepared_filters['category'] = $filter_type;
                 break;
             }
+
             $this->log(Zend_Log::DEBUG, sprintf('Active For Category Filters: %s', var_export($prepared_filters, true)));
-            return implode(';;', array_map(function ($v, $k)
-            {
-                return sprintf('%s:%s', $k, $v);
-            }
-            , $prepared_filters, array_keys($prepared_filters)));
+            return implode(
+                ';;', array_map(
+                    function ($v, $k) {
+                
+                    return sprintf('%s:%s', $k, $v);
+                    }, $prepared_filters, array_keys($prepared_filters)
+                )
+            );
         }
     }
     
@@ -248,18 +266,20 @@ class Klevu_Content_Helper_Data extends Mage_Core_Helper_Abstract
      *
      * @return array
      */
-    public function getCmsPageMap($store = null) {
+    public function getCmsPageMap($store = null) 
+    {
         $cmsmap = unserialize(Mage::getStoreConfig(static::XML_PATH_EXCLUDEDCMS_PAGES, $store));
         return (is_array($cmsmap)) ? $cmsmap : array();
     }
     
-    public function setCmsPageMap($map, $store = null) {
+    public function setCmsPageMap($map, $store = null) 
+    {
         unset($map["__empty"]);
         Mage::helper("klevu_search/config")->setStoreConfig(static::XML_PATH_EXCLUDEDCMS_PAGES, serialize($map), $store);
         return $this;
     }
-	
-	/** 
+    
+    /** 
      *  function starts here
      *  Remove html tags and replace it with space.
      *
@@ -268,21 +288,22 @@ class Klevu_Content_Helper_Data extends Mage_Core_Helper_Abstract
      * @return $string
      */
  
-	function ripTags($string) { 
-	 
-	    // ----- remove HTML TAGs ----- 
-	    $string = preg_replace ('/<[^>]*>/', ' ', $string); 
-	 
-	    // ----- remove control characters ----- 
-	    $string = str_replace("\r", '', $string);    
-	    $string = str_replace("\n", ' ', $string);   
-	    $string = str_replace("\t", ' ', $string);   
-	 
-	    // ----- remove multiple spaces ----- 
-	    $string = trim(preg_replace('/ {2,}/', ' ', $string));
-	 
-	    return $string; 
-	 
-	}
+    function ripTags($string) 
+    { 
+     
+        // ----- remove HTML TAGs ----- 
+        $string = preg_replace('/<[^>]*>/', ' ', $string); 
+     
+        // ----- remove control characters ----- 
+        $string = str_replace("\r", '', $string);    
+        $string = str_replace("\n", ' ', $string);   
+        $string = str_replace("\t", ' ', $string);   
+     
+        // ----- remove multiple spaces ----- 
+        $string = trim(preg_replace('/ {2,}/', ' ', $string));
+     
+        return $string; 
+     
+    }
 
 }

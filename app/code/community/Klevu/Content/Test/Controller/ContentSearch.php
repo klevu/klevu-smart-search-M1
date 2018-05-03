@@ -1,13 +1,15 @@
 <?php
 
-class Klevu_Content_Test_Controller_ContentSearch extends EcomDev_PHPUnit_Test_Case_Controller {
+class Klevu_Content_Test_Controller_ContentSearch extends EcomDev_PHPUnit_Test_Case_Controller
+{
 
    /**
      * Run search and make sure the page returns HTTP Code 200
      * @test
      * @loadFixture content_search_results
      */
-    public function testSearchResultsPageLoads() {
+    public function testSearchResultsPageLoads() 
+    {
         $this->mockAndDispatchSearchResults();
         // Assert the request was successful.
         $this->assertResponseHttpCode(200);
@@ -18,7 +20,8 @@ class Klevu_Content_Test_Controller_ContentSearch extends EcomDev_PHPUnit_Test_C
      * @return $this
      * @throws Zend_Controller_Exception
      */
-    protected function mockAndDispatchSearchResults($query = 'example', $response_type = 'successful', $pagination = 0) {
+    protected function mockAndDispatchSearchResults($query = 'example', $response_type = 'successful', $pagination = 0) 
+    {
         $this->mockApiAndCollection($query, $response_type, $pagination);
         // Set the search query
         $this->app()->getRequest()->setQuery('q', $query);
@@ -27,7 +30,8 @@ class Klevu_Content_Test_Controller_ContentSearch extends EcomDev_PHPUnit_Test_C
     }
     
     
-    protected function mockApiAndCollection($query = 'example', $response_type = 'successful', $pagination = 0) {
+    protected function mockApiAndCollection($query = 'example', $response_type = 'successful', $pagination = 0) 
+    {
         // Mock the API Action
         switch($response_type) {
             default:
@@ -35,8 +39,6 @@ class Klevu_Content_Test_Controller_ContentSearch extends EcomDev_PHPUnit_Test_C
                 $response = $this->getSearchResponse('search_response_success.xml');
                 break;
             case 'empty':
-                echo "new";
-                exit;
                 $response = $this->getSearchResponse('search_response_empty.xml');
                 break;
         }
@@ -52,7 +54,8 @@ class Klevu_Content_Test_Controller_ContentSearch extends EcomDev_PHPUnit_Test_C
      *
      * @return Klevu_Search_Model_Api_Response_Message
      */
-    protected function getSearchResponse($data_file) {
+    protected function getSearchResponse($data_file) 
+    {
         $model = Mage::getModel('klevu_search/api_response_search')->setRawResponse(
             new Zend_Http_Response(200, array(), $this->getDataFileContents($data_file))
         );
@@ -61,7 +64,8 @@ class Klevu_Content_Test_Controller_ContentSearch extends EcomDev_PHPUnit_Test_C
 
     }
 
-    protected function getDataFileContents($file) {
+    protected function getDataFileContents($file) 
+    {
         $directory_tree = array(
             Mage::getModuleDir('', 'Klevu_Content'),
             'Test',
@@ -87,7 +91,8 @@ class Klevu_Content_Test_Controller_ContentSearch extends EcomDev_PHPUnit_Test_C
      *
      * @return $this
      */
-    protected function replaceApiActionByMock($alias, $response) {
+    protected function replaceApiActionByMock($alias, $response) 
+    {
         $mock = $this->getModelMock($alias, array("execute"));
         $mock
             ->expects($this->any())

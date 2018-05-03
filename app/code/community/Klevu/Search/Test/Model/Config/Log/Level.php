@@ -1,11 +1,13 @@
 <?php
 
-class Klevu_Search_Test_Model_Config_Log_Level extends EcomDev_PHPUnit_Test_Case {
+class Klevu_Search_Test_Model_Config_Log_Level extends EcomDev_PHPUnit_Test_Case
+{
 
     /**
      * @test
      */
-    public function testGetValue() {
+    public function testGetValue() 
+    {
         $model = Mage::getModel('klevu_search/config_log_level');
 
         // Test the default value

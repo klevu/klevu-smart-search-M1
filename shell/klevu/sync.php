@@ -4,7 +4,8 @@ class Klevu_Shell_Sync extends Mage_Shell_Abstract
 {
     protected $_argname = array();
  
-    public function __construct() {
+    public function __construct() 
+    {
         parent::__construct();
  
         // Time limit to infinity
@@ -12,113 +13,114 @@ class Klevu_Shell_Sync extends Mage_Shell_Abstract
     }
  
     // Shell script point of entry
-    public function run() {
-		if(file_exists("klevu_running_index.lock")){
-			echo "Klevu indexing process is in running state";
-			return;
-		} 
-		
-		fopen("klevu_running_index.lock", "w");
-		
+    public function run() 
+    {
+        if(file_exists("klevu_running_index.lock")){
+            print_r("Klevu indexing process is in running state");
+            return;
+        } 
+        
+        fopen("klevu_running_index.lock", "w");
+        
         try {
             if ($this->getArg('updatesonly')) {
                 Mage::getModel('klevu_search/product_sync')->run();
                 Mage::getModel("content/content")->run();
-				$failedMessage = Mage::getSingleton('core/session')->getKlevuFailedFlag();
-				if(!empty($failedMessage) && $failedMessage == 1) {
-					echo "Product sync failed.Please consult klevu_search.log file for more information.";
-				} else {
-					echo "Data updates have been sent to Klevu";
-				}
+                $failedMessage = Mage::getSingleton('core/session')->getKlevuFailedFlag();
+                if(!empty($failedMessage) && $failedMessage == 1) {
+                    print_r("Product sync failed.Please consult klevu_search.log file for more information.");
+                } else {
+                    print_r("Data updates have been sent to Klevu.");
+                }
             } else if($this->getArg('alldata')) {
                 // Modified the updated date klevu_product_sync table
                 Mage::getModel('klevu_search/product_sync')->markAllProductsForUpdate();
                 // Run the product sync for all store
                 Mage::getModel('klevu_search/product_sync')->run();
                 Mage::getModel("content/content")->run();
-				if(!empty($failedMessage) && $failedMessage == 1) {
-					echo "Product sync failed.Please consult klevu_search.log file for more information.";
-				} else {
-					echo "All Data have been sent to Klevu";
-				}
-			} else if ($this->getArg('updatesonlywithindexing')) {
-				/* @var $indexCollection Mage_Index_Model_Resource_Process_Collection */
-				$indexCollection = Mage::getModel('index/process')->getCollection();
-				foreach ($indexCollection as $index) {
-					/* @var $index Mage_Index_Model_Process */
-					$index->reindexAll();
-				}
-				
-				Mage::getModel('klevu_search/product_sync')->run();
+                if(!empty($failedMessage) && $failedMessage == 1) {
+                    print_r("Product sync failed.Please consult klevu_search.log file for more information.");
+                } else {
+                    print_r("All Data have been sent to Klevu");
+                }
+            } else if ($this->getArg('updatesonlywithindexing')) {
+                /* @var $indexCollection Mage_Index_Model_Resource_Process_Collection */
+                $indexCollection = Mage::getModel('index/process')->getCollection();
+                foreach ($indexCollection as $index) {
+                    /* @var $index Mage_Index_Model_Process */
+                    $index->reindexAll();
+                }
+                
+                Mage::getModel('klevu_search/product_sync')->run();
                 Mage::getModel("content/content")->run();
-				$failedMessage = Mage::getSingleton('core/session')->getKlevuFailedFlag();
-				if(!empty($failedMessage) && $failedMessage == 1) {
-					echo "Product sync failed.Please consult klevu_search.log file for more information.";
-				} else {
-					echo "Data updates have been sent to Klevu";
-				}
-			} else if($this->getArg('alldatawithindexing')) {
-				
-				/* @var $indexCollection Mage_Index_Model_Resource_Process_Collection */
-				$indexCollection = Mage::getModel('index/process')->getCollection();
-				foreach ($indexCollection as $index) {
-					/* @var $index Mage_Index_Model_Process */
-					$index->reindexAll();
-				}
-				
-				// Modified the updated date klevu_product_sync table
+                $failedMessage = Mage::getSingleton('core/session')->getKlevuFailedFlag();
+                if(!empty($failedMessage) && $failedMessage == 1) {
+                    print_r("Product sync failed.Please consult klevu_search.log file for more information.");
+                } else {
+                    print_r("Data updates have been sent to Klevu");
+                }
+            } else if($this->getArg('alldatawithindexing')) {
+                /* @var $indexCollection Mage_Index_Model_Resource_Process_Collection */
+                $indexCollection = Mage::getModel('index/process')->getCollection();
+                foreach ($indexCollection as $index) {
+                    /* @var $index Mage_Index_Model_Process */
+                    $index->reindexAll();
+                }
+                
+                // Modified the updated date klevu_product_sync table
                 Mage::getModel('klevu_search/product_sync')->markAllProductsForUpdate();
                 // Run the product sync for all store
                 Mage::getModel('klevu_search/product_sync')->run();
                 Mage::getModel("content/content")->run();
-				if(!empty($failedMessage) && $failedMessage == 1) {
-					echo "Product sync failed.Please consult klevu_search.log file for more information.";
-				} else {
-					echo "All Data have been sent to Klevu";
-				}
-				
+                if(!empty($failedMessage) && $failedMessage == 1) {
+                    print_r("Product sync failed.Please consult klevu_search.log file for more information.");
+                } else {
+                    print_r("All Data have been sent to Klevu");
+                }
             } else if($this->getArg('refreshklevuimages')) {
-				$collections = Mage::getModel('catalog/product')->getCollection(); 
-				foreach($collections as $collection){
-					$stores = Mage::app()->getStores();
-					foreach ($stores as $store) {
-						$ProductModel = Mage::getModel('catalog/product')->setStoreId($store->getId())
-						->load($collection->getId());
-						$image = $ProductModel->getImage();
-						$this->createThumb($ProductModel->getImage());
-					}
-				}	
-			} else {
-                echo $this->usageHelp();
+                $collections = Mage::getModel('catalog/product')->getCollection(); 
+                foreach($collections as $collection){
+                    $stores = Mage::app()->getStores();
+                    foreach ($stores as $store) {
+                        $ProductModel = Mage::getModel('catalog/product')->setStoreId($store->getId())
+                        ->load($collection->getId());
+                        $image = $ProductModel->getImage();
+                        $this->createThumb($ProductModel->getImage());
+                    }
+                }    
+            } else {
+                print_r($this->usageHelp());
             }
         } catch(Exception $e){
-            echo $e->getMessage();
+            print_r($e->getMessage());
         }
-		
-		if(file_exists("klevu_running_index.lock")){
-			unlink("klevu_running_index.lock");
-		}
-		
-	
+        
+        if(file_exists("klevu_running_index.lock")){
+            unlink("klevu_running_index.lock");
+        }
+        
+    
     }
-	
-	
-	public function createThumb($image) {
-		$imageResized = Mage::getBaseDir('media').DS."klevu_images".$image;
-		$baseImageUrl = Mage::getBaseDir('media').DS."catalog".DS."product".$image;
-		if(file_exists($baseImageUrl)) {
-			list($width, $height, $type, $attr)= getimagesize($baseImageUrl); 
-			if($width > 200 && $height > 200) {
-				if(file_exists($imageResized)) {
-					if (!unlink('media/klevu_images'. $image))
-						{
-							Mage::helper('klevu_search')->log(Zend_Log::DEBUG, sprintf("Image Deleting Error:\n%s", $image));  
-						}
-				}
-				Mage::getModel("klevu_search/product_sync")->thumbImageObj($baseImageUrl,$imageResized);
-			}
-		}
-	}
+    
+    
+    public function createThumb($image) 
+    {
+        $imageResized = Mage::getBaseDir('media').DS."klevu_images".$image;
+        $baseImageUrl = Mage::getBaseDir('media').DS."catalog".DS."product".$image;
+        if(file_exists($baseImageUrl)) {
+            list($width, $height, $type, $attr)= getimagesize($baseImageUrl); 
+            if($width > 200 && $height > 200) {
+                if(file_exists($imageResized)) {
+                    if (!unlink('media/klevu_images'. $image))
+                        {
+                            Mage::helper('klevu_search')->log(Zend_Log::DEBUG, sprintf("Image Deleting Error:\n%s", $image));  
+                    }
+                }
+
+                Mage::getModel("klevu_search/product_sync")->thumbImageObj($baseImageUrl, $imageResized);
+            }
+        }
+    }
  
     // Usage instructions
     public function usageHelp()
@@ -143,4 +145,3 @@ $shell = new Klevu_Shell_Sync();
  
 // Initiate script
 $shell->run();
-?>

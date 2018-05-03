@@ -6,14 +6,16 @@
  * @method setMessage($message)
  * @method getMessage()
  */
-class Klevu_Search_Model_Api_Response extends Varien_Object {
+class Klevu_Search_Model_Api_Response extends Varien_Object
+{
 
     protected $raw_response;
 
     protected $successful;
     protected $xml;
 
-    public function _construct() {
+    public function _construct() 
+    {
         parent::_construct();
 
         $this->successful = false;
@@ -26,7 +28,8 @@ class Klevu_Search_Model_Api_Response extends Varien_Object {
      *
      * @return $this
      */
-    public function setRawResponse(Zend_Http_Response $response) {
+    public function setRawResponse(Zend_Http_Response $response) 
+    {
         $this->raw_response = $response;
 
         $this->parseRawResponse($response);
@@ -39,7 +42,8 @@ class Klevu_Search_Model_Api_Response extends Varien_Object {
      *
      * @return boolean
      */
-    public function isSuccessful() {
+    public function isSuccessful() 
+    {
         return $this->successful;
     }
 
@@ -48,7 +52,8 @@ class Klevu_Search_Model_Api_Response extends Varien_Object {
      *
      * @return SimpleXMLElement
      */
-    public function getXml() {
+    public function getXml() 
+    {
         return $this->xml;
     }
 
@@ -59,7 +64,8 @@ class Klevu_Search_Model_Api_Response extends Varien_Object {
      *
      * @return $this
      */
-    protected function parseRawResponse(Zend_Http_Response $response) {
+    protected function parseRawResponse(Zend_Http_Response $response) 
+    {
         if ($response->isSuccessful()) {
             $content = $response->getBody();
 
@@ -95,27 +101,29 @@ class Klevu_Search_Model_Api_Response extends Varien_Object {
                 case 503:
                     $message = "API server unavailable.";
                     break;
-				case 400:
+                case 400:
                     $message = "Klevu Product sync has issues indexing your products. <b>".Mage::helper('klevu_search')->getBaseDomain()."</b> is not listed as an allowed base URL for the Klevu Search API key <b>'".Mage::helper('klevu_search/config')->getJsApiKey()."'</b>. Please <a href='http://support.klevu.com/knowledgebase/base-urls
 ' target='_blank'>click here</a> for more information.";
-					break;
+                    break;
                 default:
                     $message = "Unexpected error.";
             }
-			if($response->getStatus() == 400) {
-				$this->setMessage(sprintf("%s", $message));
-				$storefromscope = Mage::app()->getStore(Mage::helper('klevu_search/config')->scopeId());
-				Mage::getModel('klevu_search/product_sync')->notify(
-					Mage::helper('klevu_search')->__(
-						"Product Sync failed for %s (%s): %s",
-						$storefromscope->getWebsite()->getName(),
-						$storefromscope->getName(),
-						$message
-					),null
-				);
-			} else {
-				$this->setMessage(sprintf("Failed to connect to Klevu: %s", $message));
-			}
+
+            if($response->getStatus() == 400) {
+                $this->setMessage(sprintf("%s", $message));
+                $storefromscope = Mage::app()->getStore(Mage::helper('klevu_search/config')->scopeId());
+                Mage::getModel('klevu_search/product_sync')->notify(
+                    Mage::helper('klevu_search')->__(
+                        "Product Sync failed for %s (%s): %s",
+                        $storefromscope->getWebsite()->getName(),
+                        $storefromscope->getName(),
+                        $message
+                    ), null
+                );
+            } else {
+                $this->setMessage(sprintf("Failed to connect to Klevu: %s", $message));
+            }
+
             Mage::helper('klevu_search')->log(Zend_Log::ERR, sprintf("Unsuccessful HTTP response: %s %s", $response->getStatus(), $response->responseCodeAsText($response->getStatus())));
         }
 

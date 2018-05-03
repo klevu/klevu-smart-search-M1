@@ -1,17 +1,20 @@
 <?php
 
-class Klevu_Search_Test_Helper_Config extends EcomDev_PHPUnit_Test_Case {
+class Klevu_Search_Test_Helper_Config extends EcomDev_PHPUnit_Test_Case
+{
 
     /** @var Klevu_Search_Helper_Config $helper */
     protected $helper;
 
-    protected function setUp() {
+    protected function setUp() 
+    {
         parent::setUp();
 
         $this->helper = Mage::helper("klevu_search/config");
     }
 
-    protected function tearDown() {
+    protected function tearDown() 
+    {
         $this->getConfig()->deleteConfig("klevu_search/general/enabled");
         $this->getConfig()->deleteConfig("klevu_search/general/js_api_key");
         $this->getConfig()->deleteConfig("klevu_search/general/rest_api_key");
@@ -30,7 +33,8 @@ class Klevu_Search_Test_Helper_Config extends EcomDev_PHPUnit_Test_Case {
      * @test
      * @loadFixture
      */
-    public function testIsExtensionEnabledEnabled() {
+    public function testIsExtensionEnabledEnabled() 
+    {
         $this->assertEquals(true, $this->helper->isExtensionEnabled());
     }
 
@@ -38,7 +42,8 @@ class Klevu_Search_Test_Helper_Config extends EcomDev_PHPUnit_Test_Case {
      * @test
      * @loadFixture
      */
-    public function testIsExtensionEnabledDisabled() {
+    public function testIsExtensionEnabledDisabled() 
+    {
         $this->assertEquals(false, $this->helper->isExtensionEnabled());
     }
 
@@ -46,7 +51,8 @@ class Klevu_Search_Test_Helper_Config extends EcomDev_PHPUnit_Test_Case {
     /**
      * @test
      */
-    public function testGetJsApiKeyProduction() {
+    public function testGetJsApiKeyProduction() 
+    {
         $api_key = 'klevu-14255510895641069';
 
         $this->getConfig()
@@ -61,7 +67,8 @@ class Klevu_Search_Test_Helper_Config extends EcomDev_PHPUnit_Test_Case {
     /**
      * @test
      */
-    public function testGetRestApiKeyProduction() {
+    public function testGetRestApiKeyProduction() 
+    {
         $api_key = 'a2xldnUtMTQyNTU1MTA4OTU2NDEwNjk6S2xldnUtZmo4NzQ3cHUxMg==';
 
         $this->getConfig()
@@ -76,7 +83,8 @@ class Klevu_Search_Test_Helper_Config extends EcomDev_PHPUnit_Test_Case {
     /**
      * @test
      */
-    public function testGetProductSyncEnabledFlagDefault() {
+    public function testGetProductSyncEnabledFlagDefault() 
+    {
         $this->assertEquals(1, $this->helper->getProductSyncEnabledFlag());
     }
 
@@ -84,7 +92,8 @@ class Klevu_Search_Test_Helper_Config extends EcomDev_PHPUnit_Test_Case {
      * @test
      * @loadFixture
      */
-    public function testGetProductSyncEnabledFlag() {
+    public function testGetProductSyncEnabledFlag() 
+    {
         $this->assertEquals(1, $this->helper->getProductSyncEnabledFlag());
     }
 
@@ -92,7 +101,8 @@ class Klevu_Search_Test_Helper_Config extends EcomDev_PHPUnit_Test_Case {
      * @test
      * @dataProvider dataProvider
      */
-    public function testIsProductSyncEnabled($config_flag, $result) {
+    public function testIsProductSyncEnabled($config_flag, $result) 
+    {
         
 
         $this->clearConfigCache();
@@ -107,7 +117,8 @@ class Klevu_Search_Test_Helper_Config extends EcomDev_PHPUnit_Test_Case {
     /**
      * @test
      */
-    public function testGetProductSyncFrequencyDefault() {
+    public function testGetProductSyncFrequencyDefault() 
+    {
         $this->assertEquals("0 * * * *", $this->helper->getProductSyncFrequency());
     }
 
@@ -115,14 +126,16 @@ class Klevu_Search_Test_Helper_Config extends EcomDev_PHPUnit_Test_Case {
      * @test
      * @loadFixture
      */
-    public function testGetProductSyncFrequency() {
+    public function testGetProductSyncFrequency() 
+    {
         $this->assertEquals("0 */5 * * *", $this->helper->getProductSyncFrequency());
     }
 
     /**
      * @test
      */
-    public function testGetAdditionalAttributesMap() {
+    public function testGetAdditionalAttributesMap() 
+    {
         $map = array(
             "_1" => array("klevu_attribute" => "k_test", "magento_attribute" => "m_test"),
             "_2" => array("klevu_attribute" => "k_other", "magento_attribute" => "m_something")
@@ -141,7 +154,8 @@ class Klevu_Search_Test_Helper_Config extends EcomDev_PHPUnit_Test_Case {
     /**
      * @test
      */
-    public function testGetOrderSyncEnabledFlagDefault() {
+    public function testGetOrderSyncEnabledFlagDefault() 
+    {
         $this->assertEquals(1, $this->helper->getOrderSyncEnabledFlag());
     }
 
@@ -149,7 +163,8 @@ class Klevu_Search_Test_Helper_Config extends EcomDev_PHPUnit_Test_Case {
      * @test
      * @loadFixture
      */
-    public function testGetOrderSyncEnabledFlag() {
+    public function testGetOrderSyncEnabledFlag() 
+    {
         $this->assertEquals(1, $this->helper->getOrderSyncEnabledFlag());
     }
 
@@ -157,7 +172,8 @@ class Klevu_Search_Test_Helper_Config extends EcomDev_PHPUnit_Test_Case {
      * @test
      * @dataProvider dataProvider
      */
-    public function testIsOrderSyncEnabled($config_flag, $result) {
+    public function testIsOrderSyncEnabled($config_flag, $result) 
+    {
         $this->getConfig()
             ->saveConfig("klevu_search/order_sync/enabled", $config_flag)
             ->cleanCache();
@@ -168,7 +184,8 @@ class Klevu_Search_Test_Helper_Config extends EcomDev_PHPUnit_Test_Case {
     /**
      * @test
      */
-    public function testGetOrderSyncFrequencyDefault() {
+    public function testGetOrderSyncFrequencyDefault() 
+    {
         $this->assertEquals("0 * * * *", $this->helper->getOrderSyncFrequency());
     }
 
@@ -176,14 +193,16 @@ class Klevu_Search_Test_Helper_Config extends EcomDev_PHPUnit_Test_Case {
      * @test
      * @loadFixture
      */
-    public function testGetOrderSyncFrequency() {
+    public function testGetOrderSyncFrequency() 
+    {
         $this->assertEquals("0 */3 * * *", $this->helper->getOrderSyncFrequency());
     }
 
     /**
      * @test
      */
-    public function testIsLoggingForced() {
+    public function testIsLoggingForced() 
+    {
         // Test the default value
         $this->assertEquals(true, $this->helper->isLoggingForced());
 
@@ -197,7 +216,8 @@ class Klevu_Search_Test_Helper_Config extends EcomDev_PHPUnit_Test_Case {
         $this->assertEquals(false, $this->helper->isLoggingForced());
     }
 
-    public function testGetLogLevel() {
+    public function testGetLogLevel() 
+    {
         // Test the default value
         $this->assertEquals(Zend_Log::INFO, $this->helper->getLogLevel(), "getLogLevel() returned an incorrect default value.");
 
@@ -216,7 +236,8 @@ class Klevu_Search_Test_Helper_Config extends EcomDev_PHPUnit_Test_Case {
      *
      * @param bool $result The result to be returned by the method
      */
-    protected function mockIsProductionDomain($result = false) {
+    protected function mockIsProductionDomain($result = false) 
+    {
         $data_helper = $this->getHelperMock('klevu_search', array("isProductionDomain"));
         $data_helper
             ->expects($this->any())
@@ -225,20 +246,23 @@ class Klevu_Search_Test_Helper_Config extends EcomDev_PHPUnit_Test_Case {
         $this->replaceByMock("helper", "klevu_search", $data_helper);
     }
 
-    protected function getConfig() {
+    protected function getConfig() 
+    {
         return Mage::app()->getConfig();
     }
 
     /**
      * Get around Magento's aggressive caching strategy and actually clear the configuration cache.
      */
-    protected function clearConfigCache() {
+    protected function clearConfigCache() 
+    {
         // Flush website and store configuration caches
         foreach (Mage::app()->getWebsites(true) as $website) {
             EcomDev_Utils_Reflection::setRestrictedPropertyValue(
                 $website, '_configCache', array()
             );
         }
+
         foreach (Mage::app()->getStores(true) as $store) {
             EcomDev_Utils_Reflection::setRestrictedPropertyValue(
                 $store, '_configCache', array()

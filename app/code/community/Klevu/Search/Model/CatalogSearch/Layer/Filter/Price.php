@@ -1,8 +1,10 @@
 <?php
 
-class Klevu_Search_Model_CatalogSearch_Layer_Filter_Price extends Mage_Catalog_Model_Layer_Filter_Price {
+class Klevu_Search_Model_CatalogSearch_Layer_Filter_Price extends Mage_Catalog_Model_Layer_Filter_Price
+{
 
-    public function apply(Zend_Controller_Request_Abstract $request, $filterBlock) {
+    public function apply(Zend_Controller_Request_Abstract $request, $filterBlock) 
+    {
         if (!Mage::helper('klevu_search/config')->isExtensionConfigured() || !Mage::helper('klevu_search')->isCatalogSearch()) {
             return parent::apply($request, $filterBlock);
         }
@@ -66,7 +68,8 @@ class Klevu_Search_Model_CatalogSearch_Layer_Filter_Price extends Mage_Catalog_M
         return $data;
     }
 
-    protected function _renderRangeLabel($fromPrice, $toPrice) {
+    protected function _renderRangeLabel($fromPrice, $toPrice) 
+    {
         //if (method_exists(get_parent_class($this), "_renderRangeLabel")) {
            // return parent::_renderRangeLabel($fromPrice, $toPrice);
        // } else {
@@ -80,7 +83,8 @@ class Klevu_Search_Model_CatalogSearch_Layer_Filter_Price extends Mage_Catalog_M
      * Returns array of price ranges from Klevu  [ 'label' => '10 - 25', 'count' => 1, 'selected' => false ]
      * @return array
      */
-    protected function _getKlevuPriceFilters() {
+    protected function _getKlevuPriceFilters() 
+    {
         /** @var Klevu_Search_Model_CatalogSearch_Resource_Fulltext_Collection $collection */
         $collection = $this->getLayer()->getProductCollection();
         $klevu_filters = $collection->getKlevuFilters();

@@ -1,6 +1,7 @@
 <?php
 
-abstract class Klevu_Search_Model_Sync extends Varien_Object {
+abstract class Klevu_Search_Model_Sync extends Varien_Object
+{
 
     /**
      * Limit the memory usage of the sync to 70% of the memory
@@ -31,13 +32,15 @@ abstract class Klevu_Search_Model_Sync extends Varien_Object {
      *
      * @return $this
      */
-    public function schedule($time = "now") {
+    public function schedule($time = "now") 
+    {
         if (! $time instanceof DateTime) {
             $time = new DateTime($time);
         } else {
             // Don't modify the original parameter
             $time = clone $time;
         }
+
         $time_str = $time->format("Y-m-d H:i:00");
         $before_str = $time->modify("15 minutes ago")->format("Y-m-d H:i:00");
         $after_str = $time->modify("30 minutes")->format("Y-m-d H:i:00"); // Modifying the same DateTime object, so it's -15 + 30 = +15 minutes
@@ -46,10 +49,12 @@ abstract class Klevu_Search_Model_Sync extends Varien_Object {
         $collection = Mage::getResourceModel('cron/schedule_collection')
             ->addFieldToFilter("job_code", $this->getJobCode())
             ->addFieldToFilter("status", Mage_Cron_Model_Schedule::STATUS_PENDING)
-            ->addFieldToFilter("scheduled_at", array(
+            ->addFieldToFilter(
+                "scheduled_at", array(
                 "from" => $before_str,
                 "to" => $after_str
-            ));
+                )
+            );
 
         if ($collection->getSize() == 0) {
             $schedule = Mage::getModel('cron/schedule');
@@ -76,7 +81,8 @@ abstract class Klevu_Search_Model_Sync extends Varien_Object {
      *
      * @return bool
      */
-    public function isRunning($copies = 1) {
+    public function isRunning($copies = 1) 
+    {
         $time = new Datetime("1 hour ago");
         $time = $time->format("Y-m-d H:i:00");
 
@@ -93,26 +99,32 @@ abstract class Klevu_Search_Model_Sync extends Varien_Object {
      *
      * @return bool
      */
-    protected function isBelowMemoryLimit() {
+    protected function isBelowMemoryLimit() 
+    {
         $helper = Mage::helper('klevu_search');
         $php_memory_limit = ini_get('memory_limit');
         $usage = memory_get_usage(true);
 
         if($php_memory_limit < 0){
-            $this->log(Zend_Log::DEBUG, sprintf(
-            "Memory usage: %s of %s.",
-            $helper->bytesToHumanReadable($usage),
-            $php_memory_limit));
+            $this->log(
+                Zend_Log::DEBUG, sprintf(
+                    "Memory usage: %s of %s.",
+                    $helper->bytesToHumanReadable($usage),
+                    $php_memory_limit
+                )
+            );
             return true;
         }
         
         $limit = $helper->humanReadableToBytes($php_memory_limit);
 
-        $this->log(Zend_Log::DEBUG, sprintf(
-            "Memory usage: %s of %s.",
-            $helper->bytesToHumanReadable($usage),
-            $helper->bytesToHumanReadable($limit)
-        ));
+        $this->log(
+            Zend_Log::DEBUG, sprintf(
+                "Memory usage: %s of %s.",
+                $helper->bytesToHumanReadable($usage),
+                $helper->bytesToHumanReadable($limit)
+            )
+        );
 
         if ($usage / $limit > static::MEMORY_LIMIT) {
             return false;
@@ -127,13 +139,15 @@ abstract class Klevu_Search_Model_Sync extends Varien_Object {
      *
      * @return bool true if a new process was scheduled, false otherwise.
      */
-    protected function rescheduleIfOutOfMemory() {
+    protected function rescheduleIfOutOfMemory() 
+    {
         if (!$this->isBelowMemoryLimit()) {
-			Mage::getSingleton('core/session')->setMemoryMessage("There may be few products left which will be synced during the next sync process.");
+            Mage::getSingleton('core/session')->setMemoryMessage("There may be few products left which will be synced during the next sync process.");
             $this->log(Zend_Log::INFO, "Memory limit reached. Stopped and rescheduled.");
-			if(Mage::helper("klevu_search/config")->isExternalCronEnabled()) {
-			    $this->schedule();
-			}
+            if(Mage::helper("klevu_search/config")->isExternalCronEnabled()) {
+                $this->schedule();
+            }
+
             return true;
         }
 
@@ -147,7 +161,8 @@ abstract class Klevu_Search_Model_Sync extends Varien_Object {
      *
      * @return string
      */
-    protected function getTableName($entity) {
+    protected function getTableName($entity) 
+    {
         return Mage::getModel('core/resource')->getTableName($entity);
     }
 
@@ -159,7 +174,8 @@ abstract class Klevu_Search_Model_Sync extends Varien_Object {
      *
      * @return $this
      */
-    protected function log($level, $message) {
+    protected function log($level, $message) 
+    {
         Mage::helper('klevu_search')->log($level, sprintf("[%s] %s", $this->getJobCode(), $message));
 
         return $this;

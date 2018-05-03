@@ -1,13 +1,15 @@
 <?php
 
-class Klevu_Search_Model_Api_Action_Idsearch extends Klevu_Search_Model_Api_Action {
+class Klevu_Search_Model_Api_Action_Idsearch extends Klevu_Search_Model_Api_Action
+{
     const ENDPOINT = "/cloud-search/n-search/idsearch";
     const METHOD   = "GET";
 
     const DEFAULT_REQUEST_MODEL = "klevu_search/api_request_get";
     const DEFAULT_RESPONSE_MODEL = "klevu_search/api_response_search";
 
-    protected function validate($parameters) {
+    protected function validate($parameters) 
+    {
         $errors = array();
 
         if (!isset($parameters['ticket']) || empty($parameters['ticket'])) {
@@ -39,6 +41,7 @@ class Klevu_Search_Model_Api_Action_Idsearch extends Klevu_Search_Model_Api_Acti
         if (count($errors) == 0) {
             return true;
         }
+
         return $errors;
     }
 
@@ -49,7 +52,8 @@ class Klevu_Search_Model_Api_Action_Idsearch extends Klevu_Search_Model_Api_Acti
      *
      * @return Klevu_Search_Model_Api_Response
      */
-    public function execute($parameters = array()) {
+    public function execute($parameters = array()) 
+    {
         $validation_result = $this->validate($parameters);
         if ($validation_result !== true) {
             return Mage::getModel('klevu_search/api_response_invalid')->setErrors($validation_result);

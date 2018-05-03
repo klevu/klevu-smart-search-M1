@@ -4,7 +4,7 @@ Intelligent cloud hosted site search with self-learning search technology. Guara
 
 <hr />
 <h2>Compatible with</h2>
-<li>CE 1.5, 1.6, 1.6.1, 1.6.2.0, 1.7, 1.8, 1.8.1, 1.9, 1.9.1, 1.9.2</li>
+<li>CE 1.5, 1.6, 1.6.1, 1.6.2.0, 1.7, 1.8, 1.8.1, 1.9, 1.9.1, 1.9.2, 1.9.3</li>
 <li>EE 1.12, 1.13, 1.13.1, 1.14, 1.14.1, 1.14.2</li>
 
 <hr />

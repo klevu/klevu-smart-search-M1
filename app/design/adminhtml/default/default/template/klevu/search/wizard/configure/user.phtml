@@ -1,8 +1,7 @@
 <?php /** @var Klevu_Search_Block_Adminhtml_Wizard_Configure_User $this */ ?>
 <?php echo $this->getChildHtml('messages');
 $request = $this->getRequest(); ?>
-<form id="klevu_search_wizard_configure_user_form" action="<?php echo $this->getFormActionUrl() ?>" method="POST">
-    <input type="hidden" name="form_key" value="<?php echo $this->getFormKey() ?>" />
+
     <fieldset class="fieldset">
 		<div class="kuWizardSteps">
 		<ol class="wizard-progress clearfix">
@@ -25,11 +24,13 @@ $request = $this->getRequest(); ?>
 		</ol>
 		</div>
 		
-        <table cellspacing="0" class="form-list" style="width:100%;">
+        <table cellspacing="0" class="form-list form-main-block" style="width:100%;">
             <tbody>
                 <tr>
                     <td>
-                        <table class="klevu_signup_form">
+					<form id="klevu_search_wizard_configure_user_form" action="<?php echo $this->getFormActionUrl() ?>" method="POST">
+                        <table class="klevu_signup_form" id="klevu_signup_form">
+    <input type="hidden" name="form_key" value="<?php echo $this->getFormKey() ?>" />
                             <tr>
                                 <td colspan="2">
                                     <div class="content-header">
@@ -69,11 +70,11 @@ $request = $this->getRequest(); ?>
                                 <td class="label"><label for="klevu_new_url"> <?php echo $this->__("Store URL:") ?><span class="required">&nbsp;<em>*</em></span></label></td>
                                 <td class="value"><input type="text" name="klevu_new_url" id="klevu_new_url" class="input-text" value="<?php echo $this->getStoreUrl() ?>" /></td>
                             </tr>
-                            <tr>
+                            <tr class="terms-row">
                                 <td class="label">&nbsp;</td>
                                 <td colspan="2"><input type="checkbox" name="termsconditions" id="termsOfService"> <label for="termsOfService">I accept <a href="#" onClick="termsofservice();" style="font-size:11px;"><?php echo $this->__("Terms of Service");?></a></label></td>
                             </tr>
-                            <tr>
+                            <tr class="button-row">
                                 <td class="label"></td>
                                 <td class="value" style="padding-right: 26px;">
                                     <div class="button-set">
@@ -81,10 +82,20 @@ $request = $this->getRequest(); ?>
                                     </div>
                                 </td>
                             </tr>
+							<tr>
+                                <td class="label"></td>
+                                <td class="value" style="padding-right: 26px;">
+                                    <?php echo __("Already have an account?");?><a href="#" class="formLink" onClick="hide_registration();">click here</a> <?php echo __("to login.") ?></a>
+                                </td>
+                            </tr>
+							
                         </table>
+						</form>
                     </td>
                     <td>
-                        <table class="klevu_signup_form">
+					<form id="klevu_search_wizard_configure_user_form" action="<?php echo $this->getFormActionUrl() ?>" method="POST">
+                        <table class="klevu_signup_form" id="klevu_login_form" style="display:none">
+							<input type="hidden" name="form_key" value="<?php echo $this->getFormKey() ?>" />
                             <tr>
                                 <td colspan="2">
                                     <div class="content-header">
@@ -109,10 +120,17 @@ $request = $this->getRequest(); ?>
                                     </div>
                                 </td>
                             </tr>
+							<tr>
+                                <td class="label"></td>
+                                <td class="value">
+                                   Don't have an account?<a class="formLink" href="#" onClick="hide_registration()">Sign up</a> </br>
+								   <a class="formLink" href="https://box.klevu.com/analytics/km?cmd=forgotPasswordPg" target="_blank">Forgot Password?</a>
+                                </td>
+                            </tr>
                         </table>
+						</form>
                     </td>
                 </tr>
             </tbody>
         </table>
     </fieldset>
-</form>

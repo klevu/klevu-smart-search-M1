@@ -1,13 +1,15 @@
 <?php
 
-class Klevu_Search_Model_System_Config_Source_Boosting_Attribute {
+class Klevu_Search_Model_System_Config_Source_Boosting_Attribute
+{
 
     /**
      * Fetch all integer and decimal attributes and return in as options array.
      *
      * @return array
      */
-    public function toOptionArray() {
+    public function toOptionArray() 
+    {
         $attributes = $this->getAttributeCollection();
         $boost_option = array(
             'value' => null,
@@ -36,7 +38,8 @@ class Klevu_Search_Model_System_Config_Source_Boosting_Attribute {
      *
      * @return Mage_Catalog_Model_Resource_Product_Attribute_Collection
      */
-    protected function getAttributeCollection() {
+    protected function getAttributeCollection() 
+    {
         /** @var Mage_Catalog_Model_Resource_Product_Attribute_Collection $collection */
         $collection = Mage::getResourceModel('catalog/product_attribute_collection');
 

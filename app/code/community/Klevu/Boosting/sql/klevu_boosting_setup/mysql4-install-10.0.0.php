@@ -16,4 +16,4 @@ CREATE TABLE IF NOT EXISTS `{$klevu_products_boosting}` (
 SQLTEXT;
 $installer->run($sql);
 $installer->endSetup();
-	 
+     

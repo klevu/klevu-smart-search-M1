@@ -1,12 +1,14 @@
 <?php
 
-class Klevu_Search_Test_Model_Api_Action_Addrecords extends Klevu_Search_Test_Model_Api_Test_Case {
+class Klevu_Search_Test_Model_Api_Action_Addrecords extends Klevu_Search_Test_Model_Api_Test_Case
+{
 
     /**
      * @test
      * @dataProvider dataProvider
      */
-    public function testValidateRequiredFields($field) {
+    public function testValidateRequiredFields($field) 
+    {
         $parameters = $this->getTestParameters();
         unset($parameters[$field]);
 
@@ -34,7 +36,8 @@ class Klevu_Search_Test_Model_Api_Action_Addrecords extends Klevu_Search_Test_Mo
      * @test
      * @dataProvider dataProvider
      */
-    public function testValidateRequiredFieldsRecords($field) {
+    public function testValidateRequiredFieldsRecords($field) 
+    {
         $parameters = $this->getTestParameters();
         unset($parameters['records'][0][$field]);
 
@@ -60,7 +63,8 @@ class Klevu_Search_Test_Model_Api_Action_Addrecords extends Klevu_Search_Test_Mo
      * @test
      * @dataProvider dataProvider
      */
-    public function testValidateRequiredFieldsRecordsOptional($field) {
+    public function testValidateRequiredFieldsRecordsOptional($field) 
+    {
         $parameters = $this->getTestParameters();
         $parameters['records'][0][$field] = "";
 
@@ -89,7 +93,8 @@ class Klevu_Search_Test_Model_Api_Action_Addrecords extends Klevu_Search_Test_Mo
      * @test
      * @dataProvider dataProvider
      */
-    public function testValidateRequiredFieldsRecordsEmpty($field) {
+    public function testValidateRequiredFieldsRecordsEmpty($field) 
+    {
         $parameters = $this->getTestParameters();
         $parameters['records'][0][$field] = "";
 
@@ -115,7 +120,8 @@ class Klevu_Search_Test_Model_Api_Action_Addrecords extends Klevu_Search_Test_Mo
      * @test
      * @dataProvider dataProvider
      */
-    public function testValidateRequiredFieldsRecordsAllowedEmpty($field) {
+    public function testValidateRequiredFieldsRecordsAllowedEmpty($field) 
+    {
         $parameters = $this->getTestParameters();
         $parameters['records'][0][$field] = "";
 
@@ -140,7 +146,8 @@ class Klevu_Search_Test_Model_Api_Action_Addrecords extends Klevu_Search_Test_Mo
         );
     }
 
-    protected function getTestParameters() {
+    protected function getTestParameters() 
+    {
         return array(
             'sessionId' => "Klevu-session-1234567890",
             'records' => array(

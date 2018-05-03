@@ -1,11 +1,13 @@
 <?php
 
-class Klevu_Search_Test_Model_Api_Action_Producttracking extends Klevu_Search_Test_Model_Api_Test_Case {
+class Klevu_Search_Test_Model_Api_Action_Producttracking extends Klevu_Search_Test_Model_Api_Test_Case
+{
 
     /**
      * @test
      */
-    public function testValidate() {
+    public function testValidate() 
+    {
         $parameters = $this->getTestParameters();
 
         $response = Mage::getModel('klevu_search/api_response');
@@ -28,7 +30,8 @@ class Klevu_Search_Test_Model_Api_Action_Producttracking extends Klevu_Search_Te
      * @test
      * @dataProvider dataProvider
      */
-    public function testValidateRequiredFields($field) {
+    public function testValidateRequiredFields($field) 
+    {
         $parameters = $this->getTestParameters();
         unset($parameters[$field]);
 
@@ -57,11 +60,13 @@ class Klevu_Search_Test_Model_Api_Action_Producttracking extends Klevu_Search_Te
      *
      * @return Klevu_Search_Model_Api_Action_Producttracking
      */
-    protected function getModel() {
+    protected function getModel() 
+    {
         return Mage::getModel('klevu_search/api_action_producttracking');
     }
 
-    protected function getTestParameters() {
+    protected function getTestParameters() 
+    {
         return array(
             'klevu_apiKey'    => "test-api-key",
             'klevu_type'      => "checkout",

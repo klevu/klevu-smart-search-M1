@@ -1,11 +1,13 @@
 <?php
 
-class Klevu_Search_Test_Model_Api_Action extends Klevu_Search_Test_Model_Api_Test_Case {
+class Klevu_Search_Test_Model_Api_Action extends Klevu_Search_Test_Model_Api_Test_Case
+{
 
     /**
      * @test
      */
-    public function testExecute() {
+    public function testExecute() 
+    {
         $response_model = Mage::getModel('klevu_search/api_response');
         $response_model
             ->setRawResponse(new Zend_Http_Response(200, array(), "Test response"));
@@ -27,7 +29,8 @@ class Klevu_Search_Test_Model_Api_Action extends Klevu_Search_Test_Model_Api_Tes
     /**
      * @test
      */
-    public function testValidate() {
+    public function testValidate() 
+    {
         $errors = array("Test error", "Another test error");
 
         $action = $this->getModelMock('klevu_search/api_action', array("validate"));

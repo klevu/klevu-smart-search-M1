@@ -1,13 +1,15 @@
 <?php
 
-class Klevu_Content_Block_Adminhtml_Wizard_Configure_Store extends Mage_Adminhtml_Block_Template {
+class Klevu_Content_Block_Adminhtml_Wizard_Configure_Store extends Mage_Adminhtml_Block_Template
+{
 
     /**
      * Return the submit URL for the store configuration form.
      *
      * @return string
      */
-    protected function getFormActionUrl() {
+    protected function getFormActionUrl() 
+    {
         return $this->getUrl("adminhtml/klevu_search_wizard/configure_store_post");
     }
 
@@ -17,7 +19,8 @@ class Klevu_Content_Block_Adminhtml_Wizard_Configure_Store extends Mage_Adminhtm
      *
      * @return array
      */
-    protected function getStoreSelectData() {
+    protected function getStoreSelectData() 
+    {
         $stores = Mage::app()->getStores(false);
         $config = Mage::helper("klevu_search/config");
 
@@ -36,6 +39,7 @@ class Klevu_Content_Block_Adminhtml_Wizard_Configure_Store extends Mage_Adminhtm
             if (!isset($data[$website])) {
                 $data[$website] = array();
             }
+
             if (!isset($data[$website][$group])) {
                 $data[$website][$group] = array();
             }
@@ -52,8 +56,10 @@ class Klevu_Content_Block_Adminhtml_Wizard_Configure_Store extends Mage_Adminhtm
      *
      * @return array
      */
-    protected function getCmsMappingsHtml() {
-        $element = new Varien_Data_Form_Element_Text(array(
+    protected function getCmsMappingsHtml() 
+    {
+        $element = new Varien_Data_Form_Element_Text(
+            array(
             "name" => "excludedpages",
             "label" => $this->__("Exclude CMS pages from search"),
             "tooltip" => "",
@@ -63,7 +69,8 @@ class Klevu_Content_Block_Adminhtml_Wizard_Configure_Store extends Mage_Adminhtm
             "class"   => "",
             "can_use_default_value" => false,
             "can_use_website_value" => false
-        ));
+            )
+        );
         $element->setForm(new Varien_Data_Form());
 
         /** @var Klevu_Search_Block_Adminhtml_Form_Field_Attribute_Mappings $renderer */

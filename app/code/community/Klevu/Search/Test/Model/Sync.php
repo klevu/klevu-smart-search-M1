@@ -1,10 +1,12 @@
 <?php
 
-class Klevu_Search_Test_Model_Sync extends EcomDev_PHPUnit_Test_Case {
+class Klevu_Search_Test_Model_Sync extends EcomDev_PHPUnit_Test_Case
+{
 
     const TEST_JOB_CODE = "klevu_search_test_job";
 
-    protected function tearDown() {
+    protected function tearDown() 
+    {
         $collection = $this->getTestCronScheduleCollection();
         foreach ($collection as $item) {
             $item->delete();
@@ -17,7 +19,8 @@ class Klevu_Search_Test_Model_Sync extends EcomDev_PHPUnit_Test_Case {
      * @test
      * @dataProvider dataProvider
      */
-    public function testSchedule($time) {
+    public function testSchedule($time) 
+    {
         $model = $this->getTestModel();
 
         $time = new DateTime($time);
@@ -36,7 +39,8 @@ class Klevu_Search_Test_Model_Sync extends EcomDev_PHPUnit_Test_Case {
     /**
      * @test
      */
-    public function testAlreadyScheduled() {
+    public function testAlreadyScheduled() 
+    {
         $model = $this->getTestModel();
         $connection = Mage::getModel('core/resource')->getConnection("core_write");
         $count_sql = $this->getTestCronScheduleCollection()->getSelectCountSql();
@@ -44,36 +48,47 @@ class Klevu_Search_Test_Model_Sync extends EcomDev_PHPUnit_Test_Case {
         $time = new DateTime("now");
 
         $model->schedule($time);
-        $this->assertEquals(1, $connection->fetchOne($count_sql),
-            "Failed to assert that schedule() adds a cron entry to the schedule.");
+        $this->assertEquals(
+            1, $connection->fetchOne($count_sql),
+            "Failed to assert that schedule() adds a cron entry to the schedule."
+        );
 
         $before = clone $time;
         $before->modify("15 minutes ago");
         $model->schedule($before);
-        $this->assertEquals(1, $connection->fetchOne($count_sql),
-            "Failed to assert that schedule() does not add a new cron entry if one is already scheduled for up to 15 minutes later.");
+        $this->assertEquals(
+            1, $connection->fetchOne($count_sql),
+            "Failed to assert that schedule() does not add a new cron entry if one is already scheduled for up to 15 minutes later."
+        );
 
         $after = clone $time;
         $after->modify("15 minutes");
         $model->schedule($after);
-        $this->assertEquals(1, $connection->fetchOne($count_sql),
-            "Failed to assert that schedule() does not add a new cron entry if one is already scheduled for up to 15 minutes earlier.");
+        $this->assertEquals(
+            1, $connection->fetchOne($count_sql),
+            "Failed to assert that schedule() does not add a new cron entry if one is already scheduled for up to 15 minutes earlier."
+        );
 
         $before->modify("5 minutes ago");
         $model->schedule($before);
-        $this->assertEquals(2, $connection->fetchOne($count_sql),
-            "Failed to assert that schedule() can add a new cron entry 20 minutes before an existing one.");
+        $this->assertEquals(
+            2, $connection->fetchOne($count_sql),
+            "Failed to assert that schedule() can add a new cron entry 20 minutes before an existing one."
+        );
 
         $after->modify("5 minutes");
         $model->schedule($after);
-        $this->assertEquals(3, $connection->fetchOne($count_sql),
-            "Failed to assert that schedule() can add a new cron entry 20 minutes after an existing one.");
+        $this->assertEquals(
+            3, $connection->fetchOne($count_sql),
+            "Failed to assert that schedule() can add a new cron entry 20 minutes after an existing one."
+        );
     }
 
     /**
      * @test
      */
-    public function testIsRunning() {
+    public function testIsRunning() 
+    {
         $model = $this->getTestModel();
 
         $now = new DateTime();
@@ -109,7 +124,8 @@ class Klevu_Search_Test_Model_Sync extends EcomDev_PHPUnit_Test_Case {
      *
      * @return PHPUnit_Framework_MockObject_MockObject
      */
-    protected function getTestModel() {
+    protected function getTestModel() 
+    {
         $mock = $this->getMockForAbstractClass(Mage::app()->getConfig()->getModelClassName("klevu_search/sync"));
         $mock
             ->expects($this->any())
@@ -123,7 +139,8 @@ class Klevu_Search_Test_Model_Sync extends EcomDev_PHPUnit_Test_Case {
      *
      * @return Mage_Cron_Model_Mysql4_Schedule_Collection
      */
-    protected function getTestCronScheduleCollection() {
+    protected function getTestCronScheduleCollection() 
+    {
         return Mage::getResourceModel('cron/schedule_collection')
             ->addFieldToFilter("job_code", static::TEST_JOB_CODE);
     }

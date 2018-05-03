@@ -1,13 +1,15 @@
 <?php
 
-class Klevu_Learning_Model_Api_Action_Boostingscore extends Klevu_Search_Model_Api_Action {
+class Klevu_Learning_Model_Api_Action_Boostingscore extends Klevu_Search_Model_Api_Action
+{
 
     const ENDPOINT = "/cloud-search/learningNavigation";
     const METHOD   = "POST";
     const DEFAULT_REQUEST_MODEL  = "klevu_search/api_request_post";
     const DEFAULT_RESPONSE_MODEL = "klevu_search/api_response_data";
     
-    protected function validate($parameters) {
+    protected function validate($parameters) 
+    {
 
         $errors = array();
        
@@ -26,6 +28,7 @@ class Klevu_Learning_Model_Api_Action_Boostingscore extends Klevu_Search_Model_A
         if (count($errors) == 0) {
             return true;
         }
+
         return $errors;
     }    
     /**
@@ -35,7 +38,8 @@ class Klevu_Learning_Model_Api_Action_Boostingscore extends Klevu_Search_Model_A
      *
      * @return Klevu_Search_Model_Api_Response
      */
-    public function execute($parameters = array()) {
+    public function execute($parameters = array()) 
+    {
         
         $validation_result = $this->validate($parameters);
         if ($validation_result !== true) {

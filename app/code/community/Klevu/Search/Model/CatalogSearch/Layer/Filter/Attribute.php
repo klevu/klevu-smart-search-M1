@@ -1,7 +1,8 @@
 <?php
 
 
-class Klevu_Search_Model_CatalogSearch_Layer_Filter_Attribute extends Mage_CatalogSearch_Model_Layer_Filter_Attribute {
+class Klevu_Search_Model_CatalogSearch_Layer_Filter_Attribute extends Mage_CatalogSearch_Model_Layer_Filter_Attribute
+{
 
     /**
      * Prepare and fetch an attributes options.
@@ -26,6 +27,7 @@ class Klevu_Search_Model_CatalogSearch_Layer_Filter_Attribute extends Mage_Catal
             if (!isset($klevu_filters[$this->_requestVar])) {
                 return array(); // No results found for filter in Klevu response. Return empty array.
             }
+
             if ($this->getLayer()->getProductCollection()->count() == 0) {
                 return array(); // No visible results found in search
             }
@@ -38,9 +40,11 @@ class Klevu_Search_Model_CatalogSearch_Layer_Filter_Attribute extends Mage_Catal
                 if (!$klevu_option) {
                     continue; // Skip record since klevu option was not found.
                 }
+
                 if (is_array($option['value'])) {
                     continue;
                 }
+
                 if (Mage::helper('core/string')->strlen($option['value'])) {
                     // Check filter type
                     if ($this->_getIsFilterableAttribute($attribute) == self::OPTIONS_ONLY_WITH_RESULTS) {
@@ -69,6 +73,7 @@ class Klevu_Search_Model_CatalogSearch_Layer_Filter_Attribute extends Mage_Catal
             $tags = $this->getLayer()->getStateTags($tags);
             $this->getLayer()->getAggregator()->saveCacheData($data, $key, $tags);
         }
+
         return $data;
     }
 
@@ -80,7 +85,8 @@ class Klevu_Search_Model_CatalogSearch_Layer_Filter_Attribute extends Mage_Catal
      * @param $klevu_attribute
      * @return array|bool
      */
-    protected function _findKlevuOption($option, $klevu_attribute) {
+    protected function _findKlevuOption($option, $klevu_attribute) 
+    {
 
         foreach ($klevu_attribute['options'] as $klevu_option) {
             if(strtolower($option['label']) == strtolower($klevu_option['label'])) {
@@ -94,7 +100,8 @@ class Klevu_Search_Model_CatalogSearch_Layer_Filter_Attribute extends Mage_Catal
      * Returns array of attribute filters from Klevu  [ 'label' => 'T-Shirts', 'count' => 1, 'selected' => false ]
      * @return array
      */
-    protected function _getKlevuAttributeFilters() {
+    protected function _getKlevuAttributeFilters() 
+    {
         /** @var Klevu_Search_Model_CatalogSearch_Resource_Fulltext_Collection $collection */
         $collection = $this->getLayer()->getProductCollection();
         return $collection->getKlevuFilters();

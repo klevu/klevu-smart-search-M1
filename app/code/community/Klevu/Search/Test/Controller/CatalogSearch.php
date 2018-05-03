@@ -1,11 +1,13 @@
 <?php
 
-class Klevu_Search_Test_Controller_CatalogSearch extends EcomDev_PHPUnit_Test_Case_Controller {
+class Klevu_Search_Test_Controller_CatalogSearch extends EcomDev_PHPUnit_Test_Case_Controller
+{
 
     /** @var  Klevu_Search_Model_CatalogSearch_Resource_Fulltext_Collection */
     protected $collection;
 
-    protected function tearDown() {
+    protected function tearDown() 
+    {
         $this->getLayout()->reset();
         $this->collection = null;
         Mage::unregister('_singleton/catalogsearch/layer');
@@ -18,7 +20,8 @@ class Klevu_Search_Test_Controller_CatalogSearch extends EcomDev_PHPUnit_Test_Ca
         parent::tearDown();
     }
 
-    protected function setUp() {
+    protected function setUp() 
+    {
         $this->getLayout()->reset();
         // Make sure the 'price' attribute is set to is_filterable_in_search
         $price = $this->getPriceAttribute();
@@ -33,7 +36,8 @@ class Klevu_Search_Test_Controller_CatalogSearch extends EcomDev_PHPUnit_Test_Ca
      * @test
      * @loadFixture search_results
      */
-    public function testSearchResultsPageLoads() {
+    public function testSearchResultsPageLoads() 
+    {
         $this->mockAndDispatchSearchResults();
         // Assert the request was successful.
         $this->assertResponseHttpCode(200);
@@ -44,7 +48,8 @@ class Klevu_Search_Test_Controller_CatalogSearch extends EcomDev_PHPUnit_Test_Ca
      * @test
      * @loadFixture search_results
      */
-    public function testExpectedLayoutBlocksAreRendered() {
+    public function testExpectedLayoutBlocksAreRendered() 
+    {
         $this->mockAndDispatchSearchResults();
         // Assert that the left nav (layered navigation) and the search results have been rendered.
         $this->assertLayoutBlockRendered('catalogsearch.leftnav');
@@ -57,7 +62,8 @@ class Klevu_Search_Test_Controller_CatalogSearch extends EcomDev_PHPUnit_Test_Ca
      * @test
      * @loadFixture search_results
      */
-    public function testLayeredNavigationHasFilters() {
+    public function testLayeredNavigationHasFilters() 
+    {
         $this->mockAndDispatchSearchResults();
 
         // Load the layered navigation block
@@ -85,7 +91,8 @@ class Klevu_Search_Test_Controller_CatalogSearch extends EcomDev_PHPUnit_Test_Ca
      * @test
      * @loadFixture search_results
      */
-    public function testSearchResultsAreCorrect() {
+    public function testSearchResultsAreCorrect() 
+    {
         $this->mockApiAndCollection();
         $collection = $this->collection;
         // Assert that the number of results is correct.
@@ -107,7 +114,8 @@ class Klevu_Search_Test_Controller_CatalogSearch extends EcomDev_PHPUnit_Test_Ca
      * @test
      * @loadFixture search_results
      */
-    public function testSearchCategoryFilterIsApplied() {
+    public function testSearchCategoryFilterIsApplied() 
+    {
         $this->app()->getRequest()->setQuery('cat', '2');
         $this->mockAndDispatchSearchResults();
 
@@ -120,7 +128,8 @@ class Klevu_Search_Test_Controller_CatalogSearch extends EcomDev_PHPUnit_Test_Ca
      * @test
      * @loadFixture search_results
      */
-    public function testSearchPriceFilterIsApplied() {
+    public function testSearchPriceFilterIsApplied() 
+    {
         $this->app()->getRequest()->setQuery('price', '0-49');
         $this->mockAndDispatchSearchResults();
 
@@ -133,7 +142,8 @@ class Klevu_Search_Test_Controller_CatalogSearch extends EcomDev_PHPUnit_Test_Ca
      * @test
      * @loadFixture search_results
      */
-    public function testMultipleFiltersCanBeApplied() {
+    public function testMultipleFiltersCanBeApplied() 
+    {
         $this->app()->getRequest()->setQuery(array('price' => '0-49', 'cat' => '23'));
         $this->mockAndDispatchSearchResults();
 
@@ -145,7 +155,8 @@ class Klevu_Search_Test_Controller_CatalogSearch extends EcomDev_PHPUnit_Test_Ca
      * @test
      * @loadFixture search_results
      */
-    public function testChangingSortOrderToPriceDesc() {
+    public function testChangingSortOrderToPriceDesc() 
+    {
         $this->app()->getRequest()->setQuery(array('dir' => 'desc', 'order' => 'price'));
         $this->mockAndDispatchSearchResults('example', 'sorted');
         $result_block = $this->getSearchResultsBlock();
@@ -162,6 +173,7 @@ class Klevu_Search_Test_Controller_CatalogSearch extends EcomDev_PHPUnit_Test_Ca
         foreach($product_collection as $product) {
             $actual_product_ids[] = $product->getId();
         }
+
         $this->assertEquals($expected_product_ids, $actual_product_ids, 'Products are in the wrong order');
     }
 
@@ -170,7 +182,8 @@ class Klevu_Search_Test_Controller_CatalogSearch extends EcomDev_PHPUnit_Test_Ca
      * @test
      * @loadFixture search_results
      */
-    public function testSecondPageOfResultsExists() {
+    public function testSecondPageOfResultsExists() 
+    {
         // Default: page size = 9, set the page to page 2, meaning we expect to see results from 10+
         $this->getRequest()->setQuery('p', '2');
         // Our response will return the 10th product, our response contains a total result size of 10.
@@ -193,7 +206,8 @@ class Klevu_Search_Test_Controller_CatalogSearch extends EcomDev_PHPUnit_Test_Ca
      * @test
      * @loadFixture search_results
      */
-    public function testNoResults() {
+    public function testNoResults() 
+    {
         $this->mockAndDispatchSearchResults('returnsnothing', 'empty');
 
         $result_block = $this->getSearchResultsBlock();
@@ -207,7 +221,8 @@ class Klevu_Search_Test_Controller_CatalogSearch extends EcomDev_PHPUnit_Test_Ca
      * Return the search result list block
      * @return Mage_Catalog_Block_Product_List
      */
-    protected function getSearchResultsBlock() {
+    protected function getSearchResultsBlock() 
+    {
         return $this->app()->getLayout()->getBlock('search_result_list');
     }
 
@@ -215,7 +230,8 @@ class Klevu_Search_Test_Controller_CatalogSearch extends EcomDev_PHPUnit_Test_Ca
      * Get all applied filters
      * @return array
      */
-    protected function getAppliedFilters() {
+    protected function getAppliedFilters() 
+    {
 
         /** @var Klevu_Search_Block_CatalogSearch_Layer $layer_nav */
         $layer_nav = $this->app()->getLayout()->getBlock('catalogsearch.leftnav');
@@ -226,7 +242,8 @@ class Klevu_Search_Test_Controller_CatalogSearch extends EcomDev_PHPUnit_Test_Ca
      * Fetch the first applied filter
      * @return Mage_Catalog_Model_Layer_Filter_Item
      */
-    protected function getFirstAppliedFilter() {
+    protected function getFirstAppliedFilter() 
+    {
         $filters = $this->getAppliedFilters();
         return $filters[0];
     }
@@ -236,7 +253,8 @@ class Klevu_Search_Test_Controller_CatalogSearch extends EcomDev_PHPUnit_Test_Ca
      * @return $this
      * @throws Zend_Controller_Exception
      */
-    protected function mockAndDispatchSearchResults($query = 'example', $response_type = 'successful', $pagination = 0) {
+    protected function mockAndDispatchSearchResults($query = 'example', $response_type = 'successful', $pagination = 0) 
+    {
         $this->mockApiAndCollection($query, $response_type, $pagination);
         // Set the search query
         $this->getRequest()->setQuery('q', $query);
@@ -245,7 +263,8 @@ class Klevu_Search_Test_Controller_CatalogSearch extends EcomDev_PHPUnit_Test_Ca
         return $this->dispatch('catalogsearch/result/index');
     }
 
-    protected function mockApiAndCollection($query = 'example', $response_type = 'successful', $pagination = 0) {
+    protected function mockApiAndCollection($query = 'example', $response_type = 'successful', $pagination = 0) 
+    {
         // Mock the API Action
         switch($response_type) {
             default:
@@ -292,7 +311,8 @@ class Klevu_Search_Test_Controller_CatalogSearch extends EcomDev_PHPUnit_Test_Ca
      *
      * @return $this
      */
-    protected function replaceApiActionByMock($alias, $response) {
+    protected function replaceApiActionByMock($alias, $response) 
+    {
         $mock = $this->getModelMock($alias, array("execute"));
         $mock
             ->expects($this->any())
@@ -312,7 +332,8 @@ class Klevu_Search_Test_Controller_CatalogSearch extends EcomDev_PHPUnit_Test_Ca
      *
      * @return Klevu_Search_Model_Api_Response_Message
      */
-    protected function getSearchResponse($data_file) {
+    protected function getSearchResponse($data_file) 
+    {
         $model = Mage::getModel('klevu_search/api_response_search')->setRawResponse(
             new Zend_Http_Response(200, array(), $this->getDataFileContents($data_file))
         );
@@ -321,7 +342,8 @@ class Klevu_Search_Test_Controller_CatalogSearch extends EcomDev_PHPUnit_Test_Ca
 
     }
 
-    protected function getDataFileContents($file) {
+    protected function getDataFileContents($file) 
+    {
         $directory_tree = array(
             Mage::getModuleDir('', 'Klevu_Search'),
             'Test',
@@ -336,7 +358,8 @@ class Klevu_Search_Test_Controller_CatalogSearch extends EcomDev_PHPUnit_Test_Ca
         return file_get_contents($file_path);
     }
 
-    protected function getPriceAttribute() {
+    protected function getPriceAttribute() 
+    {
         return Mage::getModel('eav/entity_attribute')->loadByCode(Mage_Catalog_Model_Product::ENTITY, 'price');
     }
 }

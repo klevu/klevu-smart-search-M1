@@ -8,12 +8,14 @@ class Klevu_Boosting_Model_Mysql4_Boost extends Mage_Core_Model_Mysql4_Abstract
     public function updateMatchingIds($matchingids, $id)
     {
         $write = $this->_getWriteAdapter();
-        $write->update(Mage::getSingleton('core/resource')->getTableName('boosting/boost') , array(
+        $write->update(
+            Mage::getSingleton('core/resource')->getTableName('boosting/boost'), array(
             "matchingids" => $matchingids
-        ) , "id=" . $id);
+            ), "id=" . $id
+        );
     }
-	
-	public function getDeletedMatchingIds($id)
+    
+    public function getDeletedMatchingIds($id)
     {
         $adapter = $this->_getReadAdapter();
         $bind    = array('id'  => $id);
@@ -24,7 +26,8 @@ class Klevu_Boosting_Model_Mysql4_Boost extends Mage_Core_Model_Mysql4_Abstract
     }
     
     // this function included for magento 1.5 and 1.6 only 
-    public function updateRuleProductData(){
+    public function updateRuleProductData()
+    {
     
     }
 }

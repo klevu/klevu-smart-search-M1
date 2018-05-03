@@ -1,6 +1,7 @@
 <?php
 
-class Klevu_Search_Block_Adminhtml_System_Config_Form_Field extends Mage_Adminhtml_Block_System_Config_Form_Field {
+class Klevu_Search_Block_Adminhtml_System_Config_Form_Field extends Mage_Adminhtml_Block_System_Config_Form_Field
+{
     
     /**
      * Enter description here...
@@ -8,7 +9,8 @@ class Klevu_Search_Block_Adminhtml_System_Config_Form_Field extends Mage_Adminht
      * @param Varien_Data_Form_Element_Abstract $element
      * @return string
      */
-    public function render(Varien_Data_Form_Element_Abstract $element) {
+    public function render(Varien_Data_Form_Element_Abstract $element) 
+    {
         if (version_compare(Mage::getVersion(), '1.7.0.1', '<')) {
             if (Mage::app()->getRequest()->getParam('section') == "klevu_search") {
                 $id       = $element->getHtmlId();
@@ -21,15 +23,18 @@ class Klevu_Search_Block_Adminhtml_System_Config_Form_Field extends Mage_Adminht
                         if (!empty($features['upgrade_message'])) {
                             $upgrade_text .= $features['upgrade_message'];
                         }
+
                         if (!empty($features['upgrade_label'])) {
                             $upgrade_text .= "<br/><button type='button' onClick=upgradeLink('" . $features["upgrade_url"] . "')>" . $features['upgrade_label'] . "</button>";
                         }
+
                         $upgrade_text .= "</div>";
                     }
                 } else {
                     $style        = '';
                     $upgrade_text = '';
                 }
+
                 $useContainerId     = $element->getData('use_container_id');
                 $html               = '<tr id="row_' . $id . '">' . '<td class="label"><label for="' . $id . '" ' . $style . '>' . $element->getLabel() . '</label>' . $upgrade_text . '</td>';
                 // $isDefault = !$this->getRequest()->getParam('website') && !$this->getRequest()->getParam('store');
@@ -45,22 +50,26 @@ class Klevu_Search_Block_Adminhtml_System_Config_Form_Field extends Mage_Adminht
                     $addInheritCheckbox = true;
                     $checkboxLabel      = Mage::helper('adminhtml')->__('Use Default');
                 }
+
                 if ($addInheritCheckbox) {
                     $inherit = $element->getInherit() == 1 ? 'checked="checked"' : '';
                     if ($inherit) {
                         $element->setDisabled(true);
                     }
                 }
+
                 // Code added by klevu
                 if (!empty($features)) {
                     $element->setDisabled(true);
                     $element->setValue(0);
                 }
+
                 $html .= '<td class="value">';
                 $html .= $this->_getElementHtml($element);
                 if ($element->getComment()) {
                     $html .= '<p class="note"><span>' . $element->getComment() . '</span></p>';
                 }
+
                 $html .= '</td>';
                 if ($addInheritCheckbox) {
                     $defText = $element->getDefaultValue();
@@ -76,8 +85,10 @@ class Klevu_Search_Block_Adminhtml_System_Config_Form_Field extends Mage_Adminht
                                 break;
                             }
                         }
+
                         $defText = join(', ', $defTextArr);
                     }
+
                     // code added by klevu
                     if (!empty($features)) {
                     } else {
@@ -89,21 +100,25 @@ class Klevu_Search_Block_Adminhtml_System_Config_Form_Field extends Mage_Adminht
                         $html .= '</td>';
                     }
                 }
+
                 $html .= '<td class="scope-label">';
                 if ($element->getScope()) {
                     $html .= $element->getScopeLabel();
                 }
+
                 $html .= '</td>';
                 // code added by klevu
                 if (!empty($features)) {
                     $element->setDisabled(true);
                 }
+
                 $html .= '<td class="">';
                 if ($element->getHint()) {
                     $html .= '<div class="hint" >';
                     $html .= '<div style="display: none;">' . $element->getHint() . '</div>';
                     $html .= '</div>';
                 }
+
                 $html .= '</td>';
                 $html .= '</tr>';
                 return $html;
@@ -124,17 +139,20 @@ class Klevu_Search_Block_Adminhtml_System_Config_Form_Field extends Mage_Adminht
                     $addInheritCheckbox = true;
                     $checkboxLabel      = Mage::helper('adminhtml')->__('Use Default');
                 }
+
                 if ($addInheritCheckbox) {
                     $inherit = $element->getInherit() == 1 ? 'checked="checked"' : '';
                     if ($inherit) {
                         $element->setDisabled(true);
                     }
                 }
+
                 $html .= '<td class="value">';
                 $html .= $this->_getElementHtml($element);
                 if ($element->getComment()) {
                     $html .= '<p class="note"><span>' . $element->getComment() . '</span></p>';
                 }
+
                 $html .= '</td>';
                 if ($addInheritCheckbox) {
                     $defText = $element->getDefaultValue();
@@ -150,8 +168,10 @@ class Klevu_Search_Block_Adminhtml_System_Config_Form_Field extends Mage_Adminht
                                 break;
                             }
                         }
+
                         $defText = join(', ', $defTextArr);
                     }
+
                     // default value
                     $html .= '<td class="use-default">';
                     // $html.= '<input id="'.$id.'_inherit" name="'.$namePrefix.'[inherit]" type="checkbox" value="1" class="input-checkbox config-inherit" '.$inherit.' onclick="$(\''.$id.'\').disabled = this.checked">';
@@ -159,10 +179,12 @@ class Klevu_Search_Block_Adminhtml_System_Config_Form_Field extends Mage_Adminht
                     $html .= '<label for="' . $id . '_inherit" class="inherit" title="' . htmlspecialchars($defText) . '">' . $checkboxLabel . '</label>';
                     $html .= '</td>';
                 }
+
                 $html .= '<td class="scope-label">';
                 if ($element->getScope()) {
                     $html .= $element->getScopeLabel();
                 }
+
                 $html .= '</td>';
                 $html .= '<td class="">';
                 if ($element->getHint()) {
@@ -170,6 +192,7 @@ class Klevu_Search_Block_Adminhtml_System_Config_Form_Field extends Mage_Adminht
                     $html .= '<div style="display: none;">' . $element->getHint() . '</div>';
                     $html .= '</div>';
                 }
+
                 $html .= '</td>';
                 $html .= '</tr>';
                 return $html;
@@ -188,9 +211,11 @@ class Klevu_Search_Block_Adminhtml_System_Config_Form_Field extends Mage_Adminht
                         if (!empty($feature_data['upgrade_message'])) {
                             $upgrade_text .= $feature_data['upgrade_message'];
                         }
+
                         if (!empty($feature_data['upgrade_label'])) {
                             $upgrade_text .= "<br/><button type='button' onClick=upgradeLink('" . $feature_data["upgrade_url"] . "')>" . $feature_data['upgrade_label'] . "</button>";
                         }
+
                         $upgrade_text .= "</div>";
                     }
                 } else {
@@ -212,16 +237,19 @@ class Klevu_Search_Block_Adminhtml_System_Config_Form_Field extends Mage_Adminht
                     $addInheritCheckbox = true;
                     $checkboxLabel      = $this->__('Use Default');
                 }
+
                 if ($addInheritCheckbox) {
                     $inherit = $element->getInherit() == 1 ? 'checked="checked"' : '';
                     if ($inherit) {
                         $element->setDisabled(true);
                     }
                 }
+
                 if (!empty($feature_data)) {
                     $element->setDisabled(true);
                     $element->setValue(0);
                 }
+
                 if ($element->getTooltip()) {
                     $html .= '<td class="value with-tooltip">';
                     $html .= $this->_getElementHtml($element);
@@ -230,10 +258,12 @@ class Klevu_Search_Block_Adminhtml_System_Config_Form_Field extends Mage_Adminht
                     $html .= '<td class="value">';
                     $html .= $this->_getElementHtml($element);
                 }
+
                 ;
                 if ($element->getComment()) {
                     $html .= '<p class="note"><span>' . $element->getComment() . '</span></p>';
                 }
+
                 $html .= '</td>';
                 if ($addInheritCheckbox) {
                     $defText = $element->getDefaultValue();
@@ -256,8 +286,10 @@ class Klevu_Search_Block_Adminhtml_System_Config_Form_Field extends Mage_Adminht
                                 }
                             }
                         }
+
                         $defText = join(', ', $defTextArr);
                     }
+
                     if (!empty($feature_data)) {
                     } else {
                         // default value
@@ -267,20 +299,24 @@ class Klevu_Search_Block_Adminhtml_System_Config_Form_Field extends Mage_Adminht
                         $html .= '</td>';
                     }
                 }
+
                 $html .= '<td class="scope-label">';
                 if ($element->getScope()) {
                     $html .= $element->getScopeLabel();
                 }
+
                 $html .= '</td>';
                 if (!empty($feature_data)) {
                     $element->setDisabled(true);
                 }
+
                 $html .= '<td class="">';
                 if ($element->getHint()) {
                     $html .= '<div class="hint" >';
                     $html .= '<div style="display: none;">' . $element->getHint() . '</div>';
                     $html .= '</div>';
                 }
+
                 $html .= '</td>';
                 return $this->_decorateRowHtml($element, $html);
             } else {
@@ -299,12 +335,14 @@ class Klevu_Search_Block_Adminhtml_System_Config_Form_Field extends Mage_Adminht
                     $addInheritCheckbox = true;
                     $checkboxLabel      = $this->__('Use Default');
                 }
+
                 if ($addInheritCheckbox) {
                     $inherit = $element->getInherit() == 1 ? 'checked="checked"' : '';
                     if ($inherit) {
                         $element->setDisabled(true);
                     }
                 }
+
                 if ($element->getTooltip()) {
                     $html .= '<td class="value with-tooltip">';
                     $html .= $this->_getElementHtml($element);
@@ -313,10 +351,12 @@ class Klevu_Search_Block_Adminhtml_System_Config_Form_Field extends Mage_Adminht
                     $html .= '<td class="value">';
                     $html .= $this->_getElementHtml($element);
                 }
+
                 ;
                 if ($element->getComment()) {
                     $html .= '<p class="note"><span>' . $element->getComment() . '</span></p>';
                 }
+
                 $html .= '</td>';
                 if ($addInheritCheckbox) {
                     $defText = $element->getDefaultValue();
@@ -339,18 +379,22 @@ class Klevu_Search_Block_Adminhtml_System_Config_Form_Field extends Mage_Adminht
                                 }
                             }
                         }
+
                         $defText = join(', ', $defTextArr);
                     }
+
                     // default value
                     $html .= '<td class="use-default">';
                     $html .= '<input id="' . $id . '_inherit" name="' . $namePrefix . '[inherit]" type="checkbox" value="1" class="checkbox config-inherit" ' . $inherit . ' onclick="toggleValueElements(this, Element.previous(this.parentNode))" /> ';
                     $html .= '<label for="' . $id . '_inherit" class="inherit" title="' . htmlspecialchars($defText) . '">' . $checkboxLabel . '</label>';
                     $html .= '</td>';
                 }
+
                 $html .= '<td class="scope-label">';
                 if ($element->getScope()) {
                     $html .= $element->getScopeLabel();
                 }
+
                 $html .= '</td>';
                 $html .= '<td class="">';
                 if ($element->getHint()) {
@@ -358,6 +402,7 @@ class Klevu_Search_Block_Adminhtml_System_Config_Form_Field extends Mage_Adminht
                     $html .= '<div style="display: none;">' . $element->getHint() . '</div>';
                     $html .= '</div>';
                 }
+
                 $html .= '</td>';
                 return $this->_decorateRowHtml($element, $html);
             }

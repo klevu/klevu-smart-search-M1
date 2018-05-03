@@ -1,8 +1,10 @@
 <?php
 
-class Klevu_Search_Block_Adminhtml_Form_Information extends Mage_Adminhtml_Block_System_Config_Form_Fieldset {
+class Klevu_Search_Block_Adminhtml_Form_Information extends Mage_Adminhtml_Block_System_Config_Form_Fieldset
+{
 
-    protected function _construct() {
+    protected function _construct() 
+    {
         parent::_construct();
 
         if (!$this->getTemplate()) {
@@ -11,7 +13,8 @@ class Klevu_Search_Block_Adminhtml_Form_Information extends Mage_Adminhtml_Block
         }
     }
 
-    public function render(Varien_Data_Form_Element_Abstract $element) {
+    public function render(Varien_Data_Form_Element_Abstract $element) 
+    {
         $html = $this->_getHeaderHtml($element);
 
         $html .= $this->_toHtml();
@@ -21,7 +24,8 @@ class Klevu_Search_Block_Adminhtml_Form_Information extends Mage_Adminhtml_Block
         return $html;
     }
 
-    public function getVersion() {
+    public function getVersion() 
+    {
         return Mage::getConfig()->getModuleConfig('Klevu_Search')->version;
     }
 

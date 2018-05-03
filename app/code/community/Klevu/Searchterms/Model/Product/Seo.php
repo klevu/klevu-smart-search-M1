@@ -4,7 +4,8 @@
  * Class Klevu_Searchterms_Model_Product_Seo
  *
  */
-class Klevu_Searchterms_Model_Product_Seo {
+class Klevu_Searchterms_Model_Product_Seo
+{
 
     /**
      * Return the JS API key for the given store.
@@ -13,11 +14,13 @@ class Klevu_Searchterms_Model_Product_Seo {
      *
      * @return string|null
      */
-    public function getApiKey($store_id) {
+    public function getApiKey($store_id) 
+    {
         $api_keys = array();
         if (!isset($api_keys[$store_id])) {
             $api_keys[$store_id] = Mage::helper("klevu_search/config")->getJsApiKey($store_id);
         }
+
         return $api_keys[$store_id];
     }
     

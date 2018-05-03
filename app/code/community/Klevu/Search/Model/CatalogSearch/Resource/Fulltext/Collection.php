@@ -1,6 +1,7 @@
 <?php
 
-class Klevu_Search_Model_CatalogSearch_Resource_Fulltext_Collection extends Mage_CatalogSearch_Model_Mysql4_Fulltext_Collection {
+class Klevu_Search_Model_CatalogSearch_Resource_Fulltext_Collection extends Mage_CatalogSearch_Model_Mysql4_Fulltext_Collection
+{
 
     /**
      * Klevu Search API Parameters
@@ -45,7 +46,8 @@ class Klevu_Search_Model_CatalogSearch_Resource_Fulltext_Collection extends Mage
      * @param string $query
      * @return $this|Mage_CatalogSearch_Model_Resource_Fulltext_Collection
      */
-    public function addSearchFilter($query) {
+    public function addSearchFilter($query) 
+    {
         if (!$this->isExtensionConfigured()) {
             return parent::addSearchFilter($query);
         }
@@ -74,9 +76,9 @@ class Klevu_Search_Model_CatalogSearch_Resource_Fulltext_Collection extends Mage
      * Return the Klevu api search filters
      * @return array
      */
-    public function getSearchFilters() {
+    public function getSearchFilters() 
+    {
         if (empty($this->_klevu_parameters)) {
-
             $noOfResults = $this->getPageSize();
 
             // If getPageSize() returns false, we need to get the page size from the toolbar block.
@@ -109,7 +111,8 @@ class Klevu_Search_Model_CatalogSearch_Resource_Fulltext_Collection extends Mage
      * Return the Klevu api search filters
      * @return array
      */
-    public function getSearchTracking($noOfTrackingResults,$queryType) {
+    public function getSearchTracking($noOfTrackingResults,$queryType) 
+    {
 
         $this->_klevu_tracking_parameters = array(
             'klevu_apiKey' => Mage::helper('klevu_search/config')->getJsApiKey(),
@@ -117,7 +120,7 @@ class Klevu_Search_Model_CatalogSearch_Resource_Fulltext_Collection extends Mage
             'klevu_totalResults' => $noOfTrackingResults,
             'klevu_shopperIP' => Mage::helper('klevu_search')->getIp(),
             'klevu_typeOfQuery' => $queryType,
-			'klevu_sessionId' => session_id(),
+            'klevu_sessionId' => session_id(),
             'Klevu_typeOfRecord' => 'KLEVU_PRODUCT'
         );
         $this->log(Zend_Log::DEBUG, sprintf("Search tracking for term: %s", $this->_query));
@@ -128,14 +131,17 @@ class Klevu_Search_Model_CatalogSearch_Resource_Fulltext_Collection extends Mage
      * Send the API Request and return the API Response.
      * @return Klevu_Search_Model_Api_Response
      */
-    public function getKlevuResponse() {
+    public function getKlevuResponse() 
+    {
         if (!$this->_klevu_response) {
             $this->_klevu_response = Mage::getModel('klevu_search/api_action_idsearch')->execute($this->getSearchFilters());
         }
+
         return $this->_klevu_response;
     }
 
-    public function getKlevuFilters() {
+    public function getKlevuFilters() 
+    {
         $attributes = array();
         $filters = $this->getKlevuResponse()->getData('filters');
 
@@ -163,13 +169,16 @@ class Klevu_Search_Model_CatalogSearch_Resource_Fulltext_Collection extends Mage
         return $attributes;
     }
 
-    protected function _beforeLoad() {
+    protected function _beforeLoad() 
+    {
         if ($this->isExtensionConfigured()) {
-            $this->setVisibility(array(
+            $this->setVisibility(
+                array(
                 Mage_Catalog_Model_Product_Visibility::VISIBILITY_NOT_VISIBLE,
                 Mage_Catalog_Model_Product_Visibility::VISIBILITY_IN_CATALOG,
                 Mage_Catalog_Model_Product_Visibility::VISIBILITY_IN_SEARCH,
-                Mage_Catalog_Model_Product_Visibility::VISIBILITY_BOTH));
+                Mage_Catalog_Model_Product_Visibility::VISIBILITY_BOTH)
+            );
             $this->addAttributeToSelect('visibility');
         }
 
@@ -210,8 +219,6 @@ class Klevu_Search_Model_CatalogSearch_Resource_Fulltext_Collection extends Mage
         }
 
         foreach ($this->_klevu_parent_child_ids as $item) {
-
-        
             if ($item['parent_id'] > 0) {
                 /** @var Mage_Catalog_Model_Product $parent */
                 $parent = $this->_items[$item['parent_id']];
@@ -221,6 +228,7 @@ class Klevu_Search_Model_CatalogSearch_Resource_Fulltext_Collection extends Mage
                 if (isset($this->_items[$item['product_id']])) {
                  $child = $this->_items[$item['product_id']];
                 }
+
                 // Parent isn't visible. Unset both child and parent products and skip.
                 if (!$parent || !$this->_isProductVisible($parent)) {
                     unset($this->_items[$item['parent_id']], $this->_items[$item['product_id']]);
@@ -243,7 +251,7 @@ class Klevu_Search_Model_CatalogSearch_Resource_Fulltext_Collection extends Mage
                     if ($child->getData('thumbnail') != 'no_selection' && !empty($thumbnail)) {
                         $parent->setData('thumbnail', $thumbnail);
                     }
-                }
+               }
 
                 unset($this->_items[$item['product_id']]);
             }
@@ -261,7 +269,8 @@ class Klevu_Search_Model_CatalogSearch_Resource_Fulltext_Collection extends Mage
      * @param Mage_Catalog_Model_Product $product
      * @return bool
      */
-    protected function _isProductVisible($product) {
+    protected function _isProductVisible($product) 
+    {
         return in_array(
             $product->getData('visibility'),
             array(
@@ -278,9 +287,9 @@ class Klevu_Search_Model_CatalogSearch_Resource_Fulltext_Collection extends Mage
      *
      * @return array
      */
-    protected function _getProductIds() {
+    protected function _getProductIds() 
+    {
         if (empty($this->_klevu_product_ids)) {
-
             // If no results, return an empty array
             if (!$this->getKlevuResponse()->hasData('result')) {
                 return array();
@@ -295,10 +304,11 @@ class Klevu_Search_Model_CatalogSearch_Resource_Fulltext_Collection extends Mage
 
                 $this->_klevu_product_ids[$item_id['product_id']] = $item_id['product_id'];
             }
+
             $this->_klevu_product_ids = array_unique($this->_klevu_product_ids);
             $this->log(Zend_Log::DEBUG, sprintf("Products count returned: %s", count($this->_klevu_product_ids)));
             $response_meta = $this->getKlevuResponse()->getData('meta');
-            Mage::getModel('klevu_search/api_action_searchtermtracking')->execute($this->getSearchTracking(count($this->_klevu_product_ids),$response_meta['typeOfQuery']));
+            Mage::getModel('klevu_search/api_action_searchtermtracking')->execute($this->getSearchTracking(count($this->_klevu_product_ids), $response_meta['typeOfQuery']));
         }
 
        return $this->_klevu_product_ids;
@@ -309,7 +319,8 @@ class Klevu_Search_Model_CatalogSearch_Resource_Fulltext_Collection extends Mage
      *
      * @return string
      */
-    protected function _getSortOrder() {
+    protected function _getSortOrder() 
+    {
         $order = $this->_getToolbar()->getCurrentOrder();
         $direction = $this->_getToolbar()->getCurrentDirection();
 
@@ -330,10 +341,12 @@ class Klevu_Search_Model_CatalogSearch_Resource_Fulltext_Collection extends Mage
      * @param null|int $current_page
      * @return int
      */
-    protected function _getStartFrom($current_page = null) {
+    protected function _getStartFrom($current_page = null) 
+    {
         if ($current_page == 1 || is_null($current_page)) {
             return 0;
         }
+
         return ($current_page - 1) * ($this->getPageSize());
     }
 
@@ -342,10 +355,12 @@ class Klevu_Search_Model_CatalogSearch_Resource_Fulltext_Collection extends Mage
      *
      * @return int
      */
-    public function getSize() {
+    public function getSize() 
+    {
         if (!$this->isExtensionConfigured()) {
             return parent::getSize();
         }
+
         $response = $this->getKlevuResponse()->getData('meta');
         return (int) $response['totalResultsFound'];
     }
@@ -355,7 +370,8 @@ class Klevu_Search_Model_CatalogSearch_Resource_Fulltext_Collection extends Mage
      *
      * @return int|string
      */
-    public function getPageSize() {
+    public function getPageSize() 
+    {
         if (!$this->isExtensionConfigured()) {
             return parent::getPageSize();
         }
@@ -363,6 +379,7 @@ class Klevu_Search_Model_CatalogSearch_Resource_Fulltext_Collection extends Mage
         if(!$this->_pageSize) {
             return $this->_getToolbar()->getLimit();
         }
+
         return $this->_pageSize;
     }
 
@@ -371,7 +388,8 @@ class Klevu_Search_Model_CatalogSearch_Resource_Fulltext_Collection extends Mage
      *
      * @return Mage_Catalog_Block_Product_List_Toolbar
      */
-    protected function _getToolbar() {
+    protected function _getToolbar() 
+    {
         /** @var Mage_Catalog_Block_Product_List $productListBlock */
         $productListBlock = Mage::getBlockSingleton('catalog/product_list');
         return $productListBlock->getToolbarBlock();
@@ -417,6 +435,7 @@ class Klevu_Search_Model_CatalogSearch_Resource_Fulltext_Collection extends Mage
             } else {
                 $query = $this->getSelect();
             }
+
             $rows = $this->_fetchAll($query);
         } catch (Exception $e) {
             Mage::printException($e, $query);
@@ -443,7 +462,8 @@ class Klevu_Search_Model_CatalogSearch_Resource_Fulltext_Collection extends Mage
      *
      * @return string
      */
-    protected function _getPreparedFilters() {
+    protected function _getPreparedFilters() 
+    {
         $layer = Mage::getSingleton('catalogsearch/layer');
         $filters = $layer->getState()->getFilters();
         $prepared_filters = array();
@@ -471,7 +491,7 @@ class Klevu_Search_Model_CatalogSearch_Resource_Fulltext_Collection extends Mage
         return implode(
             ';;',
             array_map(
-                function($v, $k) {
+                function ($v, $k) {
                     return sprintf('%s:%s', $k, $v);
                 },
                 $prepared_filters,
@@ -481,11 +501,13 @@ class Klevu_Search_Model_CatalogSearch_Resource_Fulltext_Collection extends Mage
 
     }
 
-    protected function log($level, $message) {
+    protected function log($level, $message) 
+    {
         Mage::helper('klevu_search')->log($level, $message);
     }
 
-    protected function isExtensionConfigured() {
+    protected function isExtensionConfigured() 
+    {
         return Mage::helper('klevu_search/config')->isExtensionConfigured();
     }
 }
