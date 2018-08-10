@@ -106,18 +106,6 @@ Klevu search supports your product promotion and business logic. Merchandising e
 Klevu analytics help create razor sharp SEO and promotional campaigns. Concrete data to helps increase conversion rates. You’ll have complete visibility of the path from search to purchase.
 <br /><br />
 
-<hr />
-<h3>Pricing</h3>
-<img src="http://www.klevu.com/magento-screens/pricing.jpg" />
-<br /><br />
-<h2><a href="http://www.klevu.com/magento-pricing.html#comparePlans">Compare plans </a></h2>
-
-
-<b>This prices are valid for signups from 13th July, 2017.</b>
-
-<br />
-If you have signed up before 13th July 2017, you are not obliged to move to the new model. It applies even if you upgrade to the latest Klevu Magento release. You may continue using old pricing model with the latest plugin :). 
-
 <br />
 If you have questions, feel free to write to us.
 
