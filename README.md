@@ -106,10 +106,6 @@ Klevu search supports your product promotion and business logic. Merchandising e
 Klevu analytics help create razor sharp SEO and promotional campaigns. Concrete data to helps increase conversion rates. You’ll have complete visibility of the path from search to purchase.
 <br /><br />
 
-<br />
-If you have questions, feel free to write to us.
-
-
 <hr />
 <h3><a href="http://demo.klevu.com/klevusearch/">Live demo</a></h3>
 
