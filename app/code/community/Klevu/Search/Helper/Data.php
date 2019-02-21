@@ -507,7 +507,40 @@ class Klevu_Search_Helper_Data extends Mage_Core_Helper_Abstract
             return $base_url_value['host'];
         }
     }
-    
-    
+    /**
+     * Function for getting exact Stock Status of Grouped/Bundle products
+     */
+    public function getBundleGroupedProductStockStatus($product,$store)
+	{
+        try {
+			$groupProductIds = $product->getTypeInstance()->getChildrenIds($product->getId());
+			$k = 0;
+			foreach ($groupProductIds as $ids) {
+				$i = 0;
+				if(!count($ids)){
+				 return "no";
+				}
+				foreach ($ids as $id) {
+					$bundleProduct = Mage::getModel('catalog/product')->load($id);
+					$stockItem = $bundleProduct->getStockItem();
+					if(!$stockItem->getIsInStock()){
+						$i++;
+					}
+				}
+				if(count($ids) == $i){
+					return "no";
+				}else{
+				$k++;
+				}
+			}
+				if($k == count($groupProductIds)){
+					return $product->getStockItem()->getIsInStock() ? "yes" : "no";
+				}else{
+					return "no";
+				}
+		} catch(Exception $e) {
+				Mage::helper('klevu_search')->log(Zend_Log::WARN, sprintf("Unable to get stock status for product id %s",$product->getId()));
+			}
+	}
     
 }

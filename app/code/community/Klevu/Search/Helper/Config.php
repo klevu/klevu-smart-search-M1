@@ -995,9 +995,9 @@ class Klevu_Search_Helper_Config extends Mage_Core_Helper_Abstract
      *
      * @return int
      */
-    public function scopeId($klevuApi)
+	public function scopeId()
     {
-        $configs =  Mage::getModel('core/config_data')->getCollection()
+        $configs = Mage::getModel('core/config_data')->getCollection()
                     ->addFieldToFilter('value', $this->getJsApiKey())->load();
         $scope_id = $configs->getData();
         return intval($scope_id[0]['scope_id']);

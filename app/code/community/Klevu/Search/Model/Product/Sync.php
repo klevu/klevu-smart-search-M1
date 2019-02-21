@@ -1436,8 +1436,13 @@ class Klevu_Search_Model_Product_Sync extends Klevu_Search_Model_Sync
                 }
             }
 
-            // Add stock data
-            $product['inStock'] = ($stock_data[$product['product_id']]) ? "yes" : "no";
+            // Add stock data, adding for bundle and grouped product as well
+            if($item->getData('type_id') == Mage_Catalog_Model_Product_Type::TYPE_BUNDLE || $item->getData('type_id') == Mage_Catalog_Model_Product_Type::TYPE_GROUPED)
+			{
+				$product['inStock'] =  Mage::helper('klevu_search')->getBundleGroupedProductStockStatus($item,$this->getStore());
+			}else{
+				$product['inStock'] = ($stock_data[$product['product_id']]) ? "yes" : "no";
+			}
     
 
             // Configurable product relation
@@ -1958,7 +1963,7 @@ class Klevu_Search_Model_Product_Sync extends Klevu_Search_Model_Sync
                 $attr->setStoreId($this->getStore()->getId());
                 $attribute_data[$attr->getAttributeCode()] = array(
                     'label' => $attr->getStoreLabel($this->getStore()->getId()),
-                    'values' => ''
+                    'values' => array()
                 );
 
                 if ($attr->usesSource()) {
@@ -3059,11 +3064,6 @@ class Klevu_Search_Model_Product_Sync extends Klevu_Search_Model_Sync
             // check the status of indexing when collection method selected to sync data
             $config = Mage::helper('klevu_search/config');
             $stores = Mage::app()->getStores();
-            foreach ($stores as $store) {
-                if(in_array($store->getCode(),$storeCodesToSync)){
-                    $this->markAllProductsForUpdate($store->getId());
-                }
-            }
             /* update boosting rule event */
             try {
                 Mage::helper('klevu_search')->log(Zend_Log::INFO, "Boosting rule update is started");

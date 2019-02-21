@@ -156,19 +156,11 @@ class Klevu_Search_Model_Observer extends Varien_Object
      *
      * @param Varien_Event_Observer $observer
      */
-    public function applyLandingPageModelRewrites(Varien_Event_Observer $observer) 
-    {
-
+    public function applyLandingPageModelRewrites(Varien_Event_Observer $observer) {
         if (Mage::helper("klevu_search/config")->isLandingEnabled() == 1 && Mage::helper("klevu_search/config")->isExtensionConfigured()) {
             $rewrites = array(
                 "global/models/catalogsearch_resource/rewrite/fulltext_collection"         => "Klevu_Search_Model_CatalogSearch_Resource_Fulltext_Collection",
-                "global/models/catalogsearch_mysql4/rewrite/fulltext_collection"           => "Klevu_Search_Model_CatalogSearch_Resource_Fulltext_Collection",
-                "global/models/catalogsearch/rewrite/layer_filter_attribute"               => "Klevu_Search_Model_CatalogSearch_Layer_Filter_Attribute",
-                "global/models/catalog/rewrite/config"                                     => "Klevu_Search_Model_Catalog_Model_Config",
-                "global/models/catalog/rewrite/layer_filter_price"                         => "Klevu_Search_Model_CatalogSearch_Layer_Filter_Price",
-                "global/models/catalog/rewrite/layer_filter_category"                      => "Klevu_Search_Model_CatalogSearch_Layer_Filter_Category",
-                "global/models/catalog_resource/rewrite/layer_filter_attribute"            => "Klevu_Search_Model_CatalogSearch_Resource_Layer_Filter_Attribute",
-                "global/models/catalog_resource_eav_mysql4/rewrite/layer_filter_attribute" => "Klevu_Search_Model_CatalogSearch_Resource_Layer_Filter_Attribute"
+                "global/models/catalogsearch_mysql4/rewrite/fulltext_collection"           => "Klevu_Search_Model_CatalogSearch_Resource_Fulltext_Collection"
             );
 
             $config = Mage::app()->getConfig();
@@ -291,6 +283,39 @@ class Klevu_Search_Model_Observer extends Varien_Object
         }
     }
     
-    
+    /**
+     * Update the product id when stock changed for simple product of Bundle product
+     */
+	public function addBundleToSync(Varien_Event_Observer $observer)
+	{
+		/** @var Mage_Catalog_Model_Product $product */
+		$product = $observer->getEvent()->getProduct();
+
+		if ($product->getTypeId() == Mage_Catalog_Model_Product_Type::TYPE_SIMPLE) {
+
+			$parentIds = Mage::getModel('bundle/product_type')
+				->getParentIdsByChild($product->getId());
+
+			if (!empty($parentIds)) {
+				Mage::getModel('klevu_search/product_sync')
+					->updateSpecificProductIds($parentIds);
+			}
+		}
+	}
+	/**
+     * Update the product id when stock changed for simple product of Grouped product
+     */
+	public function addGroupedToSync(Varien_Event_Observer $observer)
+	{
+		/** @var Mage_Catalog_Model_Product $product */
+		$product = $observer->getEvent()->getProduct();
+		if ($product->getTypeId() == Mage_Catalog_Model_Product_Type::TYPE_SIMPLE) {
+			$groupedParentsIds = Mage::getModel('catalog/product_type_grouped')->getParentIdsByChild($product->getId());
+			if (!empty($groupedParentsIds)) {
+				Mage::getModel('klevu_search/product_sync')
+					->updateSpecificProductIds($groupedParentsIds);
+			}
+		}
+	} 
     
 }
