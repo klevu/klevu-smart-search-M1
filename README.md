@@ -107,7 +107,7 @@ Klevu analytics help create razor sharp SEO and promotional campaigns. Concrete 
 <br /><br />
 
 <hr />
-<h3><a href="http://demo.klevu.com/klevusearch/">Live demo</a></h3>
+<h3><a href="https://demo.ksearchmisc.com/klevusearch/">Live demo</a></h3>
 
 <hr /><br /><br />
 
