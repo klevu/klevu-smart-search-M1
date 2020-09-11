@@ -9,18 +9,18 @@ class Klevu_Search_Model_Order_Sync extends Klevu_Search_Model_Sync
 
     const NOTIFICATION_TYPE = "order_sync";
 
-    public function _construct() 
+    public function _construct()
     {
         parent::_construct();
 
         $this->addData(
             array(
-            "connection" => Mage::getModel("core/resource")->getConnection("core_write")
+                "connection" => Mage::getModel("core/resource")->getConnection("core_write")
             )
         );
     }
 
-    public function getJobCode() 
+    public function getJobCode()
     {
         return "klevu_search_order_sync";
     }
@@ -34,7 +34,7 @@ class Klevu_Search_Model_Order_Sync extends Klevu_Search_Model_Sync
      *
      * @return $this
      */
-    public function addOrderToQueue(Mage_Sales_Model_Order $order, $force = false) 
+    public function addOrderToQueue(Mage_Sales_Model_Order $order, $force = false)
     {
         if (!$this->isEnabled($order->getStoreId()) && !$force) {
             return $this;
@@ -46,9 +46,9 @@ class Klevu_Search_Model_Order_Sync extends Klevu_Search_Model_Sync
         $ip_address = Mage::helper("klevu_search")->getIp();
         $order_email = 'unknown';
         if($order->getCustomerId()){
-           $order_email = $order->getCustomer()->getEmail(); //logged in customer
+            $order_email = $order->getCustomer()->getEmail(); //logged in customer
         } else{
-           $order_email = $order->getBillingAddress()->getEmail(); //not logged in customer
+            $order_email = $order->getBillingAddress()->getEmail(); //not logged in customer
         }
 
         foreach ($order->getAllVisibleItems() as $item) {
@@ -63,7 +63,7 @@ class Klevu_Search_Model_Order_Sync extends Klevu_Search_Model_Sync
                 }
             } else {
                 if($item->getId()!=null) {
-                        $items[] =  array($item->getId(),$session_id,$ip_address,$order_date,$order_email);
+                    $items[] =  array($item->getId(),$session_id,$ip_address,$order_date,$order_email);
                 }
             }
         }
@@ -72,7 +72,7 @@ class Klevu_Search_Model_Order_Sync extends Klevu_Search_Model_Sync
         // its possible that items object here is empty
         // if so, we do not add to the item.
         if(!empty($items)) {
-           $this->addItemsToQueue($items);
+            $this->addItemsToQueue($items);
         }
 
         return $this;
@@ -86,7 +86,7 @@ class Klevu_Search_Model_Order_Sync extends Klevu_Search_Model_Sync
      *
      * @return int
      */
-    public function clearQueue($store = null) 
+    public function clearQueue($store = null)
     {
         $select = $this->getConnection()
             ->select()
@@ -107,7 +107,7 @@ class Klevu_Search_Model_Order_Sync extends Klevu_Search_Model_Sync
         return $result->rowCount();
     }
 
-    public function run() 
+    public function run()
     {
         try {
             if ($this->isRunning(2)) {
@@ -115,7 +115,7 @@ class Klevu_Search_Model_Order_Sync extends Klevu_Search_Model_Sync
                 $this->log(Zend_Log::INFO, "Another copy is already running. Stopped.");
                 return;
             }
-            
+
             $stores = Mage::app()->getStores();
             foreach ($stores as $store) {
                 if(Mage::helper("klevu_search/config")->isOrderSyncEnabled($store->getId())) {
@@ -138,14 +138,14 @@ class Klevu_Search_Model_Order_Sync extends Klevu_Search_Model_Sync
                         if ($item->getId()) {
                             if ($this->isEnabled($item->getStoreId())) {
                                 if ($this->getApiKey($item->getStoreId())) {
-                                        $result = $this->sync($item, $value['klevu_session_id'], $value['ip_address'], $value['date'], $value['email']);
-                                        if ($result === true) {
-                                            $this->removeItemFromQueue($value['order_item_id']);
-                                            $items_synced++;
-                                        } else {
-                                            $this->log(Zend_Log::INFO, sprintf("Skipped order item %d: %s", $value['order_item_id'], $result));
-                                            $errors++;
-                                        }
+                                    $result = $this->sync($item, $value['klevu_session_id'], $value['ip_address'], $value['date'], $value['email']);
+                                    if ($result === true) {
+                                        $this->removeItemFromQueue($value['order_item_id']);
+                                        $items_synced++;
+                                    } else {
+                                        $this->log(Zend_Log::INFO, sprintf("Skipped order item %d: %s", $value['order_item_id'], $result));
+                                        $errors++;
+                                    }
                                 }
                             } else {
                                 $this->log(Zend_Log::ERR, sprintf("Skipped item %d: Order Sync is not enabled for this store.", $value['order_item_id']));
@@ -184,7 +184,7 @@ class Klevu_Search_Model_Order_Sync extends Klevu_Search_Model_Sync
      *
      * @return bool|string
      */
-    protected function sync($item,$sess_id,$ip_address,$order_date,$order_email) 
+    protected function sync($item,$sess_id,$ip_address,$order_date,$order_email)
     {
         if (!$this->getApiKey($item->getStoreId())) {
             return "Klevu Search is not configured for this store.";
@@ -195,22 +195,31 @@ class Klevu_Search_Model_Order_Sync extends Klevu_Search_Model_Sync
             $parent = Mage::getModel("sales/order_item")->load($item->getParentItemId());
         }
 
+        if ($item->getProductType() == Mage_Catalog_Model_Product_Type::TYPE_GROUPED) {
+            $groupProductId = Mage::getModel('catalog/product_type_grouped')->getParentIdsByChild($item->getProductId());
+            if (isset($groupProductId[0])) {
+                $klevu_productId = $groupProductId[0];
+            }
+        }  else {
+            $klevu_productId = Mage::helper("klevu_search")->getKlevuProductId($item->getProductId(), ($parent) ? $parent->getProductId() : 0);
+        }
+
         $response = Mage::getModel("klevu_search/api_action_producttracking")
             ->setStore(Mage::app()->getStore($item->getStoreId()))
             ->execute(
                 array(
-                "klevu_apiKey"    => $this->getApiKey($item->getStoreId()),
-                "klevu_type"      => "checkout",
-                "klevu_productId" => Mage::helper("klevu_search")->getKlevuProductId($item->getProductId(), ($parent) ? $parent->getProductId() : 0),
-                "klevu_unit"      => $item->getQtyOrdered() ? $item->getQtyOrdered() : ($parent ? $parent->getQtyOrdered() : null),
-                "klevu_salePrice" => $item->getPriceInclTax() ? $item->getPriceInclTax() : ($parent ? $parent->getPriceInclTax() : null),
-                "klevu_currency"  => $this->getStoreCurrency($item->getStoreId()),
-                "klevu_shopperIP" => $ip_address,
-                "klevu_sessionId" => $sess_id,
-                "klevu_orderDate" => $order_date,
-                "klevu_emailId" => $order_email,
-                "klevu_storeTimezone" => Mage::helper("klevu_search")->getStoreTimeZone($item->getStoreId()),
-                "klevu_clientIp" => $this->getOrderIP($item->getOrderId())
+                    "klevu_apiKey"    => $this->getApiKey($item->getStoreId()),
+                    "klevu_type"      => "checkout",
+                    "klevu_productId" => $klevu_productId,
+                    "klevu_unit"      => $item->getQtyOrdered() ? $item->getQtyOrdered() : ($parent ? $parent->getQtyOrdered() : null),
+                    "klevu_salePrice" => $item->getPriceInclTax() ? $item->getPriceInclTax() : ($parent ? $parent->getPriceInclTax() : null),
+                    "klevu_currency"  => $this->getStoreCurrency($item->getStoreId()),
+                    "klevu_shopperIP" => $ip_address,
+                    "klevu_sessionId" => $sess_id,
+                    "klevu_orderDate" => $order_date,
+                    "klevu_emailId" => $order_email,
+                    "klevu_storeTimezone" => Mage::helper("klevu_search")->getStoreTimeZone($item->getStoreId()),
+                    "klevu_clientIp" => $this->getOrderIP($item->getOrderId())
                 )
             );
 
@@ -228,7 +237,7 @@ class Klevu_Search_Model_Order_Sync extends Klevu_Search_Model_Sync
      *
      * @return bool
      */
-    protected function isEnabled($store_id) 
+    protected function isEnabled($store_id)
     {
         $is_enabled = $this->getData("is_enabled");
         if (!is_array($is_enabled)) {
@@ -250,7 +259,7 @@ class Klevu_Search_Model_Order_Sync extends Klevu_Search_Model_Sync
      *
      * @return string|null
      */
-    protected function getApiKey($store_id) 
+    protected function getApiKey($store_id)
     {
         $api_keys = $this->getData("api_keys");
         if (!is_array($api_keys)) {
@@ -272,7 +281,7 @@ class Klevu_Search_Model_Order_Sync extends Klevu_Search_Model_Sync
      *
      * @return string
      */
-    protected function getStoreCurrency($store_id) 
+    protected function getStoreCurrency($store_id)
     {
         $currencies = $this->getData("currencies");
         if (!is_array($currencies)) {
@@ -294,7 +303,7 @@ class Klevu_Search_Model_Order_Sync extends Klevu_Search_Model_Sync
      *
      * @return string
      */
-    protected function getOrderIP($order_id) 
+    protected function getOrderIP($order_id)
     {
         $order_ips = $this->getData("order_ips");
         if (!is_array($order_ips)) {
@@ -319,7 +328,7 @@ class Klevu_Search_Model_Order_Sync extends Klevu_Search_Model_Sync
      *
      * @return Zend_Db_Select
      */
-    protected function getSyncQueueSelect() 
+    protected function getSyncQueueSelect()
     {
         return $this->getConnection()
             ->select()
@@ -333,7 +342,7 @@ class Klevu_Search_Model_Order_Sync extends Klevu_Search_Model_Sync
      *
      * @return int
      */
-    protected function addItemsToQueue($order_item_ids) 
+    protected function addItemsToQueue($order_item_ids)
     {
         if (!is_array($order_item_ids)) {
             $order_item_ids = array($order_item_ids);
@@ -353,12 +362,12 @@ class Klevu_Search_Model_Order_Sync extends Klevu_Search_Model_Sync
      *
      * @return bool
      */
-    protected function removeItemFromQueue($order_item_id) 
+    protected function removeItemFromQueue($order_item_id)
     {
         return $this->getConnection()->delete(
-            $this->getTableName("klevu_search/order_sync"),
-            array("order_item_id" => $order_item_id)
-        ) === 1;
+                $this->getTableName("klevu_search/order_sync"),
+                array("order_item_id" => $order_item_id)
+            ) === 1;
     }
 
     /**
@@ -369,7 +378,7 @@ class Klevu_Search_Model_Order_Sync extends Klevu_Search_Model_Sync
      *
      * @return $this
      */
-    protected function notify($message) 
+    protected function notify($message)
     {
         $notification = Mage::getResourceModel("klevu_search/notification_collection")
             ->addFieldToFilter("type", array("eq" => static::NOTIFICATION_TYPE))
@@ -377,9 +386,9 @@ class Klevu_Search_Model_Order_Sync extends Klevu_Search_Model_Sync
 
         $notification->addData(
             array(
-            "type"    => static::NOTIFICATION_TYPE,
-            "date"    => Mage::getModel("core/date")->timestamp(),
-            "message" => $message
+                "type"    => static::NOTIFICATION_TYPE,
+                "date"    => Mage::getModel("core/date")->timestamp(),
+                "message" => $message
             )
         );
 
@@ -393,7 +402,7 @@ class Klevu_Search_Model_Order_Sync extends Klevu_Search_Model_Sync
      *
      * @return $this
      */
-    protected function deleteNotifications() 
+    protected function deleteNotifications()
     {
         $this->getConnection()->delete(
             $this->getTableName('klevu_search/notification'),
